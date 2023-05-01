@@ -33,6 +33,9 @@ private:
   QWidget *sidebar_widget;
   QButtonGroup *nav_btns;
   QStackedWidget *panel_widget;
+  
+  // FrogPilot variables
+  bool isBackButton;
 };
 
 class DevicePanel : public ListWidget {
