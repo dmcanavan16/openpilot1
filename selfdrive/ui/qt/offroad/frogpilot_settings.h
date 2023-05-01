@@ -66,6 +66,12 @@ private: \
   int newValue(int v) { newValueFunc } \
 };
 
+ParamController(DeviceShutdownTimer, "DeviceShutdownTimer", "Device Shutdown Timer", "Set the timer for when the device turns off after being offroad to reduce energy waste and prevent battery drain.", "../assets/offroad/icon_time.png",
+  int value = QString::fromStdString(params.get("DeviceShutdownTimer")).toInt();
+  return value == 0 ? "Instant" : QString::number(value) + " hours";,
+  return std::clamp(v, 0, 30);
+)
+
 ParamController(ScreenBrightness, "ScreenBrightness", "Screen Brightness", "Choose a custom screen brightness level or use the default 'Auto' brightness setting.", "../assets/offroad/icon_light.png",
   int brightness = QString::fromStdString(params.get("ScreenBrightness")).toInt();
   return brightness > 100 ? "Auto" : brightness == 0 ? "Screen Off" : QString::number(brightness) + "%";,
