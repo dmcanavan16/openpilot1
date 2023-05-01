@@ -192,9 +192,12 @@ ExperimentalButton::ExperimentalButton(QWidget *parent) : QPushButton(parent) {
 void ExperimentalButton::updateState(const UIState &s) {
   const SubMaster &sm = *(s.sm);
 
-  // button is "visible" if engageable or enabled
+  // FrogPilot properties
+  setProperty("rotatingWheel", s.scene.rotating_wheel);
+
+  // button is "visible" if engageable or enabled and rotating steering wheel isn't toggled on
   const auto cs = sm["controlsState"].getControlsState();
-  setVisible(cs.getEngageable() || cs.getEnabled());
+  setVisible((cs.getEngageable() || cs.getEnabled()) & !rotatingWheel);
 
   // button is "checked" if experimental mode is enabled
   setChecked(sm["controlsState"].getControlsState().getExperimentalMode());
@@ -232,6 +235,8 @@ AnnotatedCameraWidget::AnnotatedCameraWidget(VisionStreamType type, QWidget* par
   main_layout->addWidget(experimental_btn, 0, Qt::AlignTop | Qt::AlignRight);
 
   dm_img = loadPixmap("../assets/img_driver_face.png", {img_size + 5, img_size + 5});
+  engage_img = loadPixmap("../assets/img_chffr_wheel.png", {img_size, img_size});
+  experimental_img = loadPixmap("../assets/img_experimental.svg", {img_size, img_size});
 }
 
 void AnnotatedCameraWidget::updateState(const UIState &s) {
@@ -291,8 +296,11 @@ void AnnotatedCameraWidget::updateState(const UIState &s) {
   dm_fade_state = fmax(0.0, fmin(1.0, dm_fade_state+0.2*(0.5-(float)(dmActive))));
 
   // FrogPilot properties
+  setProperty("experimentalMode", sm["controlsState"].getControlsState().getExperimentalMode());
   setProperty("frogColors", s.scene.frog_colors);
   setProperty("muteDM", s.scene.mute_dm);
+  setProperty("rotatingWheel", s.scene.rotating_wheel);
+  setProperty("steeringAngleDeg", s.scene.steering_angle_deg);
 }
 
 void AnnotatedCameraWidget::drawHud(QPainter &p) {
@@ -443,6 +451,13 @@ void AnnotatedCameraWidget::drawHud(QPainter &p) {
   drawText(p, rect().center().x(), 290, speedUnit, 200);
 
   p.restore();
+
+  // Rotating steering wheel
+  if (rotatingWheel) {
+    drawIconRotate(p, rect().right() - btn_size / 2 - bdr_s * 2 + 25, btn_size / 2 + int(bdr_s * 1.5) - 20,
+                   experimentalMode ? experimental_img : engage_img,
+                   (experimentalMode ? QColor(218, 111, 37, 241) : blackColor(166)), 1.0);
+  }
 }
 
 
@@ -466,6 +481,18 @@ void AnnotatedCameraWidget::drawIcon(QPainter &p, int x, int y, QPixmap &img, QB
   p.drawPixmap(x - img.size().width() / 2, y - img.size().height() / 2, img);
 }
 
+void AnnotatedCameraWidget::drawIconRotate(QPainter &p, int x, int y, QPixmap &img, QBrush bg, float opacity) {
+  p.setOpacity(1.0);
+  p.setPen(Qt::NoPen);
+  p.setBrush(bg);
+  p.drawEllipse(x - btn_size / 2, y - btn_size / 2, btn_size, btn_size);
+  p.setOpacity(opacity);
+  p.save();
+  p.translate(x, y);
+  p.rotate(-steeringAngleDeg);
+  p.drawPixmap(-img.size().width() / 2, -img.size().height() / 2, img);
+  p.restore();
+}
 
 void AnnotatedCameraWidget::initializeGL() {
   CameraWidget::initializeGL();

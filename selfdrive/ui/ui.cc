@@ -204,6 +204,9 @@ static void update_state(UIState *s) {
     float scale = (sm["wideRoadCameraState"].getWideRoadCameraState().getSensor() == cereal::FrameData::ImageSensor::AR0231) ? 6.0f : 1.0f;
     scene.light_sensor = std::max(100.0f - scale * sm["wideRoadCameraState"].getWideRoadCameraState().getExposureValPercent(), 0.0f);
   }
+  if (sm.updated("carState")) {
+    scene.steering_angle_deg = (int)sm["carState"].getCarState().getSteeringAngleDeg();
+  }
   scene.started = sm["deviceState"].getDeviceState().getStarted() && scene.ignition;
 }
 
@@ -217,6 +220,7 @@ void ui_update_params(UIState *s) {
     bool frog_theme = params.getBool("FrogTheme");
     s->scene.frog_colors = frog_theme && params.getBool("FrogColors");
     s->scene.mute_dm = params.getBool("FireTheBabysitter") && params.getBool("MuteDM");
+    s->scene.rotating_wheel = params.getBool("RotatingWheel");
     s->scene.wide_camera_disabled = params.getBool("WideCameraDisable");
     s->scene.params_checked = true;
   }

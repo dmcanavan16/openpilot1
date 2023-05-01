@@ -32,6 +32,9 @@ private:
 class ExperimentalButton : public QPushButton {
   Q_OBJECT
 
+  // FrogPilot properties
+  Q_PROPERTY(bool rotatingWheel MEMBER rotatingWheel);
+
 public:
   explicit ExperimentalButton(QWidget *parent = 0);
   void updateState(const UIState &s);
@@ -42,6 +45,9 @@ private:
   Params params;
   QPixmap engage_img;
   QPixmap experimental_img;
+
+  // FrogPilot variables
+  bool rotatingWheel;
 };
 
 // container window for the NVG UI
@@ -62,8 +68,11 @@ class AnnotatedCameraWidget : public CameraWidget {
   Q_PROPERTY(int status MEMBER status);
 
   // FrogPilot properties
+  Q_PROPERTY(bool experimentalMode MEMBER experimentalMode);
   Q_PROPERTY(bool frogColors MEMBER frogColors);
   Q_PROPERTY(bool muteDM MEMBER muteDM);
+  Q_PROPERTY(bool rotatingWheel MEMBER rotatingWheel);
+  Q_PROPERTY(int steeringAngleDeg MEMBER steeringAngleDeg);
 
 public:
   explicit AnnotatedCameraWidget(VisionStreamType type, QWidget* parent = 0);
@@ -71,6 +80,7 @@ public:
 
 private:
   void drawIcon(QPainter &p, int x, int y, QPixmap &img, QBrush bg, float opacity);
+  void drawIconRotate(QPainter &p, int x, int y, QPixmap &img, QBrush bg, float opacity);
   void drawText(QPainter &p, int x, int y, const QString &text, int alpha = 255);
 
   ExperimentalButton *experimental_btn;
@@ -95,8 +105,13 @@ private:
   bool wide_cam_requested = false;
 
   // FrogPilot variables
+  bool experimentalMode;
   bool frogColors;
   bool muteDM;
+  bool rotatingWheel;
+  int steeringAngleDeg;
+  QPixmap engage_img;
+  QPixmap experimental_img;
 
 protected:
   void paintGL() override;
