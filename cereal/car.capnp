@@ -495,6 +495,7 @@ struct CarParams {
   adjustableFollow @72 :Bool;
   personalTune @73 :Bool;
   experimentalPersonalTune @74 :Bool;
+  experimentalModeViaWheel @75 :Bool;
 
   struct SafetyConfig {
     safetyModel @0 :SafetyModel;

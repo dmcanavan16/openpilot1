@@ -20,6 +20,7 @@ FrogPilotPanel::FrogPilotPanel(QWidget *parent) : QWidget(parent) {
     {"DeviceShutdownTimer", "Device Shutdown Timer", "Set the timer for when the device turns off after being offroad to reduce energy waste and prevent battery drain.", "../assets/offroad/icon_time.png"},
     {"DisableAd", "Disable comma prime Ad", "Hides the comma prime ad.", "../assets/offroad/icon_minus.png"},
     {"DisableInternetCheck", "Disable Internet Check", "Allows the device to remain offline indefinitely.", "../assets/offroad/icon_warning.png"},
+    {"ExperimentalModeViaWheel", "Enable Experimental Mode Via Steering Wheel", "Enable Experimental Mode by double-clicking the 'Lane Departure'/LKAS button on the steering wheel. Overrides 'Conditional Experimental Mode'. (Toyota/Lexus Only)", "../assets/img_experimental_white.svg"},
     {"FireTheBabysitter", "Fire the Babysitter", "Disable some of openpilot's 'Babysitter Protocols'.", "../assets/offroad/icon_babysitter.png"},
     {"NudgelessLaneChange", "Nudgeless Lane Change", "Switch lanes without having to nudge the steering wheel.", "../assets/offroad/icon_lane.png"},
     {"NumericalTemp", "Numerical Temperature Gauge", "Replace openpilot's 'GOOD', 'OK', and 'HIGH' temperature statuses with numerical values.", "../assets/offroad/icon_temp.png"},

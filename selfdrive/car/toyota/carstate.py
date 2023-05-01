@@ -4,6 +4,7 @@ from cereal import car
 from common.conversions import Conversions as CV
 from common.numpy_fast import mean
 from common.filter_simple import FirstOrderFilter
+from common.params import Params
 from common.realtime import DT_CTRL
 from opendbc.can.can_define import CANDefine
 from opendbc.can.parser import CANParser
@@ -32,6 +33,9 @@ class CarState(CarStateBase):
 
     # FrogPilot variables
     self.distance_btn = 0
+    self.lkas_previously_pressed = False
+
+    self.params = Params()
 
   def update(self, cp, cp_cam):
     ret = car.CarState.new_message()
@@ -146,6 +150,17 @@ class CarState(CarStateBase):
       # These cars have the acc_control on car can
       self.distance_btn = 1 if cp.vl["ACC_CONTROL"]["DISTANCE"] == 1 else 0
       ret.distanceLines = cp.vl["PCM_CRUISE_SM"]["DISTANCE_LINES"]
+
+    # Set the value of "LKAS" to the "LKAS" button if the car is a TSS2 Vehicle and the user has the toggle on
+    lkas_button = self.CP.carFingerprint in (TSS2_CAR - RADAR_ACC_CAR) and self.CP.experimentalModeViaWheel
+    # Check if the "LKAS" button is pressed
+    lkas_pressed = cp_cam.vl["LKAS_HUD"]["LKAS_STATUS"] == 1 if lkas_button else False
+    # LKAS button needs to be double pressed otherwise it'll cause errors
+    if lkas_pressed and not self.lkas_previously_pressed and ret.cruiseState.speed != 0:
+      experimental_mode = self.params.get_bool("ExperimentalMode")
+      # Invert the value of "ExperimentalMode"
+      self.params.put_bool("ExperimentalMode", not experimental_mode)
+    self.lkas_previously_pressed = lkas_pressed
 
     ret.genericToggle = bool(cp.vl["LIGHT_STALK"]["AUTO_HIGH_BEAM"])
     ret.espDisabled = cp.vl["ESP_CONTROL"]["TC_DISABLED"] != 0
@@ -302,6 +317,7 @@ class CarState(CarStateBase):
         ("FORCE", "PRE_COLLISION"),
         ("ACC_TYPE", "ACC_CONTROL"),
         ("FCW", "ACC_HUD"),
+        ("LKAS_STATUS", "LKAS_HUD"),
       ]
       checks += [
         ("PRE_COLLISION", 33),
