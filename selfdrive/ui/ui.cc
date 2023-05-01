@@ -218,6 +218,8 @@ void ui_update_params(UIState *s) {
     s->scene.frog_colors = frog_theme && params.getBool("FrogColors");
     s->scene.params_checked = true;
   }
+  // The only variables that need to be updated live
+  s->scene.screen_brightness = std::stoi(Params().get("ScreenBrightness"));
 }
 
 void UIState::updateStatus() {
@@ -245,6 +247,8 @@ void UIState::updateStatus() {
     started_prev = scene.started;
     emit offroadTransition(!scene.started);
   }
+
+  ui_update_params(uiState());
 
   // Handle prime type change
   if (prime_type != prime_type_prev) {
@@ -329,6 +333,10 @@ void Device::updateBrightness(const UIState &s) {
   int brightness = brightness_filter.update(clipped_brightness);
   if (!awake) {
     brightness = 0;
+  } else if (s.scene.started and s.scene.screen_brightness <= 100) {
+    brightness = s.scene.screen_brightness;
+  } else if (s.scene.screen_brightness <= 100) {
+    brightness = fmax(5, s.scene.screen_brightness);
   }
 
   if (brightness != last_brightness) {
