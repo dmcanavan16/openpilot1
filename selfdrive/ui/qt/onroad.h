@@ -48,6 +48,7 @@ private:
 
   // FrogPilot variables
   bool rotatingWheel;
+  QString wheel;
 };
 
 // container window for the NVG UI
@@ -112,6 +113,7 @@ private:
   int steeringAngleDeg;
   QPixmap engage_img;
   QPixmap experimental_img;
+  QString wheel;
 
 protected:
   void paintGL() override;

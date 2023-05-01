@@ -180,8 +180,17 @@ ExperimentalButton::ExperimentalButton(QWidget *parent) : QPushButton(parent) {
   setFixedSize(btn_size, btn_size);
   setCheckable(true);
 
+  // Custom steering wheel icon
   params = Params();
-  engage_img = loadPixmap("../assets/img_chffr_wheel.png", {img_size, img_size});
+  wheel = QString::fromStdString(params.get("SteeringWheel"));
+  std::map<QString, QString> wheel_images = {
+    {"0", "../assets/img_chffr_wheel.png"},
+    {"1", "../assets/lexus.png"},
+    {"2", "../assets/toyota.png"},
+    {"3", "../assets/frog.png"},
+    {"4", "../assets/rocket.png"}
+  };
+  engage_img = loadPixmap(wheel_images[wheel], {img_size, img_size});
   experimental_img = loadPixmap("../assets/img_experimental.svg", {img_size, img_size});
 
   QObject::connect(this, &QPushButton::toggled, [=](bool checked) {
@@ -213,11 +222,11 @@ void ExperimentalButton::paintEvent(QPaintEvent *event) {
   p.setRenderHint(QPainter::Antialiasing);
 
   QPoint center(btn_size / 2, btn_size / 2);
-  QPixmap img = isChecked() ? experimental_img : engage_img;
+  QPixmap img = wheel != 0 ? engage_img : isChecked() ? experimental_img : engage_img;
 
   p.setOpacity(1.0);
   p.setPen(Qt::NoPen);
-  p.setBrush(QColor(0, 0, 0, 166));
+  p.setBrush(wheel != 0 && isChecked() ? QColor(218, 111, 37, 241) : QColor(0, 0, 0, 166));
   p.drawEllipse(center, btn_size / 2, btn_size / 2);
   p.setOpacity(isDown() ? 0.8 : 1.0);
   p.drawPixmap((btn_size - img_size) / 2, (btn_size - img_size) / 2, img);
@@ -235,7 +244,16 @@ AnnotatedCameraWidget::AnnotatedCameraWidget(VisionStreamType type, QWidget* par
   main_layout->addWidget(experimental_btn, 0, Qt::AlignTop | Qt::AlignRight);
 
   dm_img = loadPixmap("../assets/img_driver_face.png", {img_size + 5, img_size + 5});
-  engage_img = loadPixmap("../assets/img_chffr_wheel.png", {img_size, img_size});
+  wheel = QString::fromStdString(Params().get("SteeringWheel"));
+  // Load the custom steering wheel icon images
+  std::map<QString, QString> wheel_images = {
+    {"0", "../assets/img_chffr_wheel.png"},
+    {"1", "../assets/lexus.png"},
+    {"2", "../assets/toyota.png"},
+    {"3", "../assets/frog.png"},
+    {"4", "../assets/rocket.png"}
+  };
+  engage_img = loadPixmap(wheel_images[wheel], {img_size, img_size});
   experimental_img = loadPixmap("../assets/img_experimental.svg", {img_size, img_size});
 }
 
@@ -455,7 +473,7 @@ void AnnotatedCameraWidget::drawHud(QPainter &p) {
   // Rotating steering wheel
   if (rotatingWheel) {
     drawIconRotate(p, rect().right() - btn_size / 2 - bdr_s * 2 + 25, btn_size / 2 + int(bdr_s * 1.5) - 20,
-                   experimentalMode ? experimental_img : engage_img,
+                   wheel != 0 ? engage_img : experimentalMode ? experimental_img : engage_img,
                    (experimentalMode ? QColor(218, 111, 37, 241) : blackColor(166)), 1.0);
   }
 }

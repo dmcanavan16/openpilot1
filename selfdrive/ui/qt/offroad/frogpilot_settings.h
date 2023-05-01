@@ -2,6 +2,10 @@
 
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QPushButton>
+#include <QLabel>
+#include <QMap>
+#include <QTimer>
 
 #include "selfdrive/ui/qt/widgets/controls.h"
 
@@ -55,6 +59,7 @@ class className : public ParamValueControl { \
 public: \
   className() : ParamValueControl(labelText, descText, iconPath) { refresh(); } \
 private: \
+  QMap<int, QString> wheelLabels = {{0, "Stock"}, {1, "Lexus"}, {2, "Toyota"}, {3, "Frog"}, {4, "Rocket"}}; \
   void refresh() override { label.setText(getValueStr()); } \
   void updateValue(int delta) override { \
     int value = QString::fromStdString(params.get(paramName)).toInt(); \
@@ -76,4 +81,9 @@ ParamController(ScreenBrightness, "ScreenBrightness", "Screen Brightness", "Choo
   int brightness = QString::fromStdString(params.get("ScreenBrightness")).toInt();
   return brightness > 100 ? "Auto" : brightness == 0 ? "Screen Off" : QString::number(brightness) + "%";,
   return std::clamp(v, 0, 101);
+)
+
+ParamController(SteeringWheel, "SteeringWheel", "Steering Wheel Icon", "Replace the stock openpilot steering wheel icon with a custom icon. Requires reboot for changes to take effect.\n\nWant to submit your own steering wheel? Message me on Discord:\nFrogsGoMoo #6969.", "../assets/offroad/icon_openpilot.png",
+  return wheelLabels[QString::fromStdString(params.get("SteeringWheel")).toInt()];,
+  return (v + 5) % 5;
 )
