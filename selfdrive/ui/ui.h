@@ -126,6 +126,7 @@ typedef struct UIScene {
 
   // FrogPilot variables
   bool frog_colors;
+  bool mute_dm;
   bool params_checked;
   bool wide_camera_disabled;
   int screen_brightness;
