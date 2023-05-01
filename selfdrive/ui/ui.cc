@@ -211,6 +211,13 @@ void ui_update_params(UIState *s) {
   auto params = Params();
   s->scene.is_metric = params.getBool("IsMetric");
   s->scene.map_on_left = params.getBool("NavSettingLeftSide");
+
+  // FrogPilot variables
+  if (!s->scene.params_checked) {
+    bool frog_theme = params.getBool("FrogTheme");
+    s->scene.frog_colors = frog_theme && params.getBool("FrogColors");
+    s->scene.params_checked = true;
+  }
 }
 
 void UIState::updateStatus() {
