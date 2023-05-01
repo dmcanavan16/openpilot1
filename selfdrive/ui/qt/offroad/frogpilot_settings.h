@@ -60,7 +60,10 @@ public: \
   className() : ParamValueControl(labelText, descText, iconPath) { refresh(); } \
 private: \
   QMap<int, QString> wheelLabels = {{0, "Stock"}, {1, "Lexus"}, {2, "Toyota"}, {3, "Frog"}, {4, "Rocket"}}; \
-  void refresh() override { label.setText(getValueStr()); } \
+  void refresh() override { \
+    label.setText(getValueStr()); \
+    params.putBool("CustomRoadUIUpdated", true); \
+  } \
   void updateValue(int delta) override { \
     int value = QString::fromStdString(params.get(paramName)).toInt(); \
     value = newValue(value + delta); \
@@ -75,6 +78,26 @@ ParamController(DeviceShutdownTimer, "DeviceShutdownTimer", "Device Shutdown Tim
   int value = QString::fromStdString(params.get("DeviceShutdownTimer")).toInt();
   return value == 0 ? "Instant" : QString::number(value) + " hours";,
   return std::clamp(v, 0, 30);
+)
+
+ParamController(LaneLinesWidth, "LaneLinesWidth", "   Lane Line Width", "Customize the lane lines width. Default matches the MUTCD average of 4 inches.", "../assets/offroad/icon_blank.png",
+  return QString::fromStdString(params.get("LaneLinesWidth")) + " inches";,
+  return std::clamp(v, 0, 24);
+)
+
+ParamController(PathEdgeWidth, "PathEdgeWidth", "   Path Edge Width", "Customize the path edge width that displays current driving statuses. Default is 20% of the total path.", "../assets/offroad/icon_blank.png",
+  return QString::fromStdString(params.get("PathEdgeWidth")) + "%";,
+  return std::clamp(v, 0, 100);
+)
+
+ParamController(PathWidth, "PathWidth", "   Path Width", "Customize the path width. Default matches a 2019 Lexus ES 350.", "../assets/offroad/icon_blank.png",
+  return QString::number(QString::fromStdString(params.get("PathWidth")).toDouble() / 10.0) + " feet";,
+  return std::clamp(v, 0, 100);
+)
+
+ParamController(RoadEdgesWidth, "RoadEdgesWidth", "   Road Edges Width", "Customize the road edges width. Default is 1/2 of the MUTCD average lane line width of 4 inches.", "../assets/offroad/icon_blank.png",
+  return QString::fromStdString(params.get("RoadEdgesWidth")) + " inches";,
+  return std::clamp(v, 0, 24);
 )
 
 ParamController(ScreenBrightness, "ScreenBrightness", "Screen Brightness", "Choose a custom screen brightness level or use the default 'Auto' brightness setting.", "../assets/offroad/icon_light.png",
