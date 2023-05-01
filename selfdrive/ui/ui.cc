@@ -216,6 +216,7 @@ void ui_update_params(UIState *s) {
   if (!s->scene.params_checked) {
     bool frog_theme = params.getBool("FrogTheme");
     s->scene.frog_colors = frog_theme && params.getBool("FrogColors");
+    s->scene.wide_camera_disabled = params.getBool("WideCameraDisable");
     s->scene.params_checked = true;
   }
   // The only variables that need to be updated live
