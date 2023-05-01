@@ -246,6 +246,7 @@ void ui_update_params(UIState *s) {
     bool frog_theme = params.getBool("FrogTheme");
     s->scene.compass = params.getBool("Compass");
     s->scene.frog_colors = frog_theme && params.getBool("FrogColors");
+    s->scene.frog_signals = frog_theme && params.getBool("FrogSignals");
     s->scene.mute_dm = params.getBool("FireTheBabysitter") && params.getBool("MuteDM");
     s->scene.rotating_wheel = params.getBool("RotatingWheel");
     s->scene.wide_camera_disabled = params.getBool("WideCameraDisable");

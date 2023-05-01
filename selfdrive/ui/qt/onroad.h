@@ -69,11 +69,16 @@ class AnnotatedCameraWidget : public CameraWidget {
   Q_PROPERTY(int status MEMBER status);
 
   // FrogPilot properties
+  Q_PROPERTY(bool blindspotLeft MEMBER blindspotLeft);
+  Q_PROPERTY(bool blindspotRight MEMBER blindspotRight);
   Q_PROPERTY(bool compass MEMBER compass);
   Q_PROPERTY(bool experimentalMode MEMBER experimentalMode);
   Q_PROPERTY(bool frogColors MEMBER frogColors);
+  Q_PROPERTY(bool frogSignals MEMBER frogSignals);
   Q_PROPERTY(bool muteDM MEMBER muteDM);
   Q_PROPERTY(bool rotatingWheel MEMBER rotatingWheel);
+  Q_PROPERTY(bool turnSignalLeft MEMBER turnSignalLeft);
+  Q_PROPERTY(bool turnSignalRight MEMBER turnSignalRight);
   Q_PROPERTY(float bearingAccuracyDeg MEMBER bearingAccuracyDeg);
   Q_PROPERTY(float bearingDeg MEMBER bearingDeg);
   Q_PROPERTY(int steeringAngleDeg MEMBER steeringAngleDeg);
@@ -84,6 +89,7 @@ public:
 
 private:
   void drawCompass(QPainter &p, int x, int y, QBrush bg, float opacity);
+  void drawFrogSignals(QPainter &p);
   void drawIcon(QPainter &p, int x, int y, QPixmap &img, QBrush bg, float opacity);
   void drawIconRotate(QPainter &p, int x, int y, QPixmap &img, QBrush bg, float opacity);
   void drawText(QPainter &p, int x, int y, const QString &text, int alpha = 255);
@@ -110,13 +116,19 @@ private:
   bool wide_cam_requested = false;
 
   // FrogPilot variables
+  bool blindspotLeft;
+  bool blindspotRight;
   bool compass;
   bool experimentalMode;
   bool frogColors;
+  bool frogSignals;
   bool muteDM;
   bool rotatingWheel;
+  bool turnSignalLeft;
+  bool turnSignalRight;
   float bearingAccuracyDeg;
   float bearingDeg;
+  int animationFrameIndex;
   int btn_offset = btn_size / 2;
   int circle_size = 250;
   int circle_offset = circle_size / 2;
@@ -125,6 +137,11 @@ private:
   QPixmap engage_img;
   QPixmap experimental_img;
   QString wheel;
+  QTimer *animationTimer;
+  static constexpr int signalHeight = 480;
+  static constexpr int signalWidth = 360;
+  static constexpr int totalFrames = 8;
+  std::vector<QPixmap> signalImgVector;
 
 protected:
   void paintGL() override;

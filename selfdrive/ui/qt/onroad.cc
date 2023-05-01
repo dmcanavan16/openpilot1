@@ -4,6 +4,9 @@
 
 #include <QDebug>
 
+#include <chrono>
+#include <QTimer>
+
 #include "common/timing.h"
 #include "selfdrive/ui/qt/util.h"
 #ifdef ENABLE_MAPS
@@ -256,6 +259,28 @@ AnnotatedCameraWidget::AnnotatedCameraWidget(VisionStreamType type, QWidget* par
   };
   engage_img = loadPixmap(wheel_images[wheel], {img_size, img_size});
   experimental_img = loadPixmap("../assets/img_experimental.svg", {img_size, img_size});
+  // Load the sequence of the turn signal images
+  const QStringList imagePaths = {
+    "../assets/images/frog_turn_signal_1.png",
+    "../assets/images/frog_turn_signal_2.png",
+    "../assets/images/frog_turn_signal_3.png",
+    "../assets/images/frog_turn_signal_4.png"
+  };
+  for (int i = 0; i < 2; ++i) {
+    for (const QString& path : imagePaths) {
+      signalImgVector.push_back(QPixmap(path));
+    }
+  }
+  // Add the blindspot signal image to the vector if an object is detected in the car's blindspot
+  signalImgVector.push_back(QPixmap("../assets/images/frog_turn_signal_1_red.png"));
+  // Turn signal animation declarations
+  animationFrameIndex = 0;
+  animationTimer = new QTimer(this);
+  connect(animationTimer, &QTimer::timeout, this, [this] {
+    animationFrameIndex = (animationFrameIndex + 1) % totalFrames;
+    update();
+  });
+  animationTimer->start(totalFrames * 11); // 11 * totalFrames (88) milliseconds per frame; syncs up perfectly with my 2019 Lexus ES 350 turn signal clicks
 }
 
 void AnnotatedCameraWidget::updateState(const UIState &s) {
@@ -317,12 +342,17 @@ void AnnotatedCameraWidget::updateState(const UIState &s) {
   // FrogPilot properties
   setProperty("bearingAccuracyDeg", sm["gpsLocationExternal"].getGpsLocationExternal().getBearingAccuracyDeg());
   setProperty("bearingDeg", sm["gpsLocationExternal"].getGpsLocationExternal().getBearingDeg());
+  setProperty("blindspotLeft", sm["carState"].getCarState().getLeftBlindspot());
+  setProperty("blindspotRight", sm["carState"].getCarState().getRightBlindspot());
   setProperty("compass", s.scene.compass);
   setProperty("experimentalMode", sm["controlsState"].getControlsState().getExperimentalMode());
   setProperty("frogColors", s.scene.frog_colors);
+  setProperty("frogSignals", s.scene.frog_signals);
   setProperty("muteDM", s.scene.mute_dm);
   setProperty("rotatingWheel", s.scene.rotating_wheel);
   setProperty("steeringAngleDeg", s.scene.steering_angle_deg);
+  setProperty("turnSignalLeft", sm["carState"].getCarState().getLeftBlinker());
+  setProperty("turnSignalRight", sm["carState"].getCarState().getRightBlinker());
 }
 
 void AnnotatedCameraWidget::drawHud(QPainter &p) {
@@ -482,9 +512,14 @@ void AnnotatedCameraWidget::drawHud(QPainter &p) {
   }
 
   // Compass
-  if (compass && bearingAccuracyDeg != 180.00) {
+  if (compass && bearingAccuracyDeg != 180.00 && (!frogSignals || (frogSignals && !turnSignalLeft && !turnSignalRight))) {
     drawCompass(p, !rightHandDM ? rect().right() - btn_size / 2 - (bdr_s * 2) - 10 : btn_size / 2 + (bdr_s * 2) + 10, 
                 rect().bottom() - 20 - footer_h / 2, blackColor(100), 1.0);
+  }
+
+  // Animated turn signals
+  if (frogSignals) {
+    drawFrogSignals(p);
   }
 }
 
@@ -787,7 +822,7 @@ void AnnotatedCameraWidget::paintGL() {
   }
 
   // DMoji
-  if (!hideDM && (sm.rcv_frame("driverStateV2") > s->scene.started_frame) && !muteDM) {
+  if (!hideDM && (sm.rcv_frame("driverStateV2") > s->scene.started_frame) && !muteDM && (!frogSignals || (frogSignals && !turnSignalLeft && !turnSignalRight))) {
     update_dmonitoring(s, sm["driverStateV2"].getDriverStateV2(), dm_fade_state, rightHandDM);
     drawDriverState(painter, s);
   }
@@ -904,5 +939,32 @@ void AnnotatedCameraWidget::drawCompass(QPainter &p, int x, int y, QBrush bg, fl
 
   for (int i = 0; i < 360; i += 15) {
     drawBearingDegrees(i);
+  }
+}
+
+void AnnotatedCameraWidget::drawFrogSignals(QPainter &p) {
+  // Enable Antialiasing
+  p.setRenderHint(QPainter::Antialiasing);
+
+  // Calculate the vertical position for the turn signals
+  const int baseYPosition = (height() - signalHeight) / 2 + 300;
+  // Calculate the x-coordinates for the turn signals
+  const int leftSignalXPosition = width() + 75 - signalWidth - (!blindspotLeft) * 300 * animationFrameIndex;
+  const int rightSignalXPosition = (-75) + (!blindspotRight) * 300 * animationFrameIndex;
+
+  // Draw the turn signals
+  if (animationFrameIndex < static_cast<int>(signalImgVector.size())) {
+    auto drawSignal = [&](bool on, int xPosition, int flip, int blindspot) {
+      if (on) {
+        // Get the appropriate image from the signalImgVector
+        const QPixmap& signal = signalImgVector[animationFrameIndex + blindspot * totalFrames].transformed(QTransform().scale(flip ? -1 : 1, 1));
+        // Draw the image
+        p.drawPixmap(xPosition, baseYPosition, signalWidth, signalHeight, signal);
+      }
+    };
+
+    // Display the animation based on which signal is activated and if it needs to be flipped or not
+    drawSignal(turnSignalLeft, leftSignalXPosition, false, blindspotLeft);
+    drawSignal(turnSignalRight, rightSignalXPosition, true, blindspotRight);
   }
 }
