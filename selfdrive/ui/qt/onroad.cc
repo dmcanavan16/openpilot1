@@ -205,6 +205,7 @@ void ExperimentalButton::updateState(const UIState &s) {
   const SubMaster &sm = *(s.sm);
 
   // FrogPilot properties
+  setProperty("conditionalOverridden", sm["carState"].getCarState().getConditionalOverridden());
   setProperty("rotatingWheel", s.scene.rotating_wheel);
 
   // button is "visible" if engageable or enabled and rotating steering wheel isn't toggled on
@@ -229,7 +230,7 @@ void ExperimentalButton::paintEvent(QPaintEvent *event) {
 
   p.setOpacity(1.0);
   p.setPen(Qt::NoPen);
-  p.setBrush(wheel != 0 && isChecked() ? QColor(218, 111, 37, 241) : QColor(0, 0, 0, 166));
+  p.setBrush(conditionalOverridden == 1 ? QColor(255, 247, 0, 255) : wheel != 0 && isChecked() ? QColor(218, 111, 37, 241) : QColor(0, 0, 0, 166));
   p.drawEllipse(center, btn_size / 2, btn_size / 2);
   p.setOpacity(isDown() ? 0.8 : 1.0);
   p.drawPixmap((btn_size - img_size) / 2, (btn_size - img_size) / 2, img);
@@ -345,6 +346,9 @@ void AnnotatedCameraWidget::updateState(const UIState &s) {
   setProperty("blindspotLeft", sm["carState"].getCarState().getLeftBlindspot());
   setProperty("blindspotRight", sm["carState"].getCarState().getRightBlindspot());
   setProperty("compass", s.scene.compass);
+  setProperty("conditionalExperimental", sm["carParams"].getCarParams().getConditionalExperimentalMode());
+  setProperty("conditionalOverridden", sm["carState"].getCarState().getConditionalOverridden());
+  setProperty("conditionalStatus", s.scene.conditional_status);
   setProperty("experimentalMode", sm["controlsState"].getControlsState().getExperimentalMode());
   setProperty("frogColors", s.scene.frog_colors);
   setProperty("frogSignals", s.scene.frog_signals);
@@ -508,13 +512,18 @@ void AnnotatedCameraWidget::drawHud(QPainter &p) {
   if (rotatingWheel) {
     drawIconRotate(p, rect().right() - btn_size / 2 - bdr_s * 2 + 25, btn_size / 2 + int(bdr_s * 1.5) - 20,
                    wheel != 0 ? engage_img : experimentalMode ? experimental_img : engage_img,
-                   (experimentalMode ? QColor(218, 111, 37, 241) : blackColor(166)), 1.0);
+                   conditionalOverridden == 1 ? QColor(255, 247, 0, 255) : (experimentalMode ? QColor(218, 111, 37, 241) : blackColor(166)), 1.0);
+  }
+
+  // Conditional experimental mode status bar
+  if (conditionalExperimental) {
+    drawConditionalExperimentalStatus(p);
   }
 
   // Compass
   if (compass && bearingAccuracyDeg != 180.00 && (!frogSignals || (frogSignals && !turnSignalLeft && !turnSignalRight))) {
     drawCompass(p, !rightHandDM ? rect().right() - btn_size / 2 - (bdr_s * 2) - 10 : btn_size / 2 + (bdr_s * 2) + 10, 
-                rect().bottom() - 20 - footer_h / 2, blackColor(100), 1.0);
+                conditionalExperimental ? rect().bottom() - 80 - footer_h / 2 : rect().bottom() - 20 - footer_h / 2, blackColor(100), 1.0);
   }
 
   // Animated turn signals
@@ -643,7 +652,11 @@ void AnnotatedCameraWidget::drawLaneLines(QPainter &painter, const UIState *s) {
 
   // paint path edges
   QLinearGradient pe(0, height(), 0, height() / 4);
-  if (experimentalMode) {
+  if (conditionalOverridden == 1) {
+    pe.setColorAt(0.0, QColor::fromHslF(58 / 360., 1.0, 0.50, 1.0));
+    pe.setColorAt(0.5, QColor::fromHslF(58 / 360., 1.0, 0.50, 0.5));
+    pe.setColorAt(1.0, QColor::fromHslF(58 / 360., 1.0, 0.50, 0.0));
+  } else if (experimentalMode) {
     pe.setColorAt(0.0, QColor::fromHslF(25 / 360., 0.71, 0.50, 1.0));
     pe.setColorAt(0.5, QColor::fromHslF(25 / 360., 0.71, 0.50, 0.5));
     pe.setColorAt(1.0, QColor::fromHslF(25 / 360., 0.71, 0.50, 0.0));
@@ -670,7 +683,7 @@ void AnnotatedCameraWidget::drawDriverState(QPainter &painter, const UIState *s)
 
   // base icon
   int x = rightHandDM ? rect().right() -  (btn_size - 24) / 2 - (bdr_s * 2) : (btn_size - 24) / 2 + (bdr_s * 2);
-  int y = rect().bottom() - footer_h / 2;
+  int y = conditionalExperimental ? rect().bottom() - 20 - footer_h / 2 : rect().bottom() - footer_h / 2;
   float opacity = dmActive ? 0.65 : 0.2;
   drawIcon(painter, x, y, dm_img, blackColor(0), opacity);
 
@@ -947,7 +960,7 @@ void AnnotatedCameraWidget::drawFrogSignals(QPainter &p) {
   p.setRenderHint(QPainter::Antialiasing);
 
   // Calculate the vertical position for the turn signals
-  const int baseYPosition = (height() - signalHeight) / 2 + 300;
+  const int baseYPosition = (height() - signalHeight) / 2 + (conditionalExperimental ? 225 : 300);
   // Calculate the x-coordinates for the turn signals
   const int leftSignalXPosition = width() + 75 - signalWidth - (!blindspotLeft) * 300 * animationFrameIndex;
   const int rightSignalXPosition = (-75) + (!blindspotRight) * 300 * animationFrameIndex;
@@ -967,4 +980,23 @@ void AnnotatedCameraWidget::drawFrogSignals(QPainter &p) {
     drawSignal(turnSignalLeft, leftSignalXPosition, false, blindspotLeft);
     drawSignal(turnSignalRight, rightSignalXPosition, true, blindspotRight);
   }
+}
+
+void AnnotatedCameraWidget::drawConditionalExperimentalStatus(QPainter &p) {
+  QRect statusBarRect(rect().left(), rect().bottom() - 59, rect().width(), 60);
+  p.fillRect(statusBarRect, QColor(0, 0, 0, 150));
+
+  QString statusText = !is_cruise_set ? "Conditional Experimental Mode ready" :
+                      (conditionalOverridden == 1 ? "Conditional Experimental Mode overridden. Double press the \"LKAS\" button to revert" :
+                      conditionalOverridden == 2 ? "Experimental Mode manually activated. Double press the \"LKAS\" button to revert" :
+                      conditionalStatus == 1 ? "Experimental Mode activated for turn / lane change" :
+                      conditionalStatus == 2 ? "Experimental Mode activated for stop sign / stop light" :
+                      conditionalStatus == 3 ? "Experimental Mode activated for curve" :
+                      "Conditional Experimental Mode ready");
+
+  configFont(p, "Inter", 40, "Bold");
+  QRect textRect = p.fontMetrics().boundingRect(statusText);
+  textRect.moveCenter(statusBarRect.center());
+  p.setPen(Qt::white);
+  p.drawText(textRect, Qt::AlignCenter, statusText);
 }

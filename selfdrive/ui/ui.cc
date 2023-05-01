@@ -253,6 +253,7 @@ void ui_update_params(UIState *s) {
     s->scene.params_checked = true;
   }
   // The only variables that need to be updated live
+  s->scene.conditional_status = std::stoi(Params().get("ConditionalStatus"));
   s->scene.screen_brightness = std::stoi(Params().get("ScreenBrightness"));
 }
 

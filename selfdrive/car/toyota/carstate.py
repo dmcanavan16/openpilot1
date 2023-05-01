@@ -34,6 +34,7 @@ class CarState(CarStateBase):
     # FrogPilot variables
     self.distance_btn = 0
     self.lkas_previously_pressed = False
+    self.previous_override_value = 0
 
     self.params = Params()
 
@@ -158,8 +159,14 @@ class CarState(CarStateBase):
     # LKAS button needs to be double pressed otherwise it'll cause errors
     if lkas_pressed and not self.lkas_previously_pressed and ret.cruiseState.speed != 0:
       experimental_mode = self.params.get_bool("ExperimentalMode")
-      # Invert the value of "ExperimentalMode"
-      self.params.put_bool("ExperimentalMode", not experimental_mode)
+      if self.CP.conditionalExperimentalMode:
+        # Set "conditionalOverridden" to work with "Conditional Experimental Mode"
+        override_value = 0 if self.previous_override_value >= 1 else 1 if experimental_mode else 2
+        self.previous_override_value = override_value
+      else:
+        # Invert the value of "ExperimentalMode"
+        self.params.put_bool("ExperimentalMode", not experimental_mode)
+    ret.conditionalOverridden = self.previous_override_value
     self.lkas_previously_pressed = lkas_pressed
 
     ret.genericToggle = bool(cp.vl["LIGHT_STALK"]["AUTO_HIGH_BEAM"])

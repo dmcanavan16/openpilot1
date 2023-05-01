@@ -132,6 +132,7 @@ typedef struct UIScene {
   bool params_checked;
   bool rotating_wheel;
   bool wide_camera_disabled;
+  int conditional_status;
   int screen_brightness;
   int steering_angle_deg;
   QPolygonF track_edge_vertices;

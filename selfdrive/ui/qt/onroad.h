@@ -34,6 +34,7 @@ class ExperimentalButton : public QPushButton {
 
   // FrogPilot properties
   Q_PROPERTY(bool rotatingWheel MEMBER rotatingWheel);
+  Q_PROPERTY(int conditionalOverridden MEMBER conditionalOverridden);
 
 public:
   explicit ExperimentalButton(QWidget *parent = 0);
@@ -48,6 +49,7 @@ private:
 
   // FrogPilot variables
   bool rotatingWheel;
+  int conditionalOverridden;
   QString wheel;
 };
 
@@ -72,6 +74,7 @@ class AnnotatedCameraWidget : public CameraWidget {
   Q_PROPERTY(bool blindspotLeft MEMBER blindspotLeft);
   Q_PROPERTY(bool blindspotRight MEMBER blindspotRight);
   Q_PROPERTY(bool compass MEMBER compass);
+  Q_PROPERTY(bool conditionalExperimental MEMBER conditionalExperimental);
   Q_PROPERTY(bool experimentalMode MEMBER experimentalMode);
   Q_PROPERTY(bool frogColors MEMBER frogColors);
   Q_PROPERTY(bool frogSignals MEMBER frogSignals);
@@ -81,6 +84,8 @@ class AnnotatedCameraWidget : public CameraWidget {
   Q_PROPERTY(bool turnSignalRight MEMBER turnSignalRight);
   Q_PROPERTY(float bearingAccuracyDeg MEMBER bearingAccuracyDeg);
   Q_PROPERTY(float bearingDeg MEMBER bearingDeg);
+  Q_PROPERTY(int conditionalOverridden MEMBER conditionalOverridden);
+  Q_PROPERTY(int conditionalStatus MEMBER conditionalStatus);
   Q_PROPERTY(int steeringAngleDeg MEMBER steeringAngleDeg);
 
 public:
@@ -89,6 +94,7 @@ public:
 
 private:
   void drawCompass(QPainter &p, int x, int y, QBrush bg, float opacity);
+  void drawConditionalExperimentalStatus(QPainter &p);
   void drawFrogSignals(QPainter &p);
   void drawIcon(QPainter &p, int x, int y, QPixmap &img, QBrush bg, float opacity);
   void drawIconRotate(QPainter &p, int x, int y, QPixmap &img, QBrush bg, float opacity);
@@ -119,6 +125,7 @@ private:
   bool blindspotLeft;
   bool blindspotRight;
   bool compass;
+  bool conditionalExperimental;
   bool experimentalMode;
   bool frogColors;
   bool frogSignals;
@@ -132,6 +139,8 @@ private:
   int btn_offset = btn_size / 2;
   int circle_size = 250;
   int circle_offset = circle_size / 2;
+  int conditionalOverridden;
+  int conditionalStatus;
   int steeringAngleDeg;
   QPixmap compass_inner_img;
   QPixmap engage_img;

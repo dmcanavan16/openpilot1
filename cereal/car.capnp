@@ -217,6 +217,7 @@ struct CarState {
   
   # FrogPilot CarStates
   distanceLines @46 :UInt8;
+  conditionalOverridden @47 :UInt8;
 
   struct WheelSpeeds {
     # optional wheel speeds
@@ -496,6 +497,7 @@ struct CarParams {
   personalTune @73 :Bool;
   experimentalPersonalTune @74 :Bool;
   experimentalModeViaWheel @75 :Bool;
+  conditionalExperimentalMode @76 :Bool;
 
   struct SafetyConfig {
     safetyModel @0 :SafetyModel;
