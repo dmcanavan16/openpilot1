@@ -58,14 +58,23 @@ T_FOLLOW = 1.45
 COMFORT_BRAKE = 2.5
 STOP_DISTANCE = 6.0
 
-def get_stopped_equivalence_factor(v_lead):
-  return (v_lead**2) / (2 * COMFORT_BRAKE)
+def get_stopped_equivalence_factor(CP, v_ego, v_lead):
+  # KRKeegan this offset rapidly decreases the following distance when the lead pulls
+  # away, resulting in an early demand for acceleration.
+  # Tweaked by FrogAi for FrogPilot to be more aggressive
+  v_diff_offset = 0
+  if np.all(v_lead - v_ego > 0) and CP.personalTune:
+    v_diff_offset = ((v_lead - v_ego) * 1.)
+    v_diff_offset = np.clip(v_diff_offset, 0, STOP_DISTANCE)
+    v_diff_offset = np.maximum(v_diff_offset * ((10 - v_ego)/10), 0)
+  distance = (v_lead**2) / (2 * COMFORT_BRAKE) + v_diff_offset
+  return distance
 
 def get_safe_obstacle_distance(v_ego, t_follow=T_FOLLOW):
   return (v_ego**2) / (2 * COMFORT_BRAKE) + t_follow * v_ego + STOP_DISTANCE
 
 def desired_follow_distance(v_ego, v_lead, t_follow=T_FOLLOW):
-  return get_safe_obstacle_distance(v_ego, t_follow) - get_stopped_equivalence_factor(v_lead)
+  return get_safe_obstacle_distance(v_ego, t_follow) - get_stopped_equivalence_factor(CP, v_ego, v_lead)
 
 
 def gen_long_model():
@@ -202,8 +211,10 @@ class LongitudinalMpc:
     self.CP = CP
     self.adjustable_follow_car = self.CP.carName == "toyota"
     self.adjustable_follow = self.CP.adjustableFollow and self.adjustable_follow_car
+    self.current_offset = 0
     self.desired_TF = T_FOLLOW
     self.mode = mode
+    self.personal_tune = self.CP.personalTune
     self.prev_profile_key = 1
     self.solver = AcadosOcpSolverCython(MODEL_NAME, ACADOS_SOLVER_TYPE, N)
     self.reset()
@@ -264,7 +275,18 @@ class LongitudinalMpc:
     a_change_tf = interp(self.desired_TF, TFs, [.1, 1., 2.])
     j_ego_tf = interp(self.desired_TF, TFs, [.6, 1., 2.])
     d_zone_tf = interp(self.desired_TF, TFs, [1.6, 1., .5])
-    return (a_change_tf, j_ego_tf, d_zone_tf)
+    # KRKeegan adjustments to improve sluggish acceleration
+    # do not apply to deceleration
+    # Tweaked by FrogAi for FrogPilot to be more aggressive
+    j_ego_v_ego = 1
+    a_change_v_ego = 1
+    if (v_lead0 - v_ego >= 0) and (v_lead1 - v_ego >= 0):
+      j_ego_v_ego = interp(v_ego, v_ego_bps, [.1, 1.])
+      a_change_v_ego = interp(v_ego, v_ego_bps, [.1, 1.])
+    # Select the appropriate min/max of the options
+    j_ego = min(j_ego_tf, j_ego_v_ego)
+    a_change = min(a_change_tf, a_change_v_ego)
+    return (a_change, j_ego, d_zone_tf) if self.personal_tune else (a_change_tf, j_ego_tf, d_zone_tf)
 
   def set_weights(self, prev_accel_constraint=True, v_lead0=0, v_lead1=0):
     if self.mode == 'acc':
@@ -326,7 +348,7 @@ class LongitudinalMpc:
     self.max_a = max_a
 
   def update_TF(self, carstate):
-    if self.adjustable_follow:
+    if self.adjustable_follow or self.personal_tune:
       # Distance profiles customized by FrogAi for FrogPilot
       distance_profiles = {
         1: [1.25, 1.20, 1.15, 1.10, 1.05, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00], # Aggressive
@@ -354,6 +376,39 @@ class LongitudinalMpc:
     else:
       self.desired_TF = T_FOLLOW
 
+  # Made by FrogAi for FrogPilot
+  def get_distance_offset(self, radarstate, v_ego):
+    # Declare the "new_offset" variable
+    new_offset = 0
+    # Check if "ExperimentalPersonalTune" is toggled on
+    if self.CP.experimentalPersonalTune:
+      # Retrieve the lead data
+      lead = radarstate.leadOne
+      # Retrieve the speed difference from the lead
+      speed_difference = -lead.vRel
+      # Retrieve the speed of the lead
+      v_lead = lead.vLead
+      # Retrieve the distance from the lead in meters
+      distance = lead.dRel
+
+      # Smoothly decelerate if going 10% faster than lead
+      if np.all(speed_difference > v_ego * 0.10):
+        # Reduces following distance when farther away and smaller speed difference. Clamped 0%-100%.
+        new_offset = np.clip((speed_difference**2 / v_lead) + distance * COMFORT_BRAKE, 0, 100)
+
+    # Define smooth factor (between 0 and 100; 0 = no change, 100 = instant change)
+    smooth_factor = 0.01
+    # Check if new_offset suddenly dropped to 0 due to previous conditions now being false
+    if new_offset == 0 and self.current_offset != 0:
+      # Smoothly decrease the offset to mimick human driving behavior
+      self.current_offset = max(self.current_offset - smooth_factor, 0)
+    else:
+      # Directly update the offset without smoothing
+      self.current_offset = new_offset
+
+    # Update desired following distance
+    self.desired_TF = max(self.desired_TF - self.current_offset / 100, 0)
+
   def update(self, carstate, radarstate, v_cruise, x, v, a, j, prev_accel_constraint):
     v_ego = self.x0[1]
     self.status = radarstate.leadOne.status or radarstate.leadTwo.status
@@ -361,14 +416,15 @@ class LongitudinalMpc:
     lead_xv_0 = self.process_lead(radarstate.leadOne)
     lead_xv_1 = self.process_lead(radarstate.leadTwo)
 
+    self.get_distance_offset(radarstate, v_ego)
     self.set_weights(prev_accel_constraint=prev_accel_constraint, v_lead0=lead_xv_0[0,1], v_lead1=lead_xv_1[0,1])
     self.update_TF(carstate)
 
     # To estimate a safe distance from a moving lead, we calculate how much stopping
     # distance that lead needs as a minimum. We can add that to the current distance
     # and then treat that as a stopped car/obstacle at this new distance.
-    lead_0_obstacle = lead_xv_0[:,0] + get_stopped_equivalence_factor(lead_xv_0[:,1])
-    lead_1_obstacle = lead_xv_1[:,0] + get_stopped_equivalence_factor(lead_xv_1[:,1])
+    lead_0_obstacle = lead_xv_0[:,0] + get_stopped_equivalence_factor(self.CP, self.x_sol[:,1], lead_xv_0[:,1])
+    lead_1_obstacle = lead_xv_1[:,0] + get_stopped_equivalence_factor(self.CP, self.x_sol[:,1], lead_xv_1[:,1])
 
     self.params[:,0] = MIN_ACCEL
     self.params[:,1] = self.max_a
