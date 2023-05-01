@@ -244,6 +244,7 @@ void ui_update_params(UIState *s) {
   // FrogPilot variables
   if (!s->scene.params_checked) {
     bool frog_theme = params.getBool("FrogTheme");
+    s->scene.compass = params.getBool("Compass");
     s->scene.frog_colors = frog_theme && params.getBool("FrogColors");
     s->scene.mute_dm = params.getBool("FireTheBabysitter") && params.getBool("MuteDM");
     s->scene.rotating_wheel = params.getBool("RotatingWheel");
@@ -294,7 +295,7 @@ UIState::UIState(QObject *parent) : QObject(parent) {
   sm = std::make_unique<SubMaster, const std::initializer_list<const char *>>({
     "modelV2", "controlsState", "liveCalibration", "radarState", "deviceState", "roadCameraState",
     "pandaStates", "carParams", "driverMonitoringState", "carState", "liveLocationKalman", "driverStateV2",
-    "wideRoadCameraState", "managerState", "navInstruction", "navRoute", "uiPlan",
+    "wideRoadCameraState", "managerState", "navInstruction", "navRoute", "uiPlan", "gpsLocationExternal",
   });
 
   Params params;

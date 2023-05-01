@@ -69,10 +69,13 @@ class AnnotatedCameraWidget : public CameraWidget {
   Q_PROPERTY(int status MEMBER status);
 
   // FrogPilot properties
+  Q_PROPERTY(bool compass MEMBER compass);
   Q_PROPERTY(bool experimentalMode MEMBER experimentalMode);
   Q_PROPERTY(bool frogColors MEMBER frogColors);
   Q_PROPERTY(bool muteDM MEMBER muteDM);
   Q_PROPERTY(bool rotatingWheel MEMBER rotatingWheel);
+  Q_PROPERTY(float bearingAccuracyDeg MEMBER bearingAccuracyDeg);
+  Q_PROPERTY(float bearingDeg MEMBER bearingDeg);
   Q_PROPERTY(int steeringAngleDeg MEMBER steeringAngleDeg);
 
 public:
@@ -80,6 +83,7 @@ public:
   void updateState(const UIState &s);
 
 private:
+  void drawCompass(QPainter &p, int x, int y, QBrush bg, float opacity);
   void drawIcon(QPainter &p, int x, int y, QPixmap &img, QBrush bg, float opacity);
   void drawIconRotate(QPainter &p, int x, int y, QPixmap &img, QBrush bg, float opacity);
   void drawText(QPainter &p, int x, int y, const QString &text, int alpha = 255);
@@ -106,11 +110,18 @@ private:
   bool wide_cam_requested = false;
 
   // FrogPilot variables
+  bool compass;
   bool experimentalMode;
   bool frogColors;
   bool muteDM;
   bool rotatingWheel;
+  float bearingAccuracyDeg;
+  float bearingDeg;
+  int btn_offset = btn_size / 2;
+  int circle_size = 250;
+  int circle_offset = circle_size / 2;
   int steeringAngleDeg;
+  QPixmap compass_inner_img;
   QPixmap engage_img;
   QPixmap experimental_img;
   QString wheel;
