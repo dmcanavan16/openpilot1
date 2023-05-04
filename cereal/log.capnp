@@ -139,16 +139,6 @@ struct FrameData {
   targetGreyFraction @22 :Float32;
   exposureValPercent @27 :Float32;
 
-  # Focus
-  lensPos @11 :Int32;
-  lensSag @12 :Float32;
-  lensErr @13 :Float32;
-  lensTruePos @14 :Float32;
-  focusVal @16 :List(Int16);
-  focusConf @17 :List(UInt8);
-  sharpnessScore @18 :List(UInt16);
-  recoverState @19 :Int32;
-
   transform @10 :List(Float32);
 
   image @6 :Data;
@@ -171,6 +161,14 @@ struct FrameData {
 
   globalGainDEPRECATED @5 :Int32;
   androidCaptureResultDEPRECATED @9 :AndroidCaptureResult;
+  lensPosDEPRECATED @11 :Int32;
+  lensSagDEPRECATED @12 :Float32;
+  lensErrDEPRECATED @13 :Float32;
+  lensTruePosDEPRECATED @14 :Float32;
+  focusValDEPRECATED @16 :List(Int16);
+  focusConfDEPRECATED @17 :List(UInt8);
+  sharpnessScoreDEPRECATED @18 :List(UInt16);
+  recoverStateDEPRECATED @19 :Int32;
   struct AndroidCaptureResult {
     sensitivity @0 :Int32;
     frameDuration @1 :Int64;
@@ -413,6 +411,9 @@ struct PandaState @0xa7649e2575e4591e {
   heartbeatLost @22 :Bool;
   interruptLoad @25 :Float32;
   fanPower @28 :UInt8;
+  fanStallCount @34 :UInt8;
+
+  spiChecksumErrorCount @33 :UInt16;
 
   # can health
   canState0 @29 :PandaCanState;
@@ -427,6 +428,9 @@ struct PandaState @0xa7649e2575e4591e {
   safetyParam @27 :UInt16;
   alternativeExperience @23 :Int16;
   safetyRxChecksInvalid @32 :Bool;
+
+  voltage @0 :UInt32;
+  current @1 :UInt32;
 
   enum FaultStatus {
     none @0;
@@ -460,6 +464,8 @@ struct PandaState @0xa7649e2575e4591e {
     interruptRateExti @22;
     interruptRateSpi @23;
     interruptRateUart7 @24;
+    sirenMalfunction @25;
+    heartbeatLoopWatchdog @26;
     # Update max fault type in boardd when adding faults
   }
 
@@ -481,15 +487,6 @@ struct PandaState @0xa7649e2575e4591e {
     normal @1;
     flipped @2;
   }
-
-  startedSignalDetectedDEPRECATED @5 :Bool;
-  voltageDEPRECATED @0 :UInt32;
-  currentDEPRECATED @1 :UInt32;
-  hasGpsDEPRECATED @6 :Bool;
-  fanSpeedRpmDEPRECATED @11 :UInt16;
-  usbPowerModeDEPRECATED @12 :PeripheralState.UsbPowerModeDEPRECATED;
-  safetyParamDEPRECATED @20 :Int16;
-  safetyParam2DEPRECATED @26 :UInt32;
 
   struct PandaCanState {
     busOff @0 :Bool;
@@ -525,6 +522,14 @@ struct PandaState @0xa7649e2575e4591e {
       noChange @7;
     }
   }
+
+  startedSignalDetectedDEPRECATED @5 :Bool;
+  hasGpsDEPRECATED @6 :Bool;
+  fanSpeedRpmDEPRECATED @11 :UInt16;
+  usbPowerModeDEPRECATED @12 :PeripheralState.UsbPowerModeDEPRECATED;
+  safetyParamDEPRECATED @20 :Int16;
+  safetyParam2DEPRECATED @26 :UInt32;
+  controlsAllowedLong @35 :Bool;
 }
 
 struct PeripheralState {
@@ -649,6 +654,7 @@ struct ControlsState @0x97ff69c53601abf1 {
 
   cumLagMs @15 :Float32;
   canErrorCounter @57 :UInt32;
+  lateralState @66 :Text;
 
   lateralControlState :union {
     indiState @52 :LateralINDIState;
@@ -794,6 +800,17 @@ struct ControlsState @0x97ff69c53601abf1 {
   canMonoTimesDEPRECATED @21 :List(UInt64);
 }
 
+# All SI units and in device frame
+struct XYZTData @0xc3cbae1fd505ae80 {
+  x @0 :List(Float32);
+  y @1 :List(Float32);
+  z @2 :List(Float32);
+  t @3 :List(Float32);
+  xStd @4 :List(Float32);
+  yStd @5 :List(Float32);
+  zStd @6 :List(Float32);
+}
+
 struct ModelDataV2 {
   frameId @0 :UInt32;
   frameIdExtra @20 :UInt32;
@@ -827,16 +844,6 @@ struct ModelDataV2 {
   # Model perceived motion
   temporalPose @21 :Pose;
 
-  # All SI units and in device frame
-  struct XYZTData {
-    x @0 :List(Float32);
-    y @1 :List(Float32);
-    z @2 :List(Float32);
-    t @3 :List(Float32);
-    xStd @4 :List(Float32);
-    yStd @5 :List(Float32);
-    zStd @6 :List(Float32);
-  }
 
   struct LeadDataV2 {
     prob @0 :Float32; # probability that car is your lead at time t
@@ -950,8 +957,28 @@ struct LongitudinalPlan @0xe00b5b3eba12876c {
   accels @32 :List(Float32);
   speeds @33 :List(Float32);
   jerks @34 :List(Float32);
+  visionTurnControllerState @36 :VisionTurnControllerState;
+  visionTurnSpeed @37 :Float32;
+  visionCurrentLatAcc @52 :Float32;
+  visionMaxPredLatAcc @53 :Float32;
 
   solverExecutionTime @35 :Float32;
+
+  speedLimitControlState @38 :SpeedLimitControlState;
+  speedLimit @39 :Float32;
+  speedLimitOffset @40 :Float32;
+  distToSpeedLimit @41 :Float32;
+  isMapSpeedLimit @42 :Bool;
+  speedLimitPercOffset @47 :Bool;
+  speedLimitValueOffset @48 :Float32;
+  desiredTF @49 :Float32;
+  notSpeedLimit @50 :Int16;
+  e2eX @51 :List(Float32);
+
+  distToTurn @43 :Float32;
+  turnSpeed @44 :Float32;
+  turnSpeedControlState @45 :SpeedLimitControlState;
+  turnSign @46 :Int16;
 
   enum LongitudinalPlanSource {
     cruise @0;
@@ -959,6 +986,9 @@ struct LongitudinalPlan @0xe00b5b3eba12876c {
     lead1 @2;
     lead2 @3;
     e2e @4;
+    turn @5;
+    limit @6;
+    turnlimit @7;
   }
 
   # deprecated
@@ -994,21 +1024,43 @@ struct LongitudinalPlan @0xe00b5b3eba12876c {
     x @0 :List(Float32);
     y @1 :List(Float32);
   }
+
+  enum SpeedLimitControlState {
+    inactive @0; # No speed limit set or not enabled by parameter.
+    tempInactive @1; # User wants to ignore speed limit until it changes.
+    adapting @2; # Reducing speed to match new speed limit.
+    active @3; # Cruising at speed limit.
+  }
+
+  enum VisionTurnControllerState {
+    disabled @0; # No predicted substantial turn on vision range or feature disabled.
+    entering @1; # A substantial turn is predicted ahead, adapting speed to turn comfort levels.
+    turning @2; # Actively turning. Managing acceleration to provide a roll on turn feeling.
+    leaving @3; # Road ahead straightens. Start to allow positive acceleration.
+  }
+}
+struct UiPlan {
+  frameId @2 :UInt32;
+  position @0 :XYZTData;
+  accel @1 :List(Float32);
 }
 
 struct LateralPlan @0xe1e9318e2ae8b51e {
   modelMonoTime @31 :UInt64;
-  laneWidthDEPRECATED @0 :Float32;
-  lProbDEPRECATED @5 :Float32;
-  rProbDEPRECATED @7 :Float32;
+  laneWidth @0 :Float32;
+  lProb @5 :Float32;
+  rProb @7 :Float32;
   dPathPoints @20 :List(Float32);
-  dProbDEPRECATED @21 :Float32;
+  dProb @21 :Float32;
+  dPathWLinesX @34 :List(Float32);
+  dPathWLinesY @35 :List(Float32);
 
   mpcSolutionValid @9 :Bool;
   desire @17 :Desire;
   laneChangeState @18 :LaneChangeState;
   laneChangeDirection @19 :LaneChangeDirection;
   useLaneLines @29 :Bool;
+  laneChangePrev @36 :Bool;
 
   # desired curvatures over next 2.5s in rad/m
   psis @26 :List(Float32);
@@ -1016,6 +1068,9 @@ struct LateralPlan @0xe1e9318e2ae8b51e {
   curvatureRates @28 :List(Float32);
 
   solverExecutionTime @30 :Float32;
+  dynamicLaneProfile @32 :Int8;
+  standstillElapsed @33 :Float32;
+  dynamicLaneProfileStatus @37 :Bool;
 
   enum Desire {
     none @0;
@@ -1032,6 +1087,7 @@ struct LateralPlan @0xe1e9318e2ae8b51e {
     preLaneChange @1;
     laneChangeStarting @2;
     laneChangeFinishing @3;
+    laneChangePrev @4;
   }
 
   enum LaneChangeDirection {
@@ -1100,6 +1156,7 @@ struct LiveLocationKalman {
   deviceStable @22 :Bool = true;
   timeSinceReset @23 :Float64;
   excessiveResets @24 :Bool;
+  timeToFirstFix @25 :Float32;
 
   enum Status {
     uninitialized @0;
@@ -1172,12 +1229,21 @@ struct GnssMeasurements {
   gpsTimeOfWeek @2 :Float64;
 
   correctedMeasurements @3 :List(CorrectedMeasurement);
+  ephemerisStatuses @9 :List(EphemerisStatus);
 
   kalmanPositionECEF @4 :LiveLocationKalman.Measurement;
   kalmanVelocityECEF @5 :LiveLocationKalman.Measurement;
   positionECEF @6 :LiveLocationKalman.Measurement;
   velocityECEF @7 :LiveLocationKalman.Measurement;
+  timeToFirstFix @8 :Float32;
   # Todo sync this with timing pulse of ublox
+
+  struct EphemerisStatus {
+    constellationId @0 :ConstellationId;
+    svId @1 :UInt8;
+    type @2 :EphemerisType;
+    source @3 :EphemerisSource;
+  }
 
   struct CorrectedMeasurement {
     constellationId @0 :ConstellationId;
@@ -1191,11 +1257,11 @@ struct GnssMeasurements {
     # Satellite position and velocity [x,y,z]
     satPos @7 :List(Float64);
     satVel @8 :List(Float64);
-    ephemerisSource @9 :EphemerisSource;
+    ephemerisSourceDEPRECATED @9 :EphemerisSourceDEPRECATED;
   }
 
-  struct EphemerisSource {
-    type @0 :EphemerisSourceType;
+  struct EphemerisSourceDEPRECATED {
+    type @0 :EphemerisType;
     # first epoch in file:
     gpsWeek @1 :Int16; # -1 if Nav
     gpsTimeOfWeek @2 :Int32; # -1 if Nav. Integer for seconds is good enough for logs.
@@ -1212,12 +1278,19 @@ struct GnssMeasurements {
     glonass @6;
   }
 
-  enum EphemerisSourceType {
+  enum EphemerisType {
     nav @0;
     # Different ultra-rapid files:
     nasaUltraRapid @1;
     glonassIacUltraRapid @2;
     qcom @3;
+  }
+
+  enum EphemerisSource {
+    gnssChip @0;
+    internet @1;
+    cache @2;
+    unknown @3;
   }
 }
 
@@ -1229,6 +1302,19 @@ struct UbloxGnss {
     hwStatus @3 :HwStatus;
     hwStatus2 @4 :HwStatus2;
     glonassEphemeris @5 :GlonassEphemeris;
+    satReport @6 :SatReport;
+  }
+
+  struct SatReport {
+    #received time of week in gps time in seconds and gps week
+    iTow @0 :UInt32;
+    svs @1 :List(SatInfo);
+
+    struct SatInfo {
+      svId @0 :UInt8;
+      gnssId @1 :UInt8;
+      flagsBitfield @2 :UInt32;
+    }
   }
 
   struct MeasurementReport {
@@ -1322,7 +1408,7 @@ struct UbloxGnss {
 
     iDot @26 :Float64;
     codesL2 @27 :Float64;
-    gpsWeek @28 :Float64;
+    gpsWeekDEPRECATED @28 :Float64;
     l2 @29 :Float64;
 
     svAcc @30 :Float64;
@@ -1340,6 +1426,8 @@ struct UbloxGnss {
     ionoBeta @39 :List(Float64);
 
     towCount @40 :UInt32;
+    toeWeek @41 :UInt16;
+    tocWeek @42 :UInt16;
   }
 
   struct IonoData {
@@ -1418,7 +1506,7 @@ struct UbloxGnss {
     age @17 :UInt8;
 
     svHealth @18 :UInt8;
-    tk @19 :UInt16;
+    tkDEPRECATED @19 :UInt16;
     tb @20 :UInt16;
 
     tauN @21 :Float64;
@@ -1430,7 +1518,12 @@ struct UbloxGnss {
     p3 @26 :UInt8;
     p4 @27 :UInt8;
 
-    freqNum @28 :UInt32;
+    freqNumDEPRECATED @28 :UInt32;
+
+    n4 @29 :UInt8;
+    nt @30 :UInt16;
+    freqNum @31 :Int16;
+    tkSeconds @32 :UInt32;
   }
 }
 
@@ -1844,6 +1937,17 @@ struct DriverMonitoringState @0xb83cda094a1da284 {
 
   isPreviewDEPRECATED @15 :Bool;
   rhdCheckedDEPRECATED @5 :Bool;
+  handsOnWheelState @18 :HandsOnWheelState;
+  notModified @19 :Float32;
+
+  enum HandsOnWheelState {
+    none @0;          # hand on wheel monitoring inactive
+    ok @1;            # driver has hands on steering wheel
+    minor @2;         # hands off steering wheel for acceptable period
+    warning @3;       # hands off steering wheel for warning period
+    critical @4;      # # hands off steering wheel for critical period
+    terminal @5;      # # hands off steering wheel for terminal period
+  }
 }
 
 struct Boot {
@@ -1908,6 +2012,40 @@ struct LiveMapDataDEPRECATED {
   roadCurvature @9 :List(Float32);
   distToTurn @10 :Float32;
   mapValid @11 :Bool;
+}
+
+struct LiveMapData {
+  speedLimitValid @0 :Bool;
+  speedLimit @1 :Float32;
+  speedLimitAheadValid @2 :Bool;
+  speedLimitAhead @3 :Float32;
+  speedLimitAheadDistance @4 :Float32;
+  turnSpeedLimitValid @5 :Bool;
+  turnSpeedLimit @6 :Float32;
+  turnSpeedLimitEndDistance @7 :Float32;
+  turnSpeedLimitSign @8 :Int16;
+  turnSpeedLimitsAhead @9 :List(Float32);
+  turnSpeedLimitsAheadDistances @10 :List(Float32);
+  turnSpeedLimitsAheadSigns @11 :List(Int16);
+  lastGpsTimestamp @12 :Int64;  # Milliseconds since January 1, 1970.
+  currentRoadName @13 :Text;
+  lastGpsLatitude @14 :Float64;
+  lastGpsLongitude @15 :Float64;
+  lastGpsSpeed @16 :Float32;
+  lastGpsBearingDeg @17 :Float32;
+  lastGpsAccuracy @18 :Float32;
+  lastGpsBearingAccuracyDeg @19 :Float32;
+  dataType @20 :DataType;
+
+  enum DataType {
+    default @0;
+    offline @1;
+    online @2;
+  }
+}
+
+struct E2eLongState {
+  status @0 :UInt16;
 }
 
 struct CameraOdometry {
@@ -2081,6 +2219,7 @@ struct Event {
     carControl @23 :Car.CarControl;
     longitudinalPlan @24 :LongitudinalPlan;
     lateralPlan @64 :LateralPlan;
+    uiPlan @106 :UiPlan;
     ubloxGnss @34 :UbloxGnss;
     ubloxRaw @39 :Data;
     qcomGnss @31 :QcomGnss;
@@ -2098,6 +2237,8 @@ struct Event {
     modelV2 @75 :ModelDataV2;
     driverStateV2 @92 :DriverStateV2;
     navModel @104 :NavModelData;
+    liveMapData @107: LiveMapData;
+    e2eLongState @108: E2eLongState;
 
     # camera stuff, each camera state has a matching encode idx
     roadCameraState @2 :FrameData;

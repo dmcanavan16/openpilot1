@@ -13,7 +13,7 @@
         "language": "c++",
         "name": "opendbc.can.parser_pyx",
         "sources": [
-            "/data/openpilot/opendbc/can/parser_pyx.pyx"
+            "/data/openpilot-special/opendbc/can/parser_pyx.pyx"
         ]
     },
     "module_name": "opendbc.can.parser_pyx"
@@ -1029,7 +1029,7 @@ struct __pyx_obj_7opendbc_3can_10parser_pyx___pyx_scope_struct_2_genexpr;
  */
 typedef unsigned int (*__pyx_t_7opendbc_3can_6common_calc_checksum_type)(uint32_t, struct Signal const &, std::vector<uint8_t>  const &);
 
-/* "opendbc/can/parser_pyx.pyx":19
+/* "opendbc/can/parser_pyx.pyx":20
  * 
  * 
  * cdef class CANParser:             # <<<<<<<<<<<<<<
@@ -1038,7 +1038,6 @@ typedef unsigned int (*__pyx_t_7opendbc_3can_6common_calc_checksum_type)(uint32_
  */
 struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser {
   PyObject_HEAD
-  struct __pyx_vtabstruct_7opendbc_3can_10parser_pyx_CANParser *__pyx_vtab;
   CANParser *can;
   struct DBC const *dbc;
   std::map<uint32_t,std::string>  address_to_msg_name;
@@ -1050,7 +1049,7 @@ struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser {
 };
 
 
-/* "opendbc/can/parser_pyx.pyx":146
+/* "opendbc/can/parser_pyx.pyx":139
  * 
  * 
  * cdef class CANDefine():             # <<<<<<<<<<<<<<
@@ -1065,7 +1064,7 @@ struct __pyx_obj_7opendbc_3can_10parser_pyx_CANDefine {
 };
 
 
-/* "opendbc/can/parser_pyx.pyx":32
+/* "opendbc/can/parser_pyx.pyx":33
  *     string dbc_name
  * 
  *   def __init__(self, dbc_name, signals, checks=None, bus=0, enforce_checks=True):             # <<<<<<<<<<<<<<
@@ -1080,7 +1079,7 @@ struct __pyx_obj_7opendbc_3can_10parser_pyx___pyx_scope_struct____init__ {
 };
 
 
-/* "opendbc/can/parser_pyx.pyx":83
+/* "opendbc/can/parser_pyx.pyx":84
  *       unchecked = signal_addrs - checked_addrs
  *       if len(unchecked):
  *         err_msg = ', '.join(f"{self.address_to_msg_name[addr].decode()} ({hex(addr)})" for addr in unchecked)             # <<<<<<<<<<<<<<
@@ -1094,7 +1093,7 @@ struct __pyx_obj_7opendbc_3can_10parser_pyx___pyx_scope_struct_1_genexpr {
 };
 
 
-/* "opendbc/can/parser_pyx.pyx":93
+/* "opendbc/can/parser_pyx.pyx":94
  *       signal_options_v.push_back(spo)
  * 
  *     message_options = dict((address, 0) for _, address in signals)             # <<<<<<<<<<<<<<
@@ -1108,20 +1107,6 @@ struct __pyx_obj_7opendbc_3can_10parser_pyx___pyx_scope_struct_2_genexpr {
   PyObject *__pyx_v_address;
 };
 
-
-
-/* "opendbc/can/parser_pyx.pyx":19
- * 
- * 
- * cdef class CANParser:             # <<<<<<<<<<<<<<
- *   cdef:
- *     cpp_CANParser *can
- */
-
-struct __pyx_vtabstruct_7opendbc_3can_10parser_pyx_CANParser {
-  std::unordered_set<uint32_t>  (*update_vl)(struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *);
-};
-static struct __pyx_vtabstruct_7opendbc_3can_10parser_pyx_CANParser *__pyx_vtabptr_7opendbc_3can_10parser_pyx_CANParser;
 
 /* --- Runtime support code (head) --- */
 /* Refnanny.proto */
@@ -1405,6 +1390,28 @@ static PyObject *__Pyx_PyDict_GetItem(PyObject *d, PyObject* key);
 #define __Pyx_PyObject_Dict_GetItem(obj, name)  PyObject_GetItem(obj, name)
 #endif
 
+/* GetItemInt.proto */
+#define __Pyx_GetItemInt(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
+    (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
+    __Pyx_GetItemInt_Fast(o, (Py_ssize_t)i, is_list, wraparound, boundscheck) :\
+    (is_list ? (PyErr_SetString(PyExc_IndexError, "list index out of range"), (PyObject*)NULL) :\
+               __Pyx_GetItemInt_Generic(o, to_py_func(i))))
+#define __Pyx_GetItemInt_List(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
+    (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
+    __Pyx_GetItemInt_List_Fast(o, (Py_ssize_t)i, wraparound, boundscheck) :\
+    (PyErr_SetString(PyExc_IndexError, "list index out of range"), (PyObject*)NULL))
+static CYTHON_INLINE PyObject *__Pyx_GetItemInt_List_Fast(PyObject *o, Py_ssize_t i,
+                                                              int wraparound, int boundscheck);
+#define __Pyx_GetItemInt_Tuple(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
+    (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
+    __Pyx_GetItemInt_Tuple_Fast(o, (Py_ssize_t)i, wraparound, boundscheck) :\
+    (PyErr_SetString(PyExc_IndexError, "tuple index out of range"), (PyObject*)NULL))
+static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Tuple_Fast(PyObject *o, Py_ssize_t i,
+                                                              int wraparound, int boundscheck);
+static PyObject *__Pyx_GetItemInt_Generic(PyObject *o, PyObject* j);
+static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Fast(PyObject *o, Py_ssize_t i,
+                                                     int is_list, int wraparound, int boundscheck);
+
 /* PyDictVersioning.proto */
 #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_TYPE_SLOTS
 #define __PYX_DICT_VERSION_INIT  ((PY_UINT64_T) -1)
@@ -1451,31 +1458,6 @@ static PyObject *__Pyx__GetModuleGlobalName(PyObject *name, PY_UINT64_T *dict_ve
 #define __Pyx_GetModuleGlobalNameUncached(var, name)  (var) = __Pyx__GetModuleGlobalName(name)
 static CYTHON_INLINE PyObject *__Pyx__GetModuleGlobalName(PyObject *name);
 #endif
-
-/* PyObjectCall2Args.proto */
-static CYTHON_UNUSED PyObject* __Pyx_PyObject_Call2Args(PyObject* function, PyObject* arg1, PyObject* arg2);
-
-/* GetItemInt.proto */
-#define __Pyx_GetItemInt(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
-    (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
-    __Pyx_GetItemInt_Fast(o, (Py_ssize_t)i, is_list, wraparound, boundscheck) :\
-    (is_list ? (PyErr_SetString(PyExc_IndexError, "list index out of range"), (PyObject*)NULL) :\
-               __Pyx_GetItemInt_Generic(o, to_py_func(i))))
-#define __Pyx_GetItemInt_List(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
-    (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
-    __Pyx_GetItemInt_List_Fast(o, (Py_ssize_t)i, wraparound, boundscheck) :\
-    (PyErr_SetString(PyExc_IndexError, "list index out of range"), (PyObject*)NULL))
-static CYTHON_INLINE PyObject *__Pyx_GetItemInt_List_Fast(PyObject *o, Py_ssize_t i,
-                                                              int wraparound, int boundscheck);
-#define __Pyx_GetItemInt_Tuple(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
-    (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
-    __Pyx_GetItemInt_Tuple_Fast(o, (Py_ssize_t)i, wraparound, boundscheck) :\
-    (PyErr_SetString(PyExc_IndexError, "tuple index out of range"), (PyObject*)NULL))
-static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Tuple_Fast(PyObject *o, Py_ssize_t i,
-                                                              int wraparound, int boundscheck);
-static PyObject *__Pyx_GetItemInt_Generic(PyObject *o, PyObject* j);
-static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Fast(PyObject *o, Py_ssize_t i,
-                                                     int is_list, int wraparound, int boundscheck);
 
 /* None.proto */
 static CYTHON_INLINE void __Pyx_RaiseUnboundLocalError(const char *varname);
@@ -1553,10 +1535,8 @@ static CYTHON_INLINE PyObject* __Pyx_dict_iterator(PyObject* dict, int is_dict, 
 static CYTHON_INLINE int __Pyx_dict_iter_next(PyObject* dict_or_iter, Py_ssize_t orig_length, Py_ssize_t* ppos,
                                               PyObject** pkey, PyObject** pvalue, PyObject** pitem, int is_dict);
 
-/* WriteUnraisableException.proto */
-static void __Pyx_WriteUnraisable(const char *name, int clineno,
-                                  int lineno, const char *filename,
-                                  int full_traceback, int nogil);
+/* PyObjectCall2Args.proto */
+static CYTHON_UNUSED PyObject* __Pyx_PyObject_Call2Args(PyObject* function, PyObject* arg1, PyObject* arg2);
 
 /* ObjectGetItem.proto */
 #if CYTHON_USE_TYPE_SLOTS
@@ -1578,9 +1558,6 @@ static PyObject* __Pyx_PyObject_GenericGetAttr(PyObject* obj, PyObject* attr_nam
 #else
 #define __Pyx_PyObject_GenericGetAttr PyObject_GenericGetAttr
 #endif
-
-/* SetVTable.proto */
-static int __Pyx_SetVtable(PyObject *dict, void *vtable);
 
 /* PyErrExceptionMatches.proto */
 #if CYTHON_FAST_THREAD_STATE
@@ -1824,7 +1801,6 @@ static int __Pyx_check_binary_version(void);
 /* InitStrings.proto */
 static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 
-static std::unordered_set<uint32_t>  __pyx_f_7opendbc_3can_10parser_pyx_9CANParser_update_vl(struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *__pyx_v_self); /* proto*/
 
 /* Module declarations from 'libc.string' */
 
@@ -1856,6 +1832,7 @@ static CYTHON_INLINE PyObject *__pyx_convert_PyUnicode_string_to_py_std__in_stri
 static CYTHON_INLINE PyObject *__pyx_convert_PyStr_string_to_py_std__in_string(std::string const &); /*proto*/
 static CYTHON_INLINE PyObject *__pyx_convert_PyBytes_string_to_py_std__in_string(std::string const &); /*proto*/
 static CYTHON_INLINE PyObject *__pyx_convert_PyByteArray_string_to_py_std__in_string(std::string const &); /*proto*/
+static std::vector<std::string>  __pyx_convert_vector_from_py_std_3a__3a_string(PyObject *); /*proto*/
 static PyObject *__pyx_convert_vector_to_py_double(const std::vector<double>  &); /*proto*/
 static PyObject *__pyx_convert_unordered_set_to_py_uint32_t(std::unordered_set<uint32_t>  const &); /*proto*/
 #define __Pyx_MODULE_NAME "opendbc.can.parser_pyx"
@@ -1875,7 +1852,6 @@ static const char __pyx_k__3[] = ", ";
 static const char __pyx_k__6[] = "'";
 static const char __pyx_k_os[] = "os";
 static const char __pyx_k_bus[] = "bus";
-static const char __pyx_k_dat[] = "dat";
 static const char __pyx_k_hex[] = "hex";
 static const char __pyx_k_zip[] = "zip";
 static const char __pyx_k_None[] = "None";
@@ -1893,7 +1869,6 @@ static const char __pyx_k_split[] = "split";
 static const char __pyx_k_throw[] = "throw";
 static const char __pyx_k_Number[] = "Number";
 static const char __pyx_k_checks[] = "checks";
-static const char __pyx_k_extend[] = "extend";
 static const char __pyx_k_import[] = "__import__";
 static const char __pyx_k_in_DBC[] = " in DBC ";
 static const char __pyx_k_reduce[] = "__reduce__";
@@ -1911,13 +1886,13 @@ static const char __pyx_k_CANDefine[] = "CANDefine";
 static const char __pyx_k_CANParser[] = "CANParser";
 static const char __pyx_k_TypeError[] = "TypeError";
 static const char __pyx_k_reduce_ex[] = "__reduce_ex__";
-static const char __pyx_k_pyx_vtable[] = "__pyx_vtable__";
 static const char __pyx_k_collections[] = "collections";
 static const char __pyx_k_defaultdict[] = "defaultdict";
 static const char __pyx_k_RuntimeError[] = "RuntimeError";
 static const char __pyx_k_reduce_cython[] = "__reduce_cython__";
 static const char __pyx_k_Can_t_find_DBC[] = "Can't find DBC: ";
 static const char __pyx_k_enforce_checks[] = "enforce_checks";
+static const char __pyx_k_update_strings[] = "update_strings";
 static const char __pyx_k_Unchecked_addrs[] = "Unchecked addrs: ";
 static const char __pyx_k_setstate_cython[] = "__setstate_cython__";
 static const char __pyx_k_Can_t_find_DBC_2[] = "Can't find DBC: '";
@@ -1948,11 +1923,9 @@ static PyObject *__pyx_n_s_cline_in_traceback;
 static PyObject *__pyx_n_s_close;
 static PyObject *__pyx_n_s_collections;
 static PyObject *__pyx_kp_u_could_not_find_message;
-static PyObject *__pyx_n_s_dat;
 static PyObject *__pyx_n_s_dbc_name;
 static PyObject *__pyx_n_s_defaultdict;
 static PyObject *__pyx_n_s_enforce_checks;
-static PyObject *__pyx_n_s_extend;
 static PyObject *__pyx_n_s_genexpr;
 static PyObject *__pyx_n_s_getstate;
 static PyObject *__pyx_n_s_hex;
@@ -1966,7 +1939,6 @@ static PyObject *__pyx_n_s_numbers;
 static PyObject *__pyx_n_s_opendbc_can_parser_pyx;
 static PyObject *__pyx_n_s_os;
 static PyObject *__pyx_n_s_print;
-static PyObject *__pyx_n_s_pyx_vtable;
 static PyObject *__pyx_n_s_range;
 static PyObject *__pyx_n_s_reduce;
 static PyObject *__pyx_n_s_reduce_cython;
@@ -1983,21 +1955,21 @@ static PyObject *__pyx_n_s_strings;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_throw;
 static PyObject *__pyx_n_s_update;
+static PyObject *__pyx_n_s_update_strings;
 static PyObject *__pyx_n_s_values;
 static PyObject *__pyx_n_s_zip;
 static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_8__init___genexpr(PyObject *__pyx_self); /* proto */
 static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_8__init___3genexpr(PyObject *__pyx_self); /* proto */
 static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *__pyx_v_self, PyObject *__pyx_v_dbc_name, PyObject *__pyx_v_signals, PyObject *__pyx_v_checks, PyObject *__pyx_v_bus, PyObject *__pyx_v_enforce_checks); /* proto */
-static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_2update_string(struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *__pyx_v_self, PyObject *__pyx_v_dat, PyObject *__pyx_v_sendcan); /* proto */
-static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_4update_strings(struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *__pyx_v_self, PyObject *__pyx_v_strings, PyObject *__pyx_v_sendcan); /* proto */
+static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_2update_strings(struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *__pyx_v_self, PyObject *__pyx_v_strings, PyObject *__pyx_v_sendcan); /* proto */
 static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_9can_valid___get__(struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_11bus_timeout___get__(struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_2vl___get__(struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_6vl_all___get__(struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_8ts_nanos___get__(struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_8dbc_name___get__(struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_6__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_8__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_4__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_6__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine___init__(struct __pyx_obj_7opendbc_3can_10parser_pyx_CANDefine *__pyx_v_self, PyObject *__pyx_v_dbc_name); /* proto */
 static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine_2dv___get__(struct __pyx_obj_7opendbc_3can_10parser_pyx_CANDefine *__pyx_v_self); /* proto */
 static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine_2dv_2__set__(struct __pyx_obj_7opendbc_3can_10parser_pyx_CANDefine *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
@@ -2012,7 +1984,6 @@ static PyObject *__pyx_tp_new_7opendbc_3can_10parser_pyx___pyx_scope_struct____i
 static PyObject *__pyx_tp_new_7opendbc_3can_10parser_pyx___pyx_scope_struct_1_genexpr(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_7opendbc_3can_10parser_pyx___pyx_scope_struct_2_genexpr(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static __Pyx_CachedCFunction __pyx_umethod_PyDict_Type_update = {0, &__pyx_n_s_update, 0, 0, 0};
-static __Pyx_CachedCFunction __pyx_umethod_PySet_Type_update = {0, &__pyx_n_s_update, 0, 0, 0};
 static PyObject *__pyx_int_0;
 static PyObject *__pyx_int_1;
 static PyObject *__pyx_int_2;
@@ -2024,7 +1995,7 @@ static PyObject *__pyx_tuple__9;
 static PyObject *__pyx_tuple__10;
 /* Late includes */
 
-/* "opendbc/can/parser_pyx.pyx":32
+/* "opendbc/can/parser_pyx.pyx":33
  *     string dbc_name
  * 
  *   def __init__(self, dbc_name, signals, checks=None, bus=0, enforce_checks=True):             # <<<<<<<<<<<<<<
@@ -2078,7 +2049,7 @@ static int __pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_1__init__(PyObject *__
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_signals)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 0, 2, 5, 1); __PYX_ERR(0, 32, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__init__", 0, 2, 5, 1); __PYX_ERR(0, 33, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -2100,7 +2071,7 @@ static int __pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_1__init__(PyObject *__
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 32, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 33, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -2124,7 +2095,7 @@ static int __pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_1__init__(PyObject *__
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 0, 2, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 32, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__init__", 0, 2, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 33, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("opendbc.can.parser_pyx.CANParser.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -2138,7 +2109,7 @@ static int __pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_1__init__(PyObject *__
 }
 static PyObject *__pyx_gb_7opendbc_3can_10parser_pyx_9CANParser_8__init___2generator(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
 
-/* "opendbc/can/parser_pyx.pyx":83
+/* "opendbc/can/parser_pyx.pyx":84
  *       unchecked = signal_addrs - checked_addrs
  *       if len(unchecked):
  *         err_msg = ', '.join(f"{self.address_to_msg_name[addr].decode()} ({hex(addr)})" for addr in unchecked)             # <<<<<<<<<<<<<<
@@ -2158,7 +2129,7 @@ static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_8__init___genexp
   if (unlikely(!__pyx_cur_scope)) {
     __pyx_cur_scope = ((struct __pyx_obj_7opendbc_3can_10parser_pyx___pyx_scope_struct_1_genexpr *)Py_None);
     __Pyx_INCREF(Py_None);
-    __PYX_ERR(0, 83, __pyx_L1_error)
+    __PYX_ERR(0, 84, __pyx_L1_error)
   } else {
     __Pyx_GOTREF(__pyx_cur_scope);
   }
@@ -2166,7 +2137,7 @@ static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_8__init___genexp
   __Pyx_INCREF(((PyObject *)__pyx_cur_scope->__pyx_outer_scope));
   __Pyx_GIVEREF(__pyx_cur_scope->__pyx_outer_scope);
   {
-    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_7opendbc_3can_10parser_pyx_9CANParser_8__init___2generator, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_genexpr, __pyx_n_s_init___locals_genexpr, __pyx_n_s_opendbc_can_parser_pyx); if (unlikely(!gen)) __PYX_ERR(0, 83, __pyx_L1_error)
+    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_7opendbc_3can_10parser_pyx_9CANParser_8__init___2generator, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_genexpr, __pyx_n_s_init___locals_genexpr, __pyx_n_s_opendbc_can_parser_pyx); if (unlikely(!gen)) __PYX_ERR(0, 84, __pyx_L1_error)
     __Pyx_DECREF(__pyx_cur_scope);
     __Pyx_RefNannyFinishContext();
     return (PyObject *) gen;
@@ -2207,34 +2178,34 @@ static PyObject *__pyx_gb_7opendbc_3can_10parser_pyx_9CANParser_8__init___2gener
     return NULL;
   }
   __pyx_L3_first_run:;
-  if (unlikely(!__pyx_sent_value)) __PYX_ERR(0, 83, __pyx_L1_error)
-  __pyx_r = PyList_New(0); if (unlikely(!__pyx_r)) __PYX_ERR(0, 83, __pyx_L1_error)
+  if (unlikely(!__pyx_sent_value)) __PYX_ERR(0, 84, __pyx_L1_error)
+  __pyx_r = PyList_New(0); if (unlikely(!__pyx_r)) __PYX_ERR(0, 84, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_r);
-  if (unlikely(!__pyx_cur_scope->__pyx_outer_scope->__pyx_v_unchecked)) { __Pyx_RaiseClosureNameError("unchecked"); __PYX_ERR(0, 83, __pyx_L1_error) }
+  if (unlikely(!__pyx_cur_scope->__pyx_outer_scope->__pyx_v_unchecked)) { __Pyx_RaiseClosureNameError("unchecked"); __PYX_ERR(0, 84, __pyx_L1_error) }
   if (likely(PyList_CheckExact(__pyx_cur_scope->__pyx_outer_scope->__pyx_v_unchecked)) || PyTuple_CheckExact(__pyx_cur_scope->__pyx_outer_scope->__pyx_v_unchecked)) {
     __pyx_t_1 = __pyx_cur_scope->__pyx_outer_scope->__pyx_v_unchecked; __Pyx_INCREF(__pyx_t_1); __pyx_t_2 = 0;
     __pyx_t_3 = NULL;
   } else {
-    __pyx_t_2 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_cur_scope->__pyx_outer_scope->__pyx_v_unchecked); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 83, __pyx_L1_error)
+    __pyx_t_2 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_cur_scope->__pyx_outer_scope->__pyx_v_unchecked); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 84, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 83, __pyx_L1_error)
+    __pyx_t_3 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 84, __pyx_L1_error)
   }
   for (;;) {
     if (likely(!__pyx_t_3)) {
       if (likely(PyList_CheckExact(__pyx_t_1))) {
         if (__pyx_t_2 >= PyList_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 83, __pyx_L1_error)
+        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 84, __pyx_L1_error)
         #else
-        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 83, __pyx_L1_error)
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 84, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         #endif
       } else {
         if (__pyx_t_2 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 83, __pyx_L1_error)
+        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 84, __pyx_L1_error)
         #else
-        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 83, __pyx_L1_error)
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 84, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         #endif
       }
@@ -2244,7 +2215,7 @@ static PyObject *__pyx_gb_7opendbc_3can_10parser_pyx_9CANParser_8__init___2gener
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 83, __pyx_L1_error)
+          else __PYX_ERR(0, 84, __pyx_L1_error)
         }
         break;
       }
@@ -2254,13 +2225,13 @@ static PyObject *__pyx_gb_7opendbc_3can_10parser_pyx_9CANParser_8__init___2gener
     __Pyx_XDECREF_SET(__pyx_cur_scope->__pyx_v_addr, __pyx_t_4);
     __Pyx_GIVEREF(__pyx_t_4);
     __pyx_t_4 = 0;
-    __pyx_t_4 = PyTuple_New(4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 83, __pyx_L1_error)
+    __pyx_t_4 = PyTuple_New(4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 84, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_5 = 0;
     __pyx_t_6 = 127;
-    if (unlikely(!__pyx_cur_scope->__pyx_outer_scope->__pyx_v_self)) { __Pyx_RaiseClosureNameError("self"); __PYX_ERR(0, 83, __pyx_L1_error) }
-    __pyx_t_7 = __Pyx_PyInt_As_uint32_t(__pyx_cur_scope->__pyx_v_addr); if (unlikely((__pyx_t_7 == ((uint32_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 83, __pyx_L1_error)
-    __pyx_t_8 = __Pyx_decode_cpp_string((__pyx_cur_scope->__pyx_outer_scope->__pyx_v_self->address_to_msg_name[__pyx_t_7]), 0, PY_SSIZE_T_MAX, NULL, NULL, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 83, __pyx_L1_error)
+    if (unlikely(!__pyx_cur_scope->__pyx_outer_scope->__pyx_v_self)) { __Pyx_RaiseClosureNameError("self"); __PYX_ERR(0, 84, __pyx_L1_error) }
+    __pyx_t_7 = __Pyx_PyInt_As_uint32_t(__pyx_cur_scope->__pyx_v_addr); if (unlikely((__pyx_t_7 == ((uint32_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 84, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_decode_cpp_string((__pyx_cur_scope->__pyx_outer_scope->__pyx_v_self->address_to_msg_name[__pyx_t_7]), 0, PY_SSIZE_T_MAX, NULL, NULL, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 84, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     __pyx_t_6 = (__Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_8) > __pyx_t_6) ? __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_8) : __pyx_t_6;
     __pyx_t_5 += __Pyx_PyUnicode_GET_LENGTH(__pyx_t_8);
@@ -2271,9 +2242,9 @@ static PyObject *__pyx_gb_7opendbc_3can_10parser_pyx_9CANParser_8__init___2gener
     __pyx_t_5 += 2;
     __Pyx_GIVEREF(__pyx_kp_u_);
     PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_kp_u_);
-    __pyx_t_8 = __Pyx_PyObject_CallOneArg(__pyx_builtin_hex, __pyx_cur_scope->__pyx_v_addr); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 83, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyObject_CallOneArg(__pyx_builtin_hex, __pyx_cur_scope->__pyx_v_addr); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 84, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
-    __pyx_t_9 = __Pyx_PyObject_FormatSimple(__pyx_t_8, __pyx_empty_unicode); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 83, __pyx_L1_error)
+    __pyx_t_9 = __Pyx_PyObject_FormatSimple(__pyx_t_8, __pyx_empty_unicode); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 84, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     __pyx_t_6 = (__Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_9) > __pyx_t_6) ? __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_9) : __pyx_t_6;
@@ -2285,10 +2256,10 @@ static PyObject *__pyx_gb_7opendbc_3can_10parser_pyx_9CANParser_8__init___2gener
     __pyx_t_5 += 1;
     __Pyx_GIVEREF(__pyx_kp_u__2);
     PyTuple_SET_ITEM(__pyx_t_4, 3, __pyx_kp_u__2);
-    __pyx_t_9 = __Pyx_PyUnicode_Join(__pyx_t_4, 4, __pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 83, __pyx_L1_error)
+    __pyx_t_9 = __Pyx_PyUnicode_Join(__pyx_t_4, 4, __pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 84, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(__Pyx_ListComp_Append(__pyx_r, (PyObject*)__pyx_t_9))) __PYX_ERR(0, 83, __pyx_L1_error)
+    if (unlikely(__Pyx_ListComp_Append(__pyx_r, (PyObject*)__pyx_t_9))) __PYX_ERR(0, 84, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -2315,7 +2286,7 @@ static PyObject *__pyx_gb_7opendbc_3can_10parser_pyx_9CANParser_8__init___2gener
 }
 static PyObject *__pyx_gb_7opendbc_3can_10parser_pyx_9CANParser_8__init___5generator1(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
 
-/* "opendbc/can/parser_pyx.pyx":93
+/* "opendbc/can/parser_pyx.pyx":94
  *       signal_options_v.push_back(spo)
  * 
  *     message_options = dict((address, 0) for _, address in signals)             # <<<<<<<<<<<<<<
@@ -2335,7 +2306,7 @@ static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_8__init___3genex
   if (unlikely(!__pyx_cur_scope)) {
     __pyx_cur_scope = ((struct __pyx_obj_7opendbc_3can_10parser_pyx___pyx_scope_struct_2_genexpr *)Py_None);
     __Pyx_INCREF(Py_None);
-    __PYX_ERR(0, 93, __pyx_L1_error)
+    __PYX_ERR(0, 94, __pyx_L1_error)
   } else {
     __Pyx_GOTREF(__pyx_cur_scope);
   }
@@ -2343,7 +2314,7 @@ static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_8__init___3genex
   __Pyx_INCREF(((PyObject *)__pyx_cur_scope->__pyx_outer_scope));
   __Pyx_GIVEREF(__pyx_cur_scope->__pyx_outer_scope);
   {
-    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_7opendbc_3can_10parser_pyx_9CANParser_8__init___5generator1, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_genexpr, __pyx_n_s_init___locals_genexpr, __pyx_n_s_opendbc_can_parser_pyx); if (unlikely(!gen)) __PYX_ERR(0, 93, __pyx_L1_error)
+    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_7opendbc_3can_10parser_pyx_9CANParser_8__init___5generator1, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_genexpr, __pyx_n_s_init___locals_genexpr, __pyx_n_s_opendbc_can_parser_pyx); if (unlikely(!gen)) __PYX_ERR(0, 94, __pyx_L1_error)
     __Pyx_DECREF(__pyx_cur_scope);
     __Pyx_RefNannyFinishContext();
     return (PyObject *) gen;
@@ -2383,34 +2354,34 @@ static PyObject *__pyx_gb_7opendbc_3can_10parser_pyx_9CANParser_8__init___5gener
     return NULL;
   }
   __pyx_L3_first_run:;
-  if (unlikely(!__pyx_sent_value)) __PYX_ERR(0, 93, __pyx_L1_error)
-  __pyx_r = PyDict_New(); if (unlikely(!__pyx_r)) __PYX_ERR(0, 93, __pyx_L1_error)
+  if (unlikely(!__pyx_sent_value)) __PYX_ERR(0, 94, __pyx_L1_error)
+  __pyx_r = PyDict_New(); if (unlikely(!__pyx_r)) __PYX_ERR(0, 94, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_r);
-  if (unlikely(!__pyx_cur_scope->__pyx_outer_scope->__pyx_v_signals)) { __Pyx_RaiseClosureNameError("signals"); __PYX_ERR(0, 93, __pyx_L1_error) }
+  if (unlikely(!__pyx_cur_scope->__pyx_outer_scope->__pyx_v_signals)) { __Pyx_RaiseClosureNameError("signals"); __PYX_ERR(0, 94, __pyx_L1_error) }
   if (likely(PyList_CheckExact(__pyx_cur_scope->__pyx_outer_scope->__pyx_v_signals)) || PyTuple_CheckExact(__pyx_cur_scope->__pyx_outer_scope->__pyx_v_signals)) {
     __pyx_t_1 = __pyx_cur_scope->__pyx_outer_scope->__pyx_v_signals; __Pyx_INCREF(__pyx_t_1); __pyx_t_2 = 0;
     __pyx_t_3 = NULL;
   } else {
-    __pyx_t_2 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_cur_scope->__pyx_outer_scope->__pyx_v_signals); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 93, __pyx_L1_error)
+    __pyx_t_2 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_cur_scope->__pyx_outer_scope->__pyx_v_signals); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 94, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 93, __pyx_L1_error)
+    __pyx_t_3 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 94, __pyx_L1_error)
   }
   for (;;) {
     if (likely(!__pyx_t_3)) {
       if (likely(PyList_CheckExact(__pyx_t_1))) {
         if (__pyx_t_2 >= PyList_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 93, __pyx_L1_error)
+        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 94, __pyx_L1_error)
         #else
-        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 93, __pyx_L1_error)
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 94, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         #endif
       } else {
         if (__pyx_t_2 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 93, __pyx_L1_error)
+        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 94, __pyx_L1_error)
         #else
-        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 93, __pyx_L1_error)
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 94, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         #endif
       }
@@ -2420,7 +2391,7 @@ static PyObject *__pyx_gb_7opendbc_3can_10parser_pyx_9CANParser_8__init___5gener
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 93, __pyx_L1_error)
+          else __PYX_ERR(0, 94, __pyx_L1_error)
         }
         break;
       }
@@ -2432,7 +2403,7 @@ static PyObject *__pyx_gb_7opendbc_3can_10parser_pyx_9CANParser_8__init___5gener
       if (unlikely(size != 2)) {
         if (size > 2) __Pyx_RaiseTooManyValuesError(2);
         else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-        __PYX_ERR(0, 93, __pyx_L1_error)
+        __PYX_ERR(0, 94, __pyx_L1_error)
       }
       #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
       if (likely(PyTuple_CheckExact(sequence))) {
@@ -2445,15 +2416,15 @@ static PyObject *__pyx_gb_7opendbc_3can_10parser_pyx_9CANParser_8__init___5gener
       __Pyx_INCREF(__pyx_t_5);
       __Pyx_INCREF(__pyx_t_6);
       #else
-      __pyx_t_5 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 93, __pyx_L1_error)
+      __pyx_t_5 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 94, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_6 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 93, __pyx_L1_error)
+      __pyx_t_6 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 94, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       #endif
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     } else {
       Py_ssize_t index = -1;
-      __pyx_t_7 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 93, __pyx_L1_error)
+      __pyx_t_7 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 94, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __pyx_t_8 = Py_TYPE(__pyx_t_7)->tp_iternext;
@@ -2461,7 +2432,7 @@ static PyObject *__pyx_gb_7opendbc_3can_10parser_pyx_9CANParser_8__init___5gener
       __Pyx_GOTREF(__pyx_t_5);
       index = 1; __pyx_t_6 = __pyx_t_8(__pyx_t_7); if (unlikely(!__pyx_t_6)) goto __pyx_L6_unpacking_failed;
       __Pyx_GOTREF(__pyx_t_6);
-      if (__Pyx_IternextUnpackEndCheck(__pyx_t_8(__pyx_t_7), 2) < 0) __PYX_ERR(0, 93, __pyx_L1_error)
+      if (__Pyx_IternextUnpackEndCheck(__pyx_t_8(__pyx_t_7), 2) < 0) __PYX_ERR(0, 94, __pyx_L1_error)
       __pyx_t_8 = NULL;
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       goto __pyx_L7_unpacking_done;
@@ -2469,7 +2440,7 @@ static PyObject *__pyx_gb_7opendbc_3can_10parser_pyx_9CANParser_8__init___5gener
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __pyx_t_8 = NULL;
       if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-      __PYX_ERR(0, 93, __pyx_L1_error)
+      __PYX_ERR(0, 94, __pyx_L1_error)
       __pyx_L7_unpacking_done:;
     }
     __Pyx_XGOTREF(__pyx_cur_scope->__pyx_v__);
@@ -2480,7 +2451,7 @@ static PyObject *__pyx_gb_7opendbc_3can_10parser_pyx_9CANParser_8__init___5gener
     __Pyx_XDECREF_SET(__pyx_cur_scope->__pyx_v_address, __pyx_t_6);
     __Pyx_GIVEREF(__pyx_t_6);
     __pyx_t_6 = 0;
-    if (unlikely(PyDict_SetItem(__pyx_r, (PyObject*)__pyx_cur_scope->__pyx_v_address, (PyObject*)__pyx_int_0))) __PYX_ERR(0, 93, __pyx_L1_error)
+    if (unlikely(PyDict_SetItem(__pyx_r, (PyObject*)__pyx_cur_scope->__pyx_v_address, (PyObject*)__pyx_int_0))) __PYX_ERR(0, 94, __pyx_L1_error)
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   CYTHON_MAYBE_UNUSED_VAR(__pyx_cur_scope);
@@ -2506,7 +2477,7 @@ static PyObject *__pyx_gb_7opendbc_3can_10parser_pyx_9CANParser_8__init___5gener
   return __pyx_r;
 }
 
-/* "opendbc/can/parser_pyx.pyx":32
+/* "opendbc/can/parser_pyx.pyx":33
  *     string dbc_name
  * 
  *   def __init__(self, dbc_name, signals, checks=None, bus=0, enforce_checks=True):             # <<<<<<<<<<<<<<
@@ -2548,9 +2519,9 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
   std::vector<struct Msg> ::size_type __pyx_t_6;
   std::vector<struct Msg> ::size_type __pyx_t_7;
   std::vector<struct Msg> ::size_type __pyx_t_8;
-  PyObject *__pyx_t_9 = NULL;
+  Py_ssize_t __pyx_t_9;
   Py_ssize_t __pyx_t_10;
-  Py_ssize_t __pyx_t_11;
+  PyObject *__pyx_t_11 = NULL;
   Py_ssize_t __pyx_t_12;
   Py_UCS4 __pyx_t_13;
   PyObject *(*__pyx_t_14)(PyObject *);
@@ -2568,7 +2539,7 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
   if (unlikely(!__pyx_cur_scope)) {
     __pyx_cur_scope = ((struct __pyx_obj_7opendbc_3can_10parser_pyx___pyx_scope_struct____init__ *)Py_None);
     __Pyx_INCREF(Py_None);
-    __PYX_ERR(0, 32, __pyx_L1_error)
+    __PYX_ERR(0, 33, __pyx_L1_error)
   } else {
     __Pyx_GOTREF(__pyx_cur_scope);
   }
@@ -2580,7 +2551,7 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
   __Pyx_GIVEREF(__pyx_cur_scope->__pyx_v_signals);
   __Pyx_INCREF(__pyx_v_checks);
 
-  /* "opendbc/can/parser_pyx.pyx":33
+  /* "opendbc/can/parser_pyx.pyx":34
  * 
  *   def __init__(self, dbc_name, signals, checks=None, bus=0, enforce_checks=True):
  *     if checks is None:             # <<<<<<<<<<<<<<
@@ -2591,19 +2562,19 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "opendbc/can/parser_pyx.pyx":34
+    /* "opendbc/can/parser_pyx.pyx":35
  *   def __init__(self, dbc_name, signals, checks=None, bus=0, enforce_checks=True):
  *     if checks is None:
  *       checks = []             # <<<<<<<<<<<<<<
  * 
  *     self.dbc_name = dbc_name
  */
-    __pyx_t_3 = PyList_New(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 34, __pyx_L1_error)
+    __pyx_t_3 = PyList_New(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 35, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF_SET(__pyx_v_checks, __pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "opendbc/can/parser_pyx.pyx":33
+    /* "opendbc/can/parser_pyx.pyx":34
  * 
  *   def __init__(self, dbc_name, signals, checks=None, bus=0, enforce_checks=True):
  *     if checks is None:             # <<<<<<<<<<<<<<
@@ -2612,27 +2583,27 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
  */
   }
 
-  /* "opendbc/can/parser_pyx.pyx":36
+  /* "opendbc/can/parser_pyx.pyx":37
  *       checks = []
  * 
  *     self.dbc_name = dbc_name             # <<<<<<<<<<<<<<
  *     self.dbc = dbc_lookup(dbc_name)
  *     if not self.dbc:
  */
-  __pyx_t_4 = __pyx_convert_string_from_py_std__in_string(__pyx_v_dbc_name); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 36, __pyx_L1_error)
+  __pyx_t_4 = __pyx_convert_string_from_py_std__in_string(__pyx_v_dbc_name); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 37, __pyx_L1_error)
   __pyx_cur_scope->__pyx_v_self->dbc_name = __pyx_t_4;
 
-  /* "opendbc/can/parser_pyx.pyx":37
+  /* "opendbc/can/parser_pyx.pyx":38
  * 
  *     self.dbc_name = dbc_name
  *     self.dbc = dbc_lookup(dbc_name)             # <<<<<<<<<<<<<<
  *     if not self.dbc:
  *       raise RuntimeError(f"Can't find DBC: {dbc_name}")
  */
-  __pyx_t_4 = __pyx_convert_string_from_py_std__in_string(__pyx_v_dbc_name); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 37, __pyx_L1_error)
+  __pyx_t_4 = __pyx_convert_string_from_py_std__in_string(__pyx_v_dbc_name); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 38, __pyx_L1_error)
   __pyx_cur_scope->__pyx_v_self->dbc = dbc_lookup(__pyx_t_4);
 
-  /* "opendbc/can/parser_pyx.pyx":38
+  /* "opendbc/can/parser_pyx.pyx":39
  *     self.dbc_name = dbc_name
  *     self.dbc = dbc_lookup(dbc_name)
  *     if not self.dbc:             # <<<<<<<<<<<<<<
@@ -2642,26 +2613,26 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
   __pyx_t_2 = ((!(__pyx_cur_scope->__pyx_v_self->dbc != 0)) != 0);
   if (unlikely(__pyx_t_2)) {
 
-    /* "opendbc/can/parser_pyx.pyx":39
+    /* "opendbc/can/parser_pyx.pyx":40
  *     self.dbc = dbc_lookup(dbc_name)
  *     if not self.dbc:
  *       raise RuntimeError(f"Can't find DBC: {dbc_name}")             # <<<<<<<<<<<<<<
  * 
  *     self.vl = {}
  */
-    __pyx_t_3 = __Pyx_PyObject_FormatSimple(__pyx_v_dbc_name, __pyx_empty_unicode); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 39, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_FormatSimple(__pyx_v_dbc_name, __pyx_empty_unicode); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 40, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_5 = __Pyx_PyUnicode_Concat(__pyx_kp_u_Can_t_find_DBC, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 39, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyUnicode_Concat(__pyx_kp_u_Can_t_find_DBC, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 40, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_builtin_RuntimeError, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 39, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_builtin_RuntimeError, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 40, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 39, __pyx_L1_error)
+    __PYX_ERR(0, 40, __pyx_L1_error)
 
-    /* "opendbc/can/parser_pyx.pyx":38
+    /* "opendbc/can/parser_pyx.pyx":39
  *     self.dbc_name = dbc_name
  *     self.dbc = dbc_lookup(dbc_name)
  *     if not self.dbc:             # <<<<<<<<<<<<<<
@@ -2670,14 +2641,14 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
  */
   }
 
-  /* "opendbc/can/parser_pyx.pyx":41
+  /* "opendbc/can/parser_pyx.pyx":42
  *       raise RuntimeError(f"Can't find DBC: {dbc_name}")
  * 
  *     self.vl = {}             # <<<<<<<<<<<<<<
  *     self.vl_all = {}
  *     self.ts_nanos = {}
  */
-  __pyx_t_3 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 41, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 42, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_3);
   __Pyx_GOTREF(__pyx_cur_scope->__pyx_v_self->vl);
@@ -2685,14 +2656,14 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
   __pyx_cur_scope->__pyx_v_self->vl = ((PyObject*)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "opendbc/can/parser_pyx.pyx":42
+  /* "opendbc/can/parser_pyx.pyx":43
  * 
  *     self.vl = {}
  *     self.vl_all = {}             # <<<<<<<<<<<<<<
  *     self.ts_nanos = {}
  *     msg_name_to_address = {}
  */
-  __pyx_t_3 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 42, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 43, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_3);
   __Pyx_GOTREF(__pyx_cur_scope->__pyx_v_self->vl_all);
@@ -2700,14 +2671,14 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
   __pyx_cur_scope->__pyx_v_self->vl_all = ((PyObject*)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "opendbc/can/parser_pyx.pyx":43
+  /* "opendbc/can/parser_pyx.pyx":44
  *     self.vl = {}
  *     self.vl_all = {}
  *     self.ts_nanos = {}             # <<<<<<<<<<<<<<
  *     msg_name_to_address = {}
  * 
  */
-  __pyx_t_3 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 43, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 44, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_3);
   __Pyx_GOTREF(__pyx_cur_scope->__pyx_v_self->ts_nanos);
@@ -2715,19 +2686,19 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
   __pyx_cur_scope->__pyx_v_self->ts_nanos = ((PyObject*)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "opendbc/can/parser_pyx.pyx":44
+  /* "opendbc/can/parser_pyx.pyx":45
  *     self.vl_all = {}
  *     self.ts_nanos = {}
  *     msg_name_to_address = {}             # <<<<<<<<<<<<<<
  * 
  *     for i in range(self.dbc[0].msgs.size()):
  */
-  __pyx_t_3 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 44, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_v_msg_name_to_address = ((PyObject*)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "opendbc/can/parser_pyx.pyx":46
+  /* "opendbc/can/parser_pyx.pyx":47
  *     msg_name_to_address = {}
  * 
  *     for i in range(self.dbc[0].msgs.size()):             # <<<<<<<<<<<<<<
@@ -2739,7 +2710,7 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
   for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
     __pyx_v_i = __pyx_t_8;
 
-    /* "opendbc/can/parser_pyx.pyx":47
+    /* "opendbc/can/parser_pyx.pyx":48
  * 
  *     for i in range(self.dbc[0].msgs.size()):
  *       msg = self.dbc[0].msgs[i]             # <<<<<<<<<<<<<<
@@ -2748,159 +2719,144 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
  */
     __pyx_v_msg = ((__pyx_cur_scope->__pyx_v_self->dbc[0]).msgs[__pyx_v_i]);
 
-    /* "opendbc/can/parser_pyx.pyx":48
+    /* "opendbc/can/parser_pyx.pyx":49
  *     for i in range(self.dbc[0].msgs.size()):
  *       msg = self.dbc[0].msgs[i]
  *       name = msg.name.decode('utf8')             # <<<<<<<<<<<<<<
  * 
  *       msg_name_to_address[name] = msg.address
  */
-    __pyx_t_3 = __Pyx_decode_cpp_string(__pyx_v_msg.name, 0, PY_SSIZE_T_MAX, NULL, NULL, PyUnicode_DecodeUTF8); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 48, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_decode_cpp_string(__pyx_v_msg.name, 0, PY_SSIZE_T_MAX, NULL, NULL, PyUnicode_DecodeUTF8); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 49, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_XDECREF_SET(__pyx_v_name, __pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "opendbc/can/parser_pyx.pyx":50
+    /* "opendbc/can/parser_pyx.pyx":51
  *       name = msg.name.decode('utf8')
  * 
  *       msg_name_to_address[name] = msg.address             # <<<<<<<<<<<<<<
  *       self.address_to_msg_name[msg.address] = name
  *       self.vl[msg.address] = {}
  */
-    __pyx_t_3 = __Pyx_PyInt_From_uint32_t(__pyx_v_msg.address); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 50, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_From_uint32_t(__pyx_v_msg.address); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 51, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    if (unlikely(PyDict_SetItem(__pyx_v_msg_name_to_address, __pyx_v_name, __pyx_t_3) < 0)) __PYX_ERR(0, 50, __pyx_L1_error)
+    if (unlikely(PyDict_SetItem(__pyx_v_msg_name_to_address, __pyx_v_name, __pyx_t_3) < 0)) __PYX_ERR(0, 51, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "opendbc/can/parser_pyx.pyx":51
+    /* "opendbc/can/parser_pyx.pyx":52
  * 
  *       msg_name_to_address[name] = msg.address
  *       self.address_to_msg_name[msg.address] = name             # <<<<<<<<<<<<<<
  *       self.vl[msg.address] = {}
  *       self.vl[name] = self.vl[msg.address]
  */
-    __pyx_t_4 = __pyx_convert_string_from_py_std__in_string(__pyx_v_name); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 51, __pyx_L1_error)
+    __pyx_t_4 = __pyx_convert_string_from_py_std__in_string(__pyx_v_name); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 52, __pyx_L1_error)
     (__pyx_cur_scope->__pyx_v_self->address_to_msg_name[__pyx_v_msg.address]) = __pyx_t_4;
 
-    /* "opendbc/can/parser_pyx.pyx":52
+    /* "opendbc/can/parser_pyx.pyx":53
  *       msg_name_to_address[name] = msg.address
  *       self.address_to_msg_name[msg.address] = name
  *       self.vl[msg.address] = {}             # <<<<<<<<<<<<<<
  *       self.vl[name] = self.vl[msg.address]
- *       self.vl_all[msg.address] = defaultdict(list)
+ *       self.vl_all[msg.address] = {}
  */
-    __pyx_t_3 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 52, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 53, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     if (unlikely(__pyx_cur_scope->__pyx_v_self->vl == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 52, __pyx_L1_error)
+      __PYX_ERR(0, 53, __pyx_L1_error)
     }
-    __pyx_t_5 = __Pyx_PyInt_From_uint32_t(__pyx_v_msg.address); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 52, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyInt_From_uint32_t(__pyx_v_msg.address); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 53, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    if (unlikely(PyDict_SetItem(__pyx_cur_scope->__pyx_v_self->vl, __pyx_t_5, __pyx_t_3) < 0)) __PYX_ERR(0, 52, __pyx_L1_error)
+    if (unlikely(PyDict_SetItem(__pyx_cur_scope->__pyx_v_self->vl, __pyx_t_5, __pyx_t_3) < 0)) __PYX_ERR(0, 53, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "opendbc/can/parser_pyx.pyx":53
+    /* "opendbc/can/parser_pyx.pyx":54
  *       self.address_to_msg_name[msg.address] = name
  *       self.vl[msg.address] = {}
  *       self.vl[name] = self.vl[msg.address]             # <<<<<<<<<<<<<<
- *       self.vl_all[msg.address] = defaultdict(list)
+ *       self.vl_all[msg.address] = {}
  *       self.vl_all[name] = self.vl_all[msg.address]
  */
     if (unlikely(__pyx_cur_scope->__pyx_v_self->vl == Py_None)) {
-      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 53, __pyx_L1_error)
-    }
-    __pyx_t_3 = __Pyx_PyInt_From_uint32_t(__pyx_v_msg.address); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 53, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_cur_scope->__pyx_v_self->vl, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 53, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(__pyx_cur_scope->__pyx_v_self->vl == Py_None)) {
-      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 53, __pyx_L1_error)
-    }
-    if (unlikely(PyDict_SetItem(__pyx_cur_scope->__pyx_v_self->vl, __pyx_v_name, __pyx_t_5) < 0)) __PYX_ERR(0, 53, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-
-    /* "opendbc/can/parser_pyx.pyx":54
- *       self.vl[msg.address] = {}
- *       self.vl[name] = self.vl[msg.address]
- *       self.vl_all[msg.address] = defaultdict(list)             # <<<<<<<<<<<<<<
- *       self.vl_all[name] = self.vl_all[msg.address]
- *       self.ts_nanos[msg.address] = {}
- */
-    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_defaultdict); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 54, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_9 = NULL;
-    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
-      __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_3);
-      if (likely(__pyx_t_9)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-        __Pyx_INCREF(__pyx_t_9);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_3, function);
-      }
-    }
-    __pyx_t_5 = (__pyx_t_9) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_9, ((PyObject *)(&PyList_Type))) : __Pyx_PyObject_CallOneArg(__pyx_t_3, ((PyObject *)(&PyList_Type)));
-    __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-    if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 54, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(__pyx_cur_scope->__pyx_v_self->vl_all == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
       __PYX_ERR(0, 54, __pyx_L1_error)
     }
     __pyx_t_3 = __Pyx_PyInt_From_uint32_t(__pyx_v_msg.address); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 54, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    if (unlikely(PyDict_SetItem(__pyx_cur_scope->__pyx_v_self->vl_all, __pyx_t_3, __pyx_t_5) < 0)) __PYX_ERR(0, 54, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_cur_scope->__pyx_v_self->vl, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 54, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (unlikely(__pyx_cur_scope->__pyx_v_self->vl == Py_None)) {
+      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+      __PYX_ERR(0, 54, __pyx_L1_error)
+    }
+    if (unlikely(PyDict_SetItem(__pyx_cur_scope->__pyx_v_self->vl, __pyx_v_name, __pyx_t_5) < 0)) __PYX_ERR(0, 54, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
     /* "opendbc/can/parser_pyx.pyx":55
+ *       self.vl[msg.address] = {}
  *       self.vl[name] = self.vl[msg.address]
- *       self.vl_all[msg.address] = defaultdict(list)
+ *       self.vl_all[msg.address] = {}             # <<<<<<<<<<<<<<
+ *       self.vl_all[name] = self.vl_all[msg.address]
+ *       self.ts_nanos[msg.address] = {}
+ */
+    __pyx_t_5 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 55, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    if (unlikely(__pyx_cur_scope->__pyx_v_self->vl_all == Py_None)) {
+      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+      __PYX_ERR(0, 55, __pyx_L1_error)
+    }
+    __pyx_t_3 = __Pyx_PyInt_From_uint32_t(__pyx_v_msg.address); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 55, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    if (unlikely(PyDict_SetItem(__pyx_cur_scope->__pyx_v_self->vl_all, __pyx_t_3, __pyx_t_5) < 0)) __PYX_ERR(0, 55, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+
+    /* "opendbc/can/parser_pyx.pyx":56
+ *       self.vl[name] = self.vl[msg.address]
+ *       self.vl_all[msg.address] = {}
  *       self.vl_all[name] = self.vl_all[msg.address]             # <<<<<<<<<<<<<<
  *       self.ts_nanos[msg.address] = {}
  *       self.ts_nanos[name] = self.ts_nanos[msg.address]
  */
     if (unlikely(__pyx_cur_scope->__pyx_v_self->vl_all == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 55, __pyx_L1_error)
+      __PYX_ERR(0, 56, __pyx_L1_error)
     }
-    __pyx_t_5 = __Pyx_PyInt_From_uint32_t(__pyx_v_msg.address); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 55, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyInt_From_uint32_t(__pyx_v_msg.address); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 56, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_3 = __Pyx_PyDict_GetItem(__pyx_cur_scope->__pyx_v_self->vl_all, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 55, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyDict_GetItem(__pyx_cur_scope->__pyx_v_self->vl_all, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 56, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     if (unlikely(__pyx_cur_scope->__pyx_v_self->vl_all == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 55, __pyx_L1_error)
+      __PYX_ERR(0, 56, __pyx_L1_error)
     }
-    if (unlikely(PyDict_SetItem(__pyx_cur_scope->__pyx_v_self->vl_all, __pyx_v_name, __pyx_t_3) < 0)) __PYX_ERR(0, 55, __pyx_L1_error)
+    if (unlikely(PyDict_SetItem(__pyx_cur_scope->__pyx_v_self->vl_all, __pyx_v_name, __pyx_t_3) < 0)) __PYX_ERR(0, 56, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "opendbc/can/parser_pyx.pyx":56
- *       self.vl_all[msg.address] = defaultdict(list)
+    /* "opendbc/can/parser_pyx.pyx":57
+ *       self.vl_all[msg.address] = {}
  *       self.vl_all[name] = self.vl_all[msg.address]
  *       self.ts_nanos[msg.address] = {}             # <<<<<<<<<<<<<<
  *       self.ts_nanos[name] = self.ts_nanos[msg.address]
  * 
  */
-    __pyx_t_3 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 56, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 57, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     if (unlikely(__pyx_cur_scope->__pyx_v_self->ts_nanos == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 56, __pyx_L1_error)
+      __PYX_ERR(0, 57, __pyx_L1_error)
     }
-    __pyx_t_5 = __Pyx_PyInt_From_uint32_t(__pyx_v_msg.address); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 56, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyInt_From_uint32_t(__pyx_v_msg.address); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 57, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    if (unlikely(PyDict_SetItem(__pyx_cur_scope->__pyx_v_self->ts_nanos, __pyx_t_5, __pyx_t_3) < 0)) __PYX_ERR(0, 56, __pyx_L1_error)
+    if (unlikely(PyDict_SetItem(__pyx_cur_scope->__pyx_v_self->ts_nanos, __pyx_t_5, __pyx_t_3) < 0)) __PYX_ERR(0, 57, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "opendbc/can/parser_pyx.pyx":57
+    /* "opendbc/can/parser_pyx.pyx":58
  *       self.vl_all[name] = self.vl_all[msg.address]
  *       self.ts_nanos[msg.address] = {}
  *       self.ts_nanos[name] = self.ts_nanos[msg.address]             # <<<<<<<<<<<<<<
@@ -2909,22 +2865,22 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
  */
     if (unlikely(__pyx_cur_scope->__pyx_v_self->ts_nanos == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 57, __pyx_L1_error)
+      __PYX_ERR(0, 58, __pyx_L1_error)
     }
-    __pyx_t_3 = __Pyx_PyInt_From_uint32_t(__pyx_v_msg.address); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 57, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_From_uint32_t(__pyx_v_msg.address); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 58, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_cur_scope->__pyx_v_self->ts_nanos, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 57, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_cur_scope->__pyx_v_self->ts_nanos, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 58, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     if (unlikely(__pyx_cur_scope->__pyx_v_self->ts_nanos == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 57, __pyx_L1_error)
+      __PYX_ERR(0, 58, __pyx_L1_error)
     }
-    if (unlikely(PyDict_SetItem(__pyx_cur_scope->__pyx_v_self->ts_nanos, __pyx_v_name, __pyx_t_5) < 0)) __PYX_ERR(0, 57, __pyx_L1_error)
+    if (unlikely(PyDict_SetItem(__pyx_cur_scope->__pyx_v_self->ts_nanos, __pyx_v_name, __pyx_t_5) < 0)) __PYX_ERR(0, 58, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   }
 
-  /* "opendbc/can/parser_pyx.pyx":60
+  /* "opendbc/can/parser_pyx.pyx":61
  * 
  *     # Convert message names into addresses
  *     for i in range(len(signals)):             # <<<<<<<<<<<<<<
@@ -2933,118 +2889,118 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
  */
   __pyx_t_5 = __pyx_cur_scope->__pyx_v_signals;
   __Pyx_INCREF(__pyx_t_5);
-  __pyx_t_10 = PyObject_Length(__pyx_t_5); if (unlikely(__pyx_t_10 == ((Py_ssize_t)-1))) __PYX_ERR(0, 60, __pyx_L1_error)
+  __pyx_t_9 = PyObject_Length(__pyx_t_5); if (unlikely(__pyx_t_9 == ((Py_ssize_t)-1))) __PYX_ERR(0, 61, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_11 = __pyx_t_10;
-  for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_11; __pyx_t_6+=1) {
+  __pyx_t_10 = __pyx_t_9;
+  for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_10; __pyx_t_6+=1) {
     __pyx_v_i = __pyx_t_6;
 
-    /* "opendbc/can/parser_pyx.pyx":61
+    /* "opendbc/can/parser_pyx.pyx":62
  *     # Convert message names into addresses
  *     for i in range(len(signals)):
  *       s = signals[i]             # <<<<<<<<<<<<<<
  *       if not isinstance(s[1], numbers.Number):
  *         if name not in msg_name_to_address:
  */
-    __pyx_t_5 = __Pyx_GetItemInt(__pyx_cur_scope->__pyx_v_signals, __pyx_v_i, std::vector<struct Msg> ::size_type, 0, __Pyx_PyInt_FromSize_t, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 61, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_GetItemInt(__pyx_cur_scope->__pyx_v_signals, __pyx_v_i, std::vector<struct Msg> ::size_type, 0, __Pyx_PyInt_FromSize_t, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 62, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_XDECREF_SET(__pyx_v_s, __pyx_t_5);
     __pyx_t_5 = 0;
 
-    /* "opendbc/can/parser_pyx.pyx":62
+    /* "opendbc/can/parser_pyx.pyx":63
  *     for i in range(len(signals)):
  *       s = signals[i]
  *       if not isinstance(s[1], numbers.Number):             # <<<<<<<<<<<<<<
  *         if name not in msg_name_to_address:
  *           print(msg_name_to_address)
  */
-    __pyx_t_5 = __Pyx_GetItemInt(__pyx_v_s, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 62, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_GetItemInt(__pyx_v_s, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 63, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_numbers); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 62, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_numbers); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 63, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_Number); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 62, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_9);
+    __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_Number); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 63, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_11);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_2 = PyObject_IsInstance(__pyx_t_5, __pyx_t_9); if (unlikely(__pyx_t_2 == ((int)-1))) __PYX_ERR(0, 62, __pyx_L1_error)
+    __pyx_t_2 = PyObject_IsInstance(__pyx_t_5, __pyx_t_11); if (unlikely(__pyx_t_2 == ((int)-1))) __PYX_ERR(0, 63, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+    __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     __pyx_t_1 = ((!(__pyx_t_2 != 0)) != 0);
     if (__pyx_t_1) {
 
-      /* "opendbc/can/parser_pyx.pyx":63
+      /* "opendbc/can/parser_pyx.pyx":64
  *       s = signals[i]
  *       if not isinstance(s[1], numbers.Number):
  *         if name not in msg_name_to_address:             # <<<<<<<<<<<<<<
  *           print(msg_name_to_address)
  *           raise RuntimeError(f"could not find message {repr(name)} in DBC {self.dbc_name}")
  */
-      if (unlikely(!__pyx_v_name)) { __Pyx_RaiseUnboundLocalError("name"); __PYX_ERR(0, 63, __pyx_L1_error) }
-      __pyx_t_1 = (__Pyx_PyDict_ContainsTF(__pyx_v_name, __pyx_v_msg_name_to_address, Py_NE)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 63, __pyx_L1_error)
+      if (unlikely(!__pyx_v_name)) { __Pyx_RaiseUnboundLocalError("name"); __PYX_ERR(0, 64, __pyx_L1_error) }
+      __pyx_t_1 = (__Pyx_PyDict_ContainsTF(__pyx_v_name, __pyx_v_msg_name_to_address, Py_NE)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 64, __pyx_L1_error)
       __pyx_t_2 = (__pyx_t_1 != 0);
       if (unlikely(__pyx_t_2)) {
 
-        /* "opendbc/can/parser_pyx.pyx":64
+        /* "opendbc/can/parser_pyx.pyx":65
  *       if not isinstance(s[1], numbers.Number):
  *         if name not in msg_name_to_address:
  *           print(msg_name_to_address)             # <<<<<<<<<<<<<<
  *           raise RuntimeError(f"could not find message {repr(name)} in DBC {self.dbc_name}")
  *         s = (s[0], msg_name_to_address[s[1]])
  */
-        __pyx_t_9 = __Pyx_PyObject_CallOneArg(__pyx_builtin_print, __pyx_v_msg_name_to_address); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 64, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_9);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+        __pyx_t_11 = __Pyx_PyObject_CallOneArg(__pyx_builtin_print, __pyx_v_msg_name_to_address); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 65, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_11);
+        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-        /* "opendbc/can/parser_pyx.pyx":65
+        /* "opendbc/can/parser_pyx.pyx":66
  *         if name not in msg_name_to_address:
  *           print(msg_name_to_address)
  *           raise RuntimeError(f"could not find message {repr(name)} in DBC {self.dbc_name}")             # <<<<<<<<<<<<<<
  *         s = (s[0], msg_name_to_address[s[1]])
  *         signals[i] = s
  */
-        __pyx_t_9 = PyTuple_New(4); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 65, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_9);
+        __pyx_t_11 = PyTuple_New(4); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 66, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_11);
         __pyx_t_12 = 0;
         __pyx_t_13 = 127;
         __Pyx_INCREF(__pyx_kp_u_could_not_find_message);
         __pyx_t_12 += 23;
         __Pyx_GIVEREF(__pyx_kp_u_could_not_find_message);
-        PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_kp_u_could_not_find_message);
-        if (unlikely(!__pyx_v_name)) { __Pyx_RaiseUnboundLocalError("name"); __PYX_ERR(0, 65, __pyx_L1_error) }
-        __pyx_t_5 = PyObject_Repr(__pyx_v_name); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 65, __pyx_L1_error)
+        PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_kp_u_could_not_find_message);
+        if (unlikely(!__pyx_v_name)) { __Pyx_RaiseUnboundLocalError("name"); __PYX_ERR(0, 66, __pyx_L1_error) }
+        __pyx_t_5 = PyObject_Repr(__pyx_v_name); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 66, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_3 = __Pyx_PyObject_FormatSimple(__pyx_t_5, __pyx_empty_unicode); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 65, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_FormatSimple(__pyx_t_5, __pyx_empty_unicode); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 66, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         __pyx_t_13 = (__Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_3) > __pyx_t_13) ? __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_3) : __pyx_t_13;
         __pyx_t_12 += __Pyx_PyUnicode_GET_LENGTH(__pyx_t_3);
         __Pyx_GIVEREF(__pyx_t_3);
-        PyTuple_SET_ITEM(__pyx_t_9, 1, __pyx_t_3);
+        PyTuple_SET_ITEM(__pyx_t_11, 1, __pyx_t_3);
         __pyx_t_3 = 0;
         __Pyx_INCREF(__pyx_kp_u_in_DBC);
         __pyx_t_12 += 8;
         __Pyx_GIVEREF(__pyx_kp_u_in_DBC);
-        PyTuple_SET_ITEM(__pyx_t_9, 2, __pyx_kp_u_in_DBC);
-        __pyx_t_3 = __pyx_convert_PyBytes_string_to_py_std__in_string(__pyx_cur_scope->__pyx_v_self->dbc_name); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 65, __pyx_L1_error)
+        PyTuple_SET_ITEM(__pyx_t_11, 2, __pyx_kp_u_in_DBC);
+        __pyx_t_3 = __pyx_convert_PyBytes_string_to_py_std__in_string(__pyx_cur_scope->__pyx_v_self->dbc_name); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 66, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_5 = __Pyx_PyObject_FormatSimple(__pyx_t_3, __pyx_empty_unicode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 65, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyObject_FormatSimple(__pyx_t_3, __pyx_empty_unicode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 66, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __pyx_t_13 = (__Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_5) > __pyx_t_13) ? __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_5) : __pyx_t_13;
         __pyx_t_12 += __Pyx_PyUnicode_GET_LENGTH(__pyx_t_5);
         __Pyx_GIVEREF(__pyx_t_5);
-        PyTuple_SET_ITEM(__pyx_t_9, 3, __pyx_t_5);
+        PyTuple_SET_ITEM(__pyx_t_11, 3, __pyx_t_5);
         __pyx_t_5 = 0;
-        __pyx_t_5 = __Pyx_PyUnicode_Join(__pyx_t_9, 4, __pyx_t_12, __pyx_t_13); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 65, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyUnicode_Join(__pyx_t_11, 4, __pyx_t_12, __pyx_t_13); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 66, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-        __pyx_t_9 = __Pyx_PyObject_CallOneArg(__pyx_builtin_RuntimeError, __pyx_t_5); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 65, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_9);
+        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+        __pyx_t_11 = __Pyx_PyObject_CallOneArg(__pyx_builtin_RuntimeError, __pyx_t_5); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 66, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_11);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-        __Pyx_Raise(__pyx_t_9, 0, 0, 0);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-        __PYX_ERR(0, 65, __pyx_L1_error)
+        __Pyx_Raise(__pyx_t_11, 0, 0, 0);
+        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+        __PYX_ERR(0, 66, __pyx_L1_error)
 
-        /* "opendbc/can/parser_pyx.pyx":63
+        /* "opendbc/can/parser_pyx.pyx":64
  *       s = signals[i]
  *       if not isinstance(s[1], numbers.Number):
  *         if name not in msg_name_to_address:             # <<<<<<<<<<<<<<
@@ -3053,41 +3009,41 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
  */
       }
 
-      /* "opendbc/can/parser_pyx.pyx":66
+      /* "opendbc/can/parser_pyx.pyx":67
  *           print(msg_name_to_address)
  *           raise RuntimeError(f"could not find message {repr(name)} in DBC {self.dbc_name}")
  *         s = (s[0], msg_name_to_address[s[1]])             # <<<<<<<<<<<<<<
  *         signals[i] = s
  * 
  */
-      __pyx_t_9 = __Pyx_GetItemInt(__pyx_v_s, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 66, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_9);
-      __pyx_t_5 = __Pyx_GetItemInt(__pyx_v_s, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 66, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_GetItemInt(__pyx_v_s, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 67, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_11);
+      __pyx_t_5 = __Pyx_GetItemInt(__pyx_v_s, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 67, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_3 = __Pyx_PyDict_GetItem(__pyx_v_msg_name_to_address, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 66, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyDict_GetItem(__pyx_v_msg_name_to_address, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 67, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 66, __pyx_L1_error)
+      __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 67, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __Pyx_GIVEREF(__pyx_t_9);
-      PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_9);
+      __Pyx_GIVEREF(__pyx_t_11);
+      PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_11);
       __Pyx_GIVEREF(__pyx_t_3);
       PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_t_3);
-      __pyx_t_9 = 0;
+      __pyx_t_11 = 0;
       __pyx_t_3 = 0;
       __Pyx_DECREF_SET(__pyx_v_s, __pyx_t_5);
       __pyx_t_5 = 0;
 
-      /* "opendbc/can/parser_pyx.pyx":67
+      /* "opendbc/can/parser_pyx.pyx":68
  *           raise RuntimeError(f"could not find message {repr(name)} in DBC {self.dbc_name}")
  *         s = (s[0], msg_name_to_address[s[1]])
  *         signals[i] = s             # <<<<<<<<<<<<<<
  * 
  *     for i in range(len(checks)):
  */
-      if (unlikely(__Pyx_SetItemInt(__pyx_cur_scope->__pyx_v_signals, __pyx_v_i, __pyx_v_s, std::vector<struct Msg> ::size_type, 0, __Pyx_PyInt_FromSize_t, 0, 0, 1) < 0)) __PYX_ERR(0, 67, __pyx_L1_error)
+      if (unlikely(__Pyx_SetItemInt(__pyx_cur_scope->__pyx_v_signals, __pyx_v_i, __pyx_v_s, std::vector<struct Msg> ::size_type, 0, __Pyx_PyInt_FromSize_t, 0, 0, 1) < 0)) __PYX_ERR(0, 68, __pyx_L1_error)
 
-      /* "opendbc/can/parser_pyx.pyx":62
+      /* "opendbc/can/parser_pyx.pyx":63
  *     for i in range(len(signals)):
  *       s = signals[i]
  *       if not isinstance(s[1], numbers.Number):             # <<<<<<<<<<<<<<
@@ -3097,126 +3053,126 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
     }
   }
 
-  /* "opendbc/can/parser_pyx.pyx":69
+  /* "opendbc/can/parser_pyx.pyx":70
  *         signals[i] = s
  * 
  *     for i in range(len(checks)):             # <<<<<<<<<<<<<<
  *       c = checks[i]
  *       if not isinstance(c[0], numbers.Number):
  */
-  __pyx_t_10 = PyObject_Length(__pyx_v_checks); if (unlikely(__pyx_t_10 == ((Py_ssize_t)-1))) __PYX_ERR(0, 69, __pyx_L1_error)
-  __pyx_t_11 = __pyx_t_10;
-  for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_11; __pyx_t_6+=1) {
+  __pyx_t_9 = PyObject_Length(__pyx_v_checks); if (unlikely(__pyx_t_9 == ((Py_ssize_t)-1))) __PYX_ERR(0, 70, __pyx_L1_error)
+  __pyx_t_10 = __pyx_t_9;
+  for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_10; __pyx_t_6+=1) {
     __pyx_v_i = __pyx_t_6;
 
-    /* "opendbc/can/parser_pyx.pyx":70
+    /* "opendbc/can/parser_pyx.pyx":71
  * 
  *     for i in range(len(checks)):
  *       c = checks[i]             # <<<<<<<<<<<<<<
  *       if not isinstance(c[0], numbers.Number):
  *         if c[0] not in msg_name_to_address:
  */
-    __pyx_t_5 = __Pyx_GetItemInt(__pyx_v_checks, __pyx_v_i, std::vector<struct Msg> ::size_type, 0, __Pyx_PyInt_FromSize_t, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 70, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_GetItemInt(__pyx_v_checks, __pyx_v_i, std::vector<struct Msg> ::size_type, 0, __Pyx_PyInt_FromSize_t, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 71, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_XDECREF_SET(__pyx_v_c, __pyx_t_5);
     __pyx_t_5 = 0;
 
-    /* "opendbc/can/parser_pyx.pyx":71
+    /* "opendbc/can/parser_pyx.pyx":72
  *     for i in range(len(checks)):
  *       c = checks[i]
  *       if not isinstance(c[0], numbers.Number):             # <<<<<<<<<<<<<<
  *         if c[0] not in msg_name_to_address:
  *           print(msg_name_to_address)
  */
-    __pyx_t_5 = __Pyx_GetItemInt(__pyx_v_c, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 71, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_GetItemInt(__pyx_v_c, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 72, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_numbers); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 71, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_numbers); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 72, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_Number); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 71, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_9);
+    __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_Number); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 72, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_11);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_2 = PyObject_IsInstance(__pyx_t_5, __pyx_t_9); if (unlikely(__pyx_t_2 == ((int)-1))) __PYX_ERR(0, 71, __pyx_L1_error)
+    __pyx_t_2 = PyObject_IsInstance(__pyx_t_5, __pyx_t_11); if (unlikely(__pyx_t_2 == ((int)-1))) __PYX_ERR(0, 72, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+    __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     __pyx_t_1 = ((!(__pyx_t_2 != 0)) != 0);
     if (__pyx_t_1) {
 
-      /* "opendbc/can/parser_pyx.pyx":72
+      /* "opendbc/can/parser_pyx.pyx":73
  *       c = checks[i]
  *       if not isinstance(c[0], numbers.Number):
  *         if c[0] not in msg_name_to_address:             # <<<<<<<<<<<<<<
  *           print(msg_name_to_address)
  *           raise RuntimeError(f"could not find message {repr(name)} in DBC {self.dbc_name}")
  */
-      __pyx_t_9 = __Pyx_GetItemInt(__pyx_v_c, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 72, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_9);
-      __pyx_t_1 = (__Pyx_PyDict_ContainsTF(__pyx_t_9, __pyx_v_msg_name_to_address, Py_NE)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 72, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+      __pyx_t_11 = __Pyx_GetItemInt(__pyx_v_c, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 73, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_11);
+      __pyx_t_1 = (__Pyx_PyDict_ContainsTF(__pyx_t_11, __pyx_v_msg_name_to_address, Py_NE)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 73, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       __pyx_t_2 = (__pyx_t_1 != 0);
       if (unlikely(__pyx_t_2)) {
 
-        /* "opendbc/can/parser_pyx.pyx":73
+        /* "opendbc/can/parser_pyx.pyx":74
  *       if not isinstance(c[0], numbers.Number):
  *         if c[0] not in msg_name_to_address:
  *           print(msg_name_to_address)             # <<<<<<<<<<<<<<
  *           raise RuntimeError(f"could not find message {repr(name)} in DBC {self.dbc_name}")
  *         c = (msg_name_to_address[c[0]], c[1])
  */
-        __pyx_t_9 = __Pyx_PyObject_CallOneArg(__pyx_builtin_print, __pyx_v_msg_name_to_address); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 73, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_9);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+        __pyx_t_11 = __Pyx_PyObject_CallOneArg(__pyx_builtin_print, __pyx_v_msg_name_to_address); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 74, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_11);
+        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-        /* "opendbc/can/parser_pyx.pyx":74
+        /* "opendbc/can/parser_pyx.pyx":75
  *         if c[0] not in msg_name_to_address:
  *           print(msg_name_to_address)
  *           raise RuntimeError(f"could not find message {repr(name)} in DBC {self.dbc_name}")             # <<<<<<<<<<<<<<
  *         c = (msg_name_to_address[c[0]], c[1])
  *         checks[i] = c
  */
-        __pyx_t_9 = PyTuple_New(4); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 74, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_9);
+        __pyx_t_11 = PyTuple_New(4); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 75, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_11);
         __pyx_t_12 = 0;
         __pyx_t_13 = 127;
         __Pyx_INCREF(__pyx_kp_u_could_not_find_message);
         __pyx_t_12 += 23;
         __Pyx_GIVEREF(__pyx_kp_u_could_not_find_message);
-        PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_kp_u_could_not_find_message);
-        if (unlikely(!__pyx_v_name)) { __Pyx_RaiseUnboundLocalError("name"); __PYX_ERR(0, 74, __pyx_L1_error) }
-        __pyx_t_5 = PyObject_Repr(__pyx_v_name); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 74, __pyx_L1_error)
+        PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_kp_u_could_not_find_message);
+        if (unlikely(!__pyx_v_name)) { __Pyx_RaiseUnboundLocalError("name"); __PYX_ERR(0, 75, __pyx_L1_error) }
+        __pyx_t_5 = PyObject_Repr(__pyx_v_name); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 75, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_3 = __Pyx_PyObject_FormatSimple(__pyx_t_5, __pyx_empty_unicode); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 74, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_FormatSimple(__pyx_t_5, __pyx_empty_unicode); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 75, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         __pyx_t_13 = (__Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_3) > __pyx_t_13) ? __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_3) : __pyx_t_13;
         __pyx_t_12 += __Pyx_PyUnicode_GET_LENGTH(__pyx_t_3);
         __Pyx_GIVEREF(__pyx_t_3);
-        PyTuple_SET_ITEM(__pyx_t_9, 1, __pyx_t_3);
+        PyTuple_SET_ITEM(__pyx_t_11, 1, __pyx_t_3);
         __pyx_t_3 = 0;
         __Pyx_INCREF(__pyx_kp_u_in_DBC);
         __pyx_t_12 += 8;
         __Pyx_GIVEREF(__pyx_kp_u_in_DBC);
-        PyTuple_SET_ITEM(__pyx_t_9, 2, __pyx_kp_u_in_DBC);
-        __pyx_t_3 = __pyx_convert_PyBytes_string_to_py_std__in_string(__pyx_cur_scope->__pyx_v_self->dbc_name); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 74, __pyx_L1_error)
+        PyTuple_SET_ITEM(__pyx_t_11, 2, __pyx_kp_u_in_DBC);
+        __pyx_t_3 = __pyx_convert_PyBytes_string_to_py_std__in_string(__pyx_cur_scope->__pyx_v_self->dbc_name); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 75, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_5 = __Pyx_PyObject_FormatSimple(__pyx_t_3, __pyx_empty_unicode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 74, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyObject_FormatSimple(__pyx_t_3, __pyx_empty_unicode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 75, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __pyx_t_13 = (__Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_5) > __pyx_t_13) ? __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_5) : __pyx_t_13;
         __pyx_t_12 += __Pyx_PyUnicode_GET_LENGTH(__pyx_t_5);
         __Pyx_GIVEREF(__pyx_t_5);
-        PyTuple_SET_ITEM(__pyx_t_9, 3, __pyx_t_5);
+        PyTuple_SET_ITEM(__pyx_t_11, 3, __pyx_t_5);
         __pyx_t_5 = 0;
-        __pyx_t_5 = __Pyx_PyUnicode_Join(__pyx_t_9, 4, __pyx_t_12, __pyx_t_13); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 74, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyUnicode_Join(__pyx_t_11, 4, __pyx_t_12, __pyx_t_13); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 75, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-        __pyx_t_9 = __Pyx_PyObject_CallOneArg(__pyx_builtin_RuntimeError, __pyx_t_5); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 74, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_9);
+        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+        __pyx_t_11 = __Pyx_PyObject_CallOneArg(__pyx_builtin_RuntimeError, __pyx_t_5); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 75, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_11);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-        __Pyx_Raise(__pyx_t_9, 0, 0, 0);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-        __PYX_ERR(0, 74, __pyx_L1_error)
+        __Pyx_Raise(__pyx_t_11, 0, 0, 0);
+        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+        __PYX_ERR(0, 75, __pyx_L1_error)
 
-        /* "opendbc/can/parser_pyx.pyx":72
+        /* "opendbc/can/parser_pyx.pyx":73
  *       c = checks[i]
  *       if not isinstance(c[0], numbers.Number):
  *         if c[0] not in msg_name_to_address:             # <<<<<<<<<<<<<<
@@ -3225,41 +3181,41 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
  */
       }
 
-      /* "opendbc/can/parser_pyx.pyx":75
+      /* "opendbc/can/parser_pyx.pyx":76
  *           print(msg_name_to_address)
  *           raise RuntimeError(f"could not find message {repr(name)} in DBC {self.dbc_name}")
  *         c = (msg_name_to_address[c[0]], c[1])             # <<<<<<<<<<<<<<
  *         checks[i] = c
  * 
  */
-      __pyx_t_9 = __Pyx_GetItemInt(__pyx_v_c, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 75, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_9);
-      __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_v_msg_name_to_address, __pyx_t_9); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 75, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_GetItemInt(__pyx_v_c, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 76, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_11);
+      __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_v_msg_name_to_address, __pyx_t_11); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 76, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      __pyx_t_9 = __Pyx_GetItemInt(__pyx_v_c, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 75, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_9);
-      __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 75, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+      __pyx_t_11 = __Pyx_GetItemInt(__pyx_v_c, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 76, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_11);
+      __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 76, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_GIVEREF(__pyx_t_5);
       PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_5);
-      __Pyx_GIVEREF(__pyx_t_9);
-      PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_t_9);
+      __Pyx_GIVEREF(__pyx_t_11);
+      PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_t_11);
       __pyx_t_5 = 0;
-      __pyx_t_9 = 0;
+      __pyx_t_11 = 0;
       __Pyx_DECREF_SET(__pyx_v_c, __pyx_t_3);
       __pyx_t_3 = 0;
 
-      /* "opendbc/can/parser_pyx.pyx":76
+      /* "opendbc/can/parser_pyx.pyx":77
  *           raise RuntimeError(f"could not find message {repr(name)} in DBC {self.dbc_name}")
  *         c = (msg_name_to_address[c[0]], c[1])
  *         checks[i] = c             # <<<<<<<<<<<<<<
  * 
  *     if enforce_checks:
  */
-      if (unlikely(__Pyx_SetItemInt(__pyx_v_checks, __pyx_v_i, __pyx_v_c, std::vector<struct Msg> ::size_type, 0, __Pyx_PyInt_FromSize_t, 0, 0, 1) < 0)) __PYX_ERR(0, 76, __pyx_L1_error)
+      if (unlikely(__Pyx_SetItemInt(__pyx_v_checks, __pyx_v_i, __pyx_v_c, std::vector<struct Msg> ::size_type, 0, __Pyx_PyInt_FromSize_t, 0, 0, 1) < 0)) __PYX_ERR(0, 77, __pyx_L1_error)
 
-      /* "opendbc/can/parser_pyx.pyx":71
+      /* "opendbc/can/parser_pyx.pyx":72
  *     for i in range(len(checks)):
  *       c = checks[i]
  *       if not isinstance(c[0], numbers.Number):             # <<<<<<<<<<<<<<
@@ -3269,17 +3225,17 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
     }
   }
 
-  /* "opendbc/can/parser_pyx.pyx":78
+  /* "opendbc/can/parser_pyx.pyx":79
  *         checks[i] = c
  * 
  *     if enforce_checks:             # <<<<<<<<<<<<<<
  *       checked_addrs = {c[0] for c in checks}
  *       signal_addrs = {s[1] for s in signals}
  */
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_v_enforce_checks); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_v_enforce_checks); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 79, __pyx_L1_error)
   if (__pyx_t_2) {
 
-    /* "opendbc/can/parser_pyx.pyx":79
+    /* "opendbc/can/parser_pyx.pyx":80
  * 
  *     if enforce_checks:
  *       checked_addrs = {c[0] for c in checks}             # <<<<<<<<<<<<<<
@@ -3287,42 +3243,42 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
  *       unchecked = signal_addrs - checked_addrs
  */
     { /* enter inner scope */
-      __pyx_t_3 = PySet_New(NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 79, __pyx_L18_error)
+      __pyx_t_3 = PySet_New(NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 80, __pyx_L18_error)
       __Pyx_GOTREF(__pyx_t_3);
       if (likely(PyList_CheckExact(__pyx_v_checks)) || PyTuple_CheckExact(__pyx_v_checks)) {
-        __pyx_t_9 = __pyx_v_checks; __Pyx_INCREF(__pyx_t_9); __pyx_t_10 = 0;
+        __pyx_t_11 = __pyx_v_checks; __Pyx_INCREF(__pyx_t_11); __pyx_t_9 = 0;
         __pyx_t_14 = NULL;
       } else {
-        __pyx_t_10 = -1; __pyx_t_9 = PyObject_GetIter(__pyx_v_checks); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 79, __pyx_L18_error)
-        __Pyx_GOTREF(__pyx_t_9);
-        __pyx_t_14 = Py_TYPE(__pyx_t_9)->tp_iternext; if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 79, __pyx_L18_error)
+        __pyx_t_9 = -1; __pyx_t_11 = PyObject_GetIter(__pyx_v_checks); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 80, __pyx_L18_error)
+        __Pyx_GOTREF(__pyx_t_11);
+        __pyx_t_14 = Py_TYPE(__pyx_t_11)->tp_iternext; if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 80, __pyx_L18_error)
       }
       for (;;) {
         if (likely(!__pyx_t_14)) {
-          if (likely(PyList_CheckExact(__pyx_t_9))) {
-            if (__pyx_t_10 >= PyList_GET_SIZE(__pyx_t_9)) break;
+          if (likely(PyList_CheckExact(__pyx_t_11))) {
+            if (__pyx_t_9 >= PyList_GET_SIZE(__pyx_t_11)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_5 = PyList_GET_ITEM(__pyx_t_9, __pyx_t_10); __Pyx_INCREF(__pyx_t_5); __pyx_t_10++; if (unlikely(0 < 0)) __PYX_ERR(0, 79, __pyx_L18_error)
+            __pyx_t_5 = PyList_GET_ITEM(__pyx_t_11, __pyx_t_9); __Pyx_INCREF(__pyx_t_5); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 80, __pyx_L18_error)
             #else
-            __pyx_t_5 = PySequence_ITEM(__pyx_t_9, __pyx_t_10); __pyx_t_10++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 79, __pyx_L18_error)
+            __pyx_t_5 = PySequence_ITEM(__pyx_t_11, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 80, __pyx_L18_error)
             __Pyx_GOTREF(__pyx_t_5);
             #endif
           } else {
-            if (__pyx_t_10 >= PyTuple_GET_SIZE(__pyx_t_9)) break;
+            if (__pyx_t_9 >= PyTuple_GET_SIZE(__pyx_t_11)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_5 = PyTuple_GET_ITEM(__pyx_t_9, __pyx_t_10); __Pyx_INCREF(__pyx_t_5); __pyx_t_10++; if (unlikely(0 < 0)) __PYX_ERR(0, 79, __pyx_L18_error)
+            __pyx_t_5 = PyTuple_GET_ITEM(__pyx_t_11, __pyx_t_9); __Pyx_INCREF(__pyx_t_5); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 80, __pyx_L18_error)
             #else
-            __pyx_t_5 = PySequence_ITEM(__pyx_t_9, __pyx_t_10); __pyx_t_10++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 79, __pyx_L18_error)
+            __pyx_t_5 = PySequence_ITEM(__pyx_t_11, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 80, __pyx_L18_error)
             __Pyx_GOTREF(__pyx_t_5);
             #endif
           }
         } else {
-          __pyx_t_5 = __pyx_t_14(__pyx_t_9);
+          __pyx_t_5 = __pyx_t_14(__pyx_t_11);
           if (unlikely(!__pyx_t_5)) {
             PyObject* exc_type = PyErr_Occurred();
             if (exc_type) {
               if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-              else __PYX_ERR(0, 79, __pyx_L18_error)
+              else __PYX_ERR(0, 80, __pyx_L18_error)
             }
             break;
           }
@@ -3330,12 +3286,12 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
         }
         __Pyx_XDECREF_SET(__pyx_7genexpr__pyx_v_c, __pyx_t_5);
         __pyx_t_5 = 0;
-        __pyx_t_5 = __Pyx_GetItemInt(__pyx_7genexpr__pyx_v_c, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 79, __pyx_L18_error)
+        __pyx_t_5 = __Pyx_GetItemInt(__pyx_7genexpr__pyx_v_c, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 80, __pyx_L18_error)
         __Pyx_GOTREF(__pyx_t_5);
-        if (unlikely(PySet_Add(__pyx_t_3, (PyObject*)__pyx_t_5))) __PYX_ERR(0, 79, __pyx_L18_error)
+        if (unlikely(PySet_Add(__pyx_t_3, (PyObject*)__pyx_t_5))) __PYX_ERR(0, 80, __pyx_L18_error)
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       }
-      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+      __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       __Pyx_XDECREF(__pyx_7genexpr__pyx_v_c); __pyx_7genexpr__pyx_v_c = 0;
       goto __pyx_L21_exit_scope;
       __pyx_L18_error:;
@@ -3346,7 +3302,7 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
     __pyx_v_checked_addrs = ((PyObject*)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "opendbc/can/parser_pyx.pyx":80
+    /* "opendbc/can/parser_pyx.pyx":81
  *     if enforce_checks:
  *       checked_addrs = {c[0] for c in checks}
  *       signal_addrs = {s[1] for s in signals}             # <<<<<<<<<<<<<<
@@ -3354,42 +3310,42 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
  *       if len(unchecked):
  */
     { /* enter inner scope */
-      __pyx_t_3 = PySet_New(NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 80, __pyx_L24_error)
+      __pyx_t_3 = PySet_New(NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 81, __pyx_L24_error)
       __Pyx_GOTREF(__pyx_t_3);
       if (likely(PyList_CheckExact(__pyx_cur_scope->__pyx_v_signals)) || PyTuple_CheckExact(__pyx_cur_scope->__pyx_v_signals)) {
-        __pyx_t_9 = __pyx_cur_scope->__pyx_v_signals; __Pyx_INCREF(__pyx_t_9); __pyx_t_10 = 0;
+        __pyx_t_11 = __pyx_cur_scope->__pyx_v_signals; __Pyx_INCREF(__pyx_t_11); __pyx_t_9 = 0;
         __pyx_t_14 = NULL;
       } else {
-        __pyx_t_10 = -1; __pyx_t_9 = PyObject_GetIter(__pyx_cur_scope->__pyx_v_signals); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 80, __pyx_L24_error)
-        __Pyx_GOTREF(__pyx_t_9);
-        __pyx_t_14 = Py_TYPE(__pyx_t_9)->tp_iternext; if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 80, __pyx_L24_error)
+        __pyx_t_9 = -1; __pyx_t_11 = PyObject_GetIter(__pyx_cur_scope->__pyx_v_signals); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 81, __pyx_L24_error)
+        __Pyx_GOTREF(__pyx_t_11);
+        __pyx_t_14 = Py_TYPE(__pyx_t_11)->tp_iternext; if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 81, __pyx_L24_error)
       }
       for (;;) {
         if (likely(!__pyx_t_14)) {
-          if (likely(PyList_CheckExact(__pyx_t_9))) {
-            if (__pyx_t_10 >= PyList_GET_SIZE(__pyx_t_9)) break;
+          if (likely(PyList_CheckExact(__pyx_t_11))) {
+            if (__pyx_t_9 >= PyList_GET_SIZE(__pyx_t_11)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_5 = PyList_GET_ITEM(__pyx_t_9, __pyx_t_10); __Pyx_INCREF(__pyx_t_5); __pyx_t_10++; if (unlikely(0 < 0)) __PYX_ERR(0, 80, __pyx_L24_error)
+            __pyx_t_5 = PyList_GET_ITEM(__pyx_t_11, __pyx_t_9); __Pyx_INCREF(__pyx_t_5); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 81, __pyx_L24_error)
             #else
-            __pyx_t_5 = PySequence_ITEM(__pyx_t_9, __pyx_t_10); __pyx_t_10++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 80, __pyx_L24_error)
+            __pyx_t_5 = PySequence_ITEM(__pyx_t_11, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 81, __pyx_L24_error)
             __Pyx_GOTREF(__pyx_t_5);
             #endif
           } else {
-            if (__pyx_t_10 >= PyTuple_GET_SIZE(__pyx_t_9)) break;
+            if (__pyx_t_9 >= PyTuple_GET_SIZE(__pyx_t_11)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_5 = PyTuple_GET_ITEM(__pyx_t_9, __pyx_t_10); __Pyx_INCREF(__pyx_t_5); __pyx_t_10++; if (unlikely(0 < 0)) __PYX_ERR(0, 80, __pyx_L24_error)
+            __pyx_t_5 = PyTuple_GET_ITEM(__pyx_t_11, __pyx_t_9); __Pyx_INCREF(__pyx_t_5); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 81, __pyx_L24_error)
             #else
-            __pyx_t_5 = PySequence_ITEM(__pyx_t_9, __pyx_t_10); __pyx_t_10++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 80, __pyx_L24_error)
+            __pyx_t_5 = PySequence_ITEM(__pyx_t_11, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 81, __pyx_L24_error)
             __Pyx_GOTREF(__pyx_t_5);
             #endif
           }
         } else {
-          __pyx_t_5 = __pyx_t_14(__pyx_t_9);
+          __pyx_t_5 = __pyx_t_14(__pyx_t_11);
           if (unlikely(!__pyx_t_5)) {
             PyObject* exc_type = PyErr_Occurred();
             if (exc_type) {
               if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-              else __PYX_ERR(0, 80, __pyx_L24_error)
+              else __PYX_ERR(0, 81, __pyx_L24_error)
             }
             break;
           }
@@ -3397,12 +3353,12 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
         }
         __Pyx_XDECREF_SET(__pyx_8genexpr1__pyx_v_s, __pyx_t_5);
         __pyx_t_5 = 0;
-        __pyx_t_5 = __Pyx_GetItemInt(__pyx_8genexpr1__pyx_v_s, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 80, __pyx_L24_error)
+        __pyx_t_5 = __Pyx_GetItemInt(__pyx_8genexpr1__pyx_v_s, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 81, __pyx_L24_error)
         __Pyx_GOTREF(__pyx_t_5);
-        if (unlikely(PySet_Add(__pyx_t_3, (PyObject*)__pyx_t_5))) __PYX_ERR(0, 80, __pyx_L24_error)
+        if (unlikely(PySet_Add(__pyx_t_3, (PyObject*)__pyx_t_5))) __PYX_ERR(0, 81, __pyx_L24_error)
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       }
-      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+      __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       __Pyx_XDECREF(__pyx_8genexpr1__pyx_v_s); __pyx_8genexpr1__pyx_v_s = 0;
       goto __pyx_L27_exit_scope;
       __pyx_L24_error:;
@@ -3413,20 +3369,20 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
     __pyx_v_signal_addrs = ((PyObject*)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "opendbc/can/parser_pyx.pyx":81
+    /* "opendbc/can/parser_pyx.pyx":82
  *       checked_addrs = {c[0] for c in checks}
  *       signal_addrs = {s[1] for s in signals}
  *       unchecked = signal_addrs - checked_addrs             # <<<<<<<<<<<<<<
  *       if len(unchecked):
  *         err_msg = ', '.join(f"{self.address_to_msg_name[addr].decode()} ({hex(addr)})" for addr in unchecked)
  */
-    __pyx_t_3 = PyNumber_Subtract(__pyx_v_signal_addrs, __pyx_v_checked_addrs); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 81, __pyx_L1_error)
+    __pyx_t_3 = PyNumber_Subtract(__pyx_v_signal_addrs, __pyx_v_checked_addrs); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 82, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_GIVEREF(__pyx_t_3);
     __pyx_cur_scope->__pyx_v_unchecked = __pyx_t_3;
     __pyx_t_3 = 0;
 
-    /* "opendbc/can/parser_pyx.pyx":82
+    /* "opendbc/can/parser_pyx.pyx":83
  *       signal_addrs = {s[1] for s in signals}
  *       unchecked = signal_addrs - checked_addrs
  *       if len(unchecked):             # <<<<<<<<<<<<<<
@@ -3435,49 +3391,49 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
  */
     __pyx_t_3 = __pyx_cur_scope->__pyx_v_unchecked;
     __Pyx_INCREF(__pyx_t_3);
-    __pyx_t_10 = PyObject_Length(__pyx_t_3); if (unlikely(__pyx_t_10 == ((Py_ssize_t)-1))) __PYX_ERR(0, 82, __pyx_L1_error)
+    __pyx_t_9 = PyObject_Length(__pyx_t_3); if (unlikely(__pyx_t_9 == ((Py_ssize_t)-1))) __PYX_ERR(0, 83, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_2 = (__pyx_t_10 != 0);
+    __pyx_t_2 = (__pyx_t_9 != 0);
     if (unlikely(__pyx_t_2)) {
 
-      /* "opendbc/can/parser_pyx.pyx":83
+      /* "opendbc/can/parser_pyx.pyx":84
  *       unchecked = signal_addrs - checked_addrs
  *       if len(unchecked):
  *         err_msg = ', '.join(f"{self.address_to_msg_name[addr].decode()} ({hex(addr)})" for addr in unchecked)             # <<<<<<<<<<<<<<
  *         raise RuntimeError(f"Unchecked addrs: {err_msg}")
  * 
  */
-      __pyx_t_3 = __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_8__init___genexpr(((PyObject*)__pyx_cur_scope)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 83, __pyx_L1_error)
+      __pyx_t_3 = __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_8__init___genexpr(((PyObject*)__pyx_cur_scope)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 84, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_9 = __Pyx_Generator_Next(__pyx_t_3); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 83, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_9);
+      __pyx_t_11 = __Pyx_Generator_Next(__pyx_t_3); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 84, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = PyUnicode_Join(__pyx_kp_u__3, __pyx_t_9); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 83, __pyx_L1_error)
+      __pyx_t_3 = PyUnicode_Join(__pyx_kp_u__3, __pyx_t_11); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 84, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+      __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       __pyx_v_err_msg = ((PyObject*)__pyx_t_3);
       __pyx_t_3 = 0;
 
-      /* "opendbc/can/parser_pyx.pyx":84
+      /* "opendbc/can/parser_pyx.pyx":85
  *       if len(unchecked):
  *         err_msg = ', '.join(f"{self.address_to_msg_name[addr].decode()} ({hex(addr)})" for addr in unchecked)
  *         raise RuntimeError(f"Unchecked addrs: {err_msg}")             # <<<<<<<<<<<<<<
  * 
  *     cdef vector[SignalParseOptions] signal_options_v
  */
-      __pyx_t_3 = __Pyx_PyUnicode_Unicode(__pyx_v_err_msg); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 84, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyUnicode_Unicode(__pyx_v_err_msg); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 85, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_9 = __Pyx_PyUnicode_Concat(__pyx_kp_u_Unchecked_addrs, __pyx_t_3); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 84, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_9);
+      __pyx_t_11 = __Pyx_PyUnicode_Concat(__pyx_kp_u_Unchecked_addrs, __pyx_t_3); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 85, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_builtin_RuntimeError, __pyx_t_9); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 84, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_builtin_RuntimeError, __pyx_t_11); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 85, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+      __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       __Pyx_Raise(__pyx_t_3, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __PYX_ERR(0, 84, __pyx_L1_error)
+      __PYX_ERR(0, 85, __pyx_L1_error)
 
-      /* "opendbc/can/parser_pyx.pyx":82
+      /* "opendbc/can/parser_pyx.pyx":83
  *       signal_addrs = {s[1] for s in signals}
  *       unchecked = signal_addrs - checked_addrs
  *       if len(unchecked):             # <<<<<<<<<<<<<<
@@ -3486,7 +3442,7 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
  */
     }
 
-    /* "opendbc/can/parser_pyx.pyx":78
+    /* "opendbc/can/parser_pyx.pyx":79
  *         checks[i] = c
  * 
  *     if enforce_checks:             # <<<<<<<<<<<<<<
@@ -3495,7 +3451,7 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
  */
   }
 
-  /* "opendbc/can/parser_pyx.pyx":88
+  /* "opendbc/can/parser_pyx.pyx":89
  *     cdef vector[SignalParseOptions] signal_options_v
  *     cdef SignalParseOptions spo
  *     for sig_name, sig_address in signals:             # <<<<<<<<<<<<<<
@@ -3503,51 +3459,51 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
  *       spo.name = sig_name
  */
   if (likely(PyList_CheckExact(__pyx_cur_scope->__pyx_v_signals)) || PyTuple_CheckExact(__pyx_cur_scope->__pyx_v_signals)) {
-    __pyx_t_3 = __pyx_cur_scope->__pyx_v_signals; __Pyx_INCREF(__pyx_t_3); __pyx_t_10 = 0;
+    __pyx_t_3 = __pyx_cur_scope->__pyx_v_signals; __Pyx_INCREF(__pyx_t_3); __pyx_t_9 = 0;
     __pyx_t_14 = NULL;
   } else {
-    __pyx_t_10 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_cur_scope->__pyx_v_signals); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 88, __pyx_L1_error)
+    __pyx_t_9 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_cur_scope->__pyx_v_signals); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 89, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_14 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 88, __pyx_L1_error)
+    __pyx_t_14 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 89, __pyx_L1_error)
   }
   for (;;) {
     if (likely(!__pyx_t_14)) {
       if (likely(PyList_CheckExact(__pyx_t_3))) {
-        if (__pyx_t_10 >= PyList_GET_SIZE(__pyx_t_3)) break;
+        if (__pyx_t_9 >= PyList_GET_SIZE(__pyx_t_3)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_9 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_10); __Pyx_INCREF(__pyx_t_9); __pyx_t_10++; if (unlikely(0 < 0)) __PYX_ERR(0, 88, __pyx_L1_error)
+        __pyx_t_11 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_9); __Pyx_INCREF(__pyx_t_11); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 89, __pyx_L1_error)
         #else
-        __pyx_t_9 = PySequence_ITEM(__pyx_t_3, __pyx_t_10); __pyx_t_10++; if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 88, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_9);
+        __pyx_t_11 = PySequence_ITEM(__pyx_t_3, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 89, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_11);
         #endif
       } else {
-        if (__pyx_t_10 >= PyTuple_GET_SIZE(__pyx_t_3)) break;
+        if (__pyx_t_9 >= PyTuple_GET_SIZE(__pyx_t_3)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_9 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_10); __Pyx_INCREF(__pyx_t_9); __pyx_t_10++; if (unlikely(0 < 0)) __PYX_ERR(0, 88, __pyx_L1_error)
+        __pyx_t_11 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_9); __Pyx_INCREF(__pyx_t_11); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 89, __pyx_L1_error)
         #else
-        __pyx_t_9 = PySequence_ITEM(__pyx_t_3, __pyx_t_10); __pyx_t_10++; if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 88, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_9);
+        __pyx_t_11 = PySequence_ITEM(__pyx_t_3, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 89, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_11);
         #endif
       }
     } else {
-      __pyx_t_9 = __pyx_t_14(__pyx_t_3);
-      if (unlikely(!__pyx_t_9)) {
+      __pyx_t_11 = __pyx_t_14(__pyx_t_3);
+      if (unlikely(!__pyx_t_11)) {
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 88, __pyx_L1_error)
+          else __PYX_ERR(0, 89, __pyx_L1_error)
         }
         break;
       }
-      __Pyx_GOTREF(__pyx_t_9);
+      __Pyx_GOTREF(__pyx_t_11);
     }
-    if ((likely(PyTuple_CheckExact(__pyx_t_9))) || (PyList_CheckExact(__pyx_t_9))) {
-      PyObject* sequence = __pyx_t_9;
+    if ((likely(PyTuple_CheckExact(__pyx_t_11))) || (PyList_CheckExact(__pyx_t_11))) {
+      PyObject* sequence = __pyx_t_11;
       Py_ssize_t size = __Pyx_PySequence_SIZE(sequence);
       if (unlikely(size != 2)) {
         if (size > 2) __Pyx_RaiseTooManyValuesError(2);
         else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-        __PYX_ERR(0, 88, __pyx_L1_error)
+        __PYX_ERR(0, 89, __pyx_L1_error)
       }
       #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
       if (likely(PyTuple_CheckExact(sequence))) {
@@ -3560,23 +3516,23 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
       __Pyx_INCREF(__pyx_t_5);
       __Pyx_INCREF(__pyx_t_15);
       #else
-      __pyx_t_5 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 88, __pyx_L1_error)
+      __pyx_t_5 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 89, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_15 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 88, __pyx_L1_error)
+      __pyx_t_15 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 89, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_15);
       #endif
-      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+      __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     } else {
       Py_ssize_t index = -1;
-      __pyx_t_16 = PyObject_GetIter(__pyx_t_9); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 88, __pyx_L1_error)
+      __pyx_t_16 = PyObject_GetIter(__pyx_t_11); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 89, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_16);
-      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+      __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       __pyx_t_17 = Py_TYPE(__pyx_t_16)->tp_iternext;
       index = 0; __pyx_t_5 = __pyx_t_17(__pyx_t_16); if (unlikely(!__pyx_t_5)) goto __pyx_L31_unpacking_failed;
       __Pyx_GOTREF(__pyx_t_5);
       index = 1; __pyx_t_15 = __pyx_t_17(__pyx_t_16); if (unlikely(!__pyx_t_15)) goto __pyx_L31_unpacking_failed;
       __Pyx_GOTREF(__pyx_t_15);
-      if (__Pyx_IternextUnpackEndCheck(__pyx_t_17(__pyx_t_16), 2) < 0) __PYX_ERR(0, 88, __pyx_L1_error)
+      if (__Pyx_IternextUnpackEndCheck(__pyx_t_17(__pyx_t_16), 2) < 0) __PYX_ERR(0, 89, __pyx_L1_error)
       __pyx_t_17 = NULL;
       __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
       goto __pyx_L32_unpacking_done;
@@ -3584,7 +3540,7 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
       __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
       __pyx_t_17 = NULL;
       if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-      __PYX_ERR(0, 88, __pyx_L1_error)
+      __PYX_ERR(0, 89, __pyx_L1_error)
       __pyx_L32_unpacking_done:;
     }
     __Pyx_XDECREF_SET(__pyx_v_sig_name, __pyx_t_5);
@@ -3592,27 +3548,27 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
     __Pyx_XDECREF_SET(__pyx_v_sig_address, __pyx_t_15);
     __pyx_t_15 = 0;
 
-    /* "opendbc/can/parser_pyx.pyx":89
+    /* "opendbc/can/parser_pyx.pyx":90
  *     cdef SignalParseOptions spo
  *     for sig_name, sig_address in signals:
  *       spo.address = sig_address             # <<<<<<<<<<<<<<
  *       spo.name = sig_name
  *       signal_options_v.push_back(spo)
  */
-    __pyx_t_18 = __Pyx_PyInt_As_uint32_t(__pyx_v_sig_address); if (unlikely((__pyx_t_18 == ((uint32_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 89, __pyx_L1_error)
+    __pyx_t_18 = __Pyx_PyInt_As_uint32_t(__pyx_v_sig_address); if (unlikely((__pyx_t_18 == ((uint32_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 90, __pyx_L1_error)
     __pyx_v_spo.address = __pyx_t_18;
 
-    /* "opendbc/can/parser_pyx.pyx":90
+    /* "opendbc/can/parser_pyx.pyx":91
  *     for sig_name, sig_address in signals:
  *       spo.address = sig_address
  *       spo.name = sig_name             # <<<<<<<<<<<<<<
  *       signal_options_v.push_back(spo)
  * 
  */
-    __pyx_t_4 = __pyx_convert_string_from_py_std__in_string(__pyx_v_sig_name); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 90, __pyx_L1_error)
+    __pyx_t_4 = __pyx_convert_string_from_py_std__in_string(__pyx_v_sig_name); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 91, __pyx_L1_error)
     __pyx_v_spo.name = __pyx_t_4;
 
-    /* "opendbc/can/parser_pyx.pyx":91
+    /* "opendbc/can/parser_pyx.pyx":92
  *       spo.address = sig_address
  *       spo.name = sig_name
  *       signal_options_v.push_back(spo)             # <<<<<<<<<<<<<<
@@ -3623,10 +3579,10 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
       __pyx_v_signal_options_v.push_back(__pyx_v_spo);
     } catch(...) {
       __Pyx_CppExn2PyErr();
-      __PYX_ERR(0, 91, __pyx_L1_error)
+      __PYX_ERR(0, 92, __pyx_L1_error)
     }
 
-    /* "opendbc/can/parser_pyx.pyx":88
+    /* "opendbc/can/parser_pyx.pyx":89
  *     cdef vector[SignalParseOptions] signal_options_v
  *     cdef SignalParseOptions spo
  *     for sig_name, sig_address in signals:             # <<<<<<<<<<<<<<
@@ -3636,84 +3592,84 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
   }
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "opendbc/can/parser_pyx.pyx":93
+  /* "opendbc/can/parser_pyx.pyx":94
  *       signal_options_v.push_back(spo)
  * 
  *     message_options = dict((address, 0) for _, address in signals)             # <<<<<<<<<<<<<<
  *     message_options.update(dict(checks))
  * 
  */
-  __pyx_t_3 = __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_8__init___3genexpr(((PyObject*)__pyx_cur_scope)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 93, __pyx_L1_error)
+  __pyx_t_3 = __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_8__init___3genexpr(((PyObject*)__pyx_cur_scope)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 94, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_9 = __Pyx_Generator_Next(__pyx_t_3); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 93, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_9);
+  __pyx_t_11 = __Pyx_Generator_Next(__pyx_t_3); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 94, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_11);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_v_message_options = ((PyObject*)__pyx_t_9);
-  __pyx_t_9 = 0;
+  __pyx_v_message_options = ((PyObject*)__pyx_t_11);
+  __pyx_t_11 = 0;
 
-  /* "opendbc/can/parser_pyx.pyx":94
+  /* "opendbc/can/parser_pyx.pyx":95
  * 
  *     message_options = dict((address, 0) for _, address in signals)
  *     message_options.update(dict(checks))             # <<<<<<<<<<<<<<
  * 
  *     cdef vector[MessageParseOptions] message_options_v
  */
-  __pyx_t_9 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyDict_Type)), __pyx_v_checks); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 94, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_9);
-  __pyx_t_3 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyDict_Type_update, __pyx_v_message_options, __pyx_t_9); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 94, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyDict_Type)), __pyx_v_checks); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 95, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_11);
+  __pyx_t_3 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyDict_Type_update, __pyx_v_message_options, __pyx_t_11); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 95, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+  __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "opendbc/can/parser_pyx.pyx":98
+  /* "opendbc/can/parser_pyx.pyx":99
  *     cdef vector[MessageParseOptions] message_options_v
  *     cdef MessageParseOptions mpo
  *     for msg_address, freq in message_options.items():             # <<<<<<<<<<<<<<
  *       mpo.address = msg_address
  *       mpo.check_frequency = freq
  */
-  __pyx_t_10 = 0;
+  __pyx_t_9 = 0;
   if (unlikely(__pyx_v_message_options == Py_None)) {
     PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "items");
-    __PYX_ERR(0, 98, __pyx_L1_error)
+    __PYX_ERR(0, 99, __pyx_L1_error)
   }
-  __pyx_t_9 = __Pyx_dict_iterator(__pyx_v_message_options, 1, __pyx_n_s_items, (&__pyx_t_11), (&__pyx_t_19)); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 98, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_9);
+  __pyx_t_11 = __Pyx_dict_iterator(__pyx_v_message_options, 1, __pyx_n_s_items, (&__pyx_t_10), (&__pyx_t_19)); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 99, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_11);
   __Pyx_XDECREF(__pyx_t_3);
-  __pyx_t_3 = __pyx_t_9;
-  __pyx_t_9 = 0;
+  __pyx_t_3 = __pyx_t_11;
+  __pyx_t_11 = 0;
   while (1) {
-    __pyx_t_20 = __Pyx_dict_iter_next(__pyx_t_3, __pyx_t_11, &__pyx_t_10, &__pyx_t_9, &__pyx_t_15, NULL, __pyx_t_19);
+    __pyx_t_20 = __Pyx_dict_iter_next(__pyx_t_3, __pyx_t_10, &__pyx_t_9, &__pyx_t_11, &__pyx_t_15, NULL, __pyx_t_19);
     if (unlikely(__pyx_t_20 == 0)) break;
-    if (unlikely(__pyx_t_20 == -1)) __PYX_ERR(0, 98, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_9);
+    if (unlikely(__pyx_t_20 == -1)) __PYX_ERR(0, 99, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_11);
     __Pyx_GOTREF(__pyx_t_15);
-    __Pyx_XDECREF_SET(__pyx_v_msg_address, __pyx_t_9);
-    __pyx_t_9 = 0;
+    __Pyx_XDECREF_SET(__pyx_v_msg_address, __pyx_t_11);
+    __pyx_t_11 = 0;
     __Pyx_XDECREF_SET(__pyx_v_freq, __pyx_t_15);
     __pyx_t_15 = 0;
 
-    /* "opendbc/can/parser_pyx.pyx":99
+    /* "opendbc/can/parser_pyx.pyx":100
  *     cdef MessageParseOptions mpo
  *     for msg_address, freq in message_options.items():
  *       mpo.address = msg_address             # <<<<<<<<<<<<<<
  *       mpo.check_frequency = freq
  *       message_options_v.push_back(mpo)
  */
-    __pyx_t_18 = __Pyx_PyInt_As_uint32_t(__pyx_v_msg_address); if (unlikely((__pyx_t_18 == ((uint32_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 99, __pyx_L1_error)
+    __pyx_t_18 = __Pyx_PyInt_As_uint32_t(__pyx_v_msg_address); if (unlikely((__pyx_t_18 == ((uint32_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 100, __pyx_L1_error)
     __pyx_v_mpo.address = __pyx_t_18;
 
-    /* "opendbc/can/parser_pyx.pyx":100
+    /* "opendbc/can/parser_pyx.pyx":101
  *     for msg_address, freq in message_options.items():
  *       mpo.address = msg_address
  *       mpo.check_frequency = freq             # <<<<<<<<<<<<<<
  *       message_options_v.push_back(mpo)
  * 
  */
-    __pyx_t_20 = __Pyx_PyInt_As_int(__pyx_v_freq); if (unlikely((__pyx_t_20 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 100, __pyx_L1_error)
+    __pyx_t_20 = __Pyx_PyInt_As_int(__pyx_v_freq); if (unlikely((__pyx_t_20 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 101, __pyx_L1_error)
     __pyx_v_mpo.check_frequency = __pyx_t_20;
 
-    /* "opendbc/can/parser_pyx.pyx":101
+    /* "opendbc/can/parser_pyx.pyx":102
  *       mpo.address = msg_address
  *       mpo.check_frequency = freq
  *       message_options_v.push_back(mpo)             # <<<<<<<<<<<<<<
@@ -3724,32 +3680,52 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
       __pyx_v_message_options_v.push_back(__pyx_v_mpo);
     } catch(...) {
       __Pyx_CppExn2PyErr();
-      __PYX_ERR(0, 101, __pyx_L1_error)
+      __PYX_ERR(0, 102, __pyx_L1_error)
     }
   }
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "opendbc/can/parser_pyx.pyx":103
+  /* "opendbc/can/parser_pyx.pyx":104
  *       message_options_v.push_back(mpo)
  * 
  *     self.can = new cpp_CANParser(bus, dbc_name, message_options_v, signal_options_v)             # <<<<<<<<<<<<<<
- *     self.update_vl()
+ *     self.update_strings([])
  * 
  */
-  __pyx_t_19 = __Pyx_PyInt_As_int(__pyx_v_bus); if (unlikely((__pyx_t_19 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 103, __pyx_L1_error)
-  __pyx_t_4 = __pyx_convert_string_from_py_std__in_string(__pyx_v_dbc_name); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 103, __pyx_L1_error)
+  __pyx_t_19 = __Pyx_PyInt_As_int(__pyx_v_bus); if (unlikely((__pyx_t_19 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 104, __pyx_L1_error)
+  __pyx_t_4 = __pyx_convert_string_from_py_std__in_string(__pyx_v_dbc_name); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 104, __pyx_L1_error)
   __pyx_cur_scope->__pyx_v_self->can = new CANParser(__pyx_t_19, __pyx_t_4, __pyx_v_message_options_v, __pyx_v_signal_options_v);
 
-  /* "opendbc/can/parser_pyx.pyx":104
+  /* "opendbc/can/parser_pyx.pyx":105
  * 
  *     self.can = new cpp_CANParser(bus, dbc_name, message_options_v, signal_options_v)
- *     self.update_vl()             # <<<<<<<<<<<<<<
+ *     self.update_strings([])             # <<<<<<<<<<<<<<
  * 
- *   cdef unordered_set[uint32_t] update_vl(self):
+ *   def update_strings(self, strings, sendcan=False):
  */
-  (void)(((struct __pyx_vtabstruct_7opendbc_3can_10parser_pyx_CANParser *)__pyx_cur_scope->__pyx_v_self->__pyx_vtab)->update_vl(__pyx_cur_scope->__pyx_v_self));
+  __pyx_t_15 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_cur_scope->__pyx_v_self), __pyx_n_s_update_strings); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 105, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_15);
+  __pyx_t_11 = PyList_New(0); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 105, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_11);
+  __pyx_t_5 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_15))) {
+    __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_15);
+    if (likely(__pyx_t_5)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_15);
+      __Pyx_INCREF(__pyx_t_5);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_15, function);
+    }
+  }
+  __pyx_t_3 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_15, __pyx_t_5, __pyx_t_11) : __Pyx_PyObject_CallOneArg(__pyx_t_15, __pyx_t_11);
+  __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 105, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "opendbc/can/parser_pyx.pyx":32
+  /* "opendbc/can/parser_pyx.pyx":33
  *     string dbc_name
  * 
  *   def __init__(self, dbc_name, signals, checks=None, bus=0, enforce_checks=True):             # <<<<<<<<<<<<<<
@@ -3763,7 +3739,7 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_9);
+  __Pyx_XDECREF(__pyx_t_11);
   __Pyx_XDECREF(__pyx_t_15);
   __Pyx_XDECREF(__pyx_t_16);
   __Pyx_AddTraceback("opendbc.can.parser_pyx.CANParser.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
@@ -3791,413 +3767,17 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser___init__(struct __pyx_
   return __pyx_r;
 }
 
-/* "opendbc/can/parser_pyx.pyx":106
- *     self.update_vl()
- * 
- *   cdef unordered_set[uint32_t] update_vl(self):             # <<<<<<<<<<<<<<
- *     cdef unordered_set[uint32_t] updated_addrs
- * 
- */
-
-static std::unordered_set<uint32_t>  __pyx_f_7opendbc_3can_10parser_pyx_9CANParser_update_vl(struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *__pyx_v_self) {
-  std::unordered_set<uint32_t>  __pyx_v_updated_addrs;
-  std::vector<struct SignalValue>  __pyx_v_new_vals;
-  struct SignalValue __pyx_v_cv;
-  PyObject *__pyx_v_cv_name = NULL;
-  std::unordered_set<uint32_t>  __pyx_r;
-  __Pyx_RefNannyDeclarations
-  std::vector<struct SignalValue> ::iterator __pyx_t_1;
-  struct SignalValue __pyx_t_2;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  PyObject *__pyx_t_6 = NULL;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("update_vl", 0);
-
-  /* "opendbc/can/parser_pyx.pyx":109
- *     cdef unordered_set[uint32_t] updated_addrs
- * 
- *     new_vals = self.can.query_latest()             # <<<<<<<<<<<<<<
- *     for cv in new_vals:
- *       # Cast char * directly to unicode
- */
-  __pyx_v_new_vals = __pyx_v_self->can->query_latest();
-
-  /* "opendbc/can/parser_pyx.pyx":110
- * 
- *     new_vals = self.can.query_latest()
- *     for cv in new_vals:             # <<<<<<<<<<<<<<
- *       # Cast char * directly to unicode
- *       cv_name = <unicode>cv.name
- */
-  __pyx_t_1 = __pyx_v_new_vals.begin();
-  for (;;) {
-    if (!(__pyx_t_1 != __pyx_v_new_vals.end())) break;
-    __pyx_t_2 = *__pyx_t_1;
-    ++__pyx_t_1;
-    __pyx_v_cv = __pyx_t_2;
-
-    /* "opendbc/can/parser_pyx.pyx":112
- *     for cv in new_vals:
- *       # Cast char * directly to unicode
- *       cv_name = <unicode>cv.name             # <<<<<<<<<<<<<<
- *       self.vl[cv.address][cv_name] = cv.value
- *       self.vl_all[cv.address][cv_name].extend(cv.all_values)
- */
-    __pyx_t_3 = __pyx_convert_PyUnicode_string_to_py_std__in_string(__pyx_v_cv.name); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 112, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __pyx_t_3;
-    __Pyx_INCREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __Pyx_XDECREF_SET(__pyx_v_cv_name, ((PyObject*)__pyx_t_4));
-    __pyx_t_4 = 0;
-
-    /* "opendbc/can/parser_pyx.pyx":113
- *       # Cast char * directly to unicode
- *       cv_name = <unicode>cv.name
- *       self.vl[cv.address][cv_name] = cv.value             # <<<<<<<<<<<<<<
- *       self.vl_all[cv.address][cv_name].extend(cv.all_values)
- *       self.ts_nanos[cv.address][cv_name] = cv.ts_nanos
- */
-    __pyx_t_4 = PyFloat_FromDouble(__pyx_v_cv.value); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 113, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    if (unlikely(__pyx_v_self->vl == Py_None)) {
-      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 113, __pyx_L1_error)
-    }
-    __pyx_t_3 = __Pyx_PyInt_From_uint32_t(__pyx_v_cv.address); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 113, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_v_self->vl, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 113, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(PyObject_SetItem(__pyx_t_5, __pyx_v_cv_name, __pyx_t_4) < 0)) __PYX_ERR(0, 113, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-
-    /* "opendbc/can/parser_pyx.pyx":114
- *       cv_name = <unicode>cv.name
- *       self.vl[cv.address][cv_name] = cv.value
- *       self.vl_all[cv.address][cv_name].extend(cv.all_values)             # <<<<<<<<<<<<<<
- *       self.ts_nanos[cv.address][cv_name] = cv.ts_nanos
- *       updated_addrs.insert(cv.address)
- */
-    if (unlikely(__pyx_v_self->vl_all == Py_None)) {
-      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 114, __pyx_L1_error)
-    }
-    __pyx_t_5 = __Pyx_PyInt_From_uint32_t(__pyx_v_cv.address); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 114, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_3 = __Pyx_PyDict_GetItem(__pyx_v_self->vl_all, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 114, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = __Pyx_PyObject_Dict_GetItem(__pyx_t_3, __pyx_v_cv_name); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 114, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_extend); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 114, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __pyx_t_5 = __pyx_convert_vector_to_py_double(__pyx_v_cv.all_values); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 114, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
-      __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_3);
-      if (likely(__pyx_t_6)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-        __Pyx_INCREF(__pyx_t_6);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_3, function);
-      }
-    }
-    __pyx_t_4 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_6, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5);
-    __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 114, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-
-    /* "opendbc/can/parser_pyx.pyx":115
- *       self.vl[cv.address][cv_name] = cv.value
- *       self.vl_all[cv.address][cv_name].extend(cv.all_values)
- *       self.ts_nanos[cv.address][cv_name] = cv.ts_nanos             # <<<<<<<<<<<<<<
- *       updated_addrs.insert(cv.address)
- * 
- */
-    __pyx_t_4 = __Pyx_PyInt_From_uint64_t(__pyx_v_cv.ts_nanos); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 115, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    if (unlikely(__pyx_v_self->ts_nanos == Py_None)) {
-      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 115, __pyx_L1_error)
-    }
-    __pyx_t_3 = __Pyx_PyInt_From_uint32_t(__pyx_v_cv.address); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 115, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_v_self->ts_nanos, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 115, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(PyObject_SetItem(__pyx_t_5, __pyx_v_cv_name, __pyx_t_4) < 0)) __PYX_ERR(0, 115, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-
-    /* "opendbc/can/parser_pyx.pyx":116
- *       self.vl_all[cv.address][cv_name].extend(cv.all_values)
- *       self.ts_nanos[cv.address][cv_name] = cv.ts_nanos
- *       updated_addrs.insert(cv.address)             # <<<<<<<<<<<<<<
- * 
- *     return updated_addrs
- */
-    (void)(__pyx_v_updated_addrs.insert(__pyx_v_cv.address));
-
-    /* "opendbc/can/parser_pyx.pyx":110
- * 
- *     new_vals = self.can.query_latest()
- *     for cv in new_vals:             # <<<<<<<<<<<<<<
- *       # Cast char * directly to unicode
- *       cv_name = <unicode>cv.name
- */
-  }
-
-  /* "opendbc/can/parser_pyx.pyx":118
- *       updated_addrs.insert(cv.address)
- * 
- *     return updated_addrs             # <<<<<<<<<<<<<<
- * 
- *   def update_string(self, dat, sendcan=False):
- */
-  __pyx_r = __pyx_v_updated_addrs;
-  goto __pyx_L0;
-
-  /* "opendbc/can/parser_pyx.pyx":106
- *     self.update_vl()
- * 
- *   cdef unordered_set[uint32_t] update_vl(self):             # <<<<<<<<<<<<<<
- *     cdef unordered_set[uint32_t] updated_addrs
- * 
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_WriteUnraisable("opendbc.can.parser_pyx.CANParser.update_vl", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
-  __Pyx_pretend_to_initialize(&__pyx_r);
-  __pyx_L0:;
-  __Pyx_XDECREF(__pyx_v_cv_name);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "opendbc/can/parser_pyx.pyx":120
- *     return updated_addrs
- * 
- *   def update_string(self, dat, sendcan=False):             # <<<<<<<<<<<<<<
- *     for v in self.vl_all.values():
- *       v.clear()
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_3update_string(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_3update_string(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_dat = 0;
-  PyObject *__pyx_v_sendcan = 0;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("update_string (wrapper)", 0);
-  {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_dat,&__pyx_n_s_sendcan,0};
-    PyObject* values[2] = {0,0};
-    values[1] = ((PyObject *)Py_False);
-    if (unlikely(__pyx_kwds)) {
-      Py_ssize_t kw_args;
-      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
-      switch (pos_args) {
-        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-        CYTHON_FALLTHROUGH;
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        CYTHON_FALLTHROUGH;
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-      kw_args = PyDict_Size(__pyx_kwds);
-      switch (pos_args) {
-        case  0:
-        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_dat)) != 0)) kw_args--;
-        else goto __pyx_L5_argtuple_error;
-        CYTHON_FALLTHROUGH;
-        case  1:
-        if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_sendcan);
-          if (value) { values[1] = value; kw_args--; }
-        }
-      }
-      if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "update_string") < 0)) __PYX_ERR(0, 120, __pyx_L3_error)
-      }
-    } else {
-      switch (PyTuple_GET_SIZE(__pyx_args)) {
-        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-        CYTHON_FALLTHROUGH;
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-    }
-    __pyx_v_dat = values[0];
-    __pyx_v_sendcan = values[1];
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("update_string", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 120, __pyx_L3_error)
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("opendbc.can.parser_pyx.CANParser.update_string", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return NULL;
-  __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_2update_string(((struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *)__pyx_v_self), __pyx_v_dat, __pyx_v_sendcan);
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_2update_string(struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *__pyx_v_self, PyObject *__pyx_v_dat, PyObject *__pyx_v_sendcan) {
-  PyObject *__pyx_v_v = NULL;
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  Py_ssize_t __pyx_t_2;
-  Py_ssize_t __pyx_t_3;
-  int __pyx_t_4;
-  PyObject *__pyx_t_5 = NULL;
-  int __pyx_t_6;
-  PyObject *__pyx_t_7 = NULL;
-  PyObject *__pyx_t_8 = NULL;
-  std::string __pyx_t_9;
-  bool __pyx_t_10;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("update_string", 0);
-
-  /* "opendbc/can/parser_pyx.pyx":121
- * 
- *   def update_string(self, dat, sendcan=False):
- *     for v in self.vl_all.values():             # <<<<<<<<<<<<<<
- *       v.clear()
- * 
- */
-  __pyx_t_2 = 0;
-  if (unlikely(__pyx_v_self->vl_all == Py_None)) {
-    PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "values");
-    __PYX_ERR(0, 121, __pyx_L1_error)
-  }
-  __pyx_t_5 = __Pyx_dict_iterator(__pyx_v_self->vl_all, 1, __pyx_n_s_values, (&__pyx_t_3), (&__pyx_t_4)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 121, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_1);
-  __pyx_t_1 = __pyx_t_5;
-  __pyx_t_5 = 0;
-  while (1) {
-    __pyx_t_6 = __Pyx_dict_iter_next(__pyx_t_1, __pyx_t_3, &__pyx_t_2, NULL, &__pyx_t_5, NULL, __pyx_t_4);
-    if (unlikely(__pyx_t_6 == 0)) break;
-    if (unlikely(__pyx_t_6 == -1)) __PYX_ERR(0, 121, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __Pyx_XDECREF_SET(__pyx_v_v, __pyx_t_5);
-    __pyx_t_5 = 0;
-
-    /* "opendbc/can/parser_pyx.pyx":122
- *   def update_string(self, dat, sendcan=False):
- *     for v in self.vl_all.values():
- *       v.clear()             # <<<<<<<<<<<<<<
- * 
- *     self.can.update_string(dat, sendcan)
- */
-    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_v, __pyx_n_s_clear); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 122, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_8 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
-      __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_7);
-      if (likely(__pyx_t_8)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
-        __Pyx_INCREF(__pyx_t_8);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_7, function);
-      }
-    }
-    __pyx_t_5 = (__pyx_t_8) ? __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_8) : __Pyx_PyObject_CallNoArg(__pyx_t_7);
-    __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-    if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 122, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  }
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "opendbc/can/parser_pyx.pyx":124
- *       v.clear()
- * 
- *     self.can.update_string(dat, sendcan)             # <<<<<<<<<<<<<<
- *     return self.update_vl()
- * 
- */
-  __pyx_t_9 = __pyx_convert_string_from_py_std__in_string(__pyx_v_dat); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 124, __pyx_L1_error)
-  __pyx_t_10 = __Pyx_PyObject_IsTrue(__pyx_v_sendcan); if (unlikely((__pyx_t_10 == ((bool)-1)) && PyErr_Occurred())) __PYX_ERR(0, 124, __pyx_L1_error)
-  __pyx_v_self->can->update_string(__pyx_t_9, __pyx_t_10);
-
-  /* "opendbc/can/parser_pyx.pyx":125
- * 
- *     self.can.update_string(dat, sendcan)
- *     return self.update_vl()             # <<<<<<<<<<<<<<
- * 
- *   def update_strings(self, strings, sendcan=False):
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_unordered_set_to_py_uint32_t(((struct __pyx_vtabstruct_7opendbc_3can_10parser_pyx_CANParser *)__pyx_v_self->__pyx_vtab)->update_vl(__pyx_v_self)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 125, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* "opendbc/can/parser_pyx.pyx":120
- *     return updated_addrs
- * 
- *   def update_string(self, dat, sendcan=False):             # <<<<<<<<<<<<<<
- *     for v in self.vl_all.values():
- *       v.clear()
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_7);
-  __Pyx_XDECREF(__pyx_t_8);
-  __Pyx_AddTraceback("opendbc.can.parser_pyx.CANParser.update_string", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XDECREF(__pyx_v_v);
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "opendbc/can/parser_pyx.pyx":127
- *     return self.update_vl()
+/* "opendbc/can/parser_pyx.pyx":107
+ *     self.update_strings([])
  * 
  *   def update_strings(self, strings, sendcan=False):             # <<<<<<<<<<<<<<
  *     for v in self.vl_all.values():
- *       v.clear()
+ *       for l in v.values():
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_5update_strings(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_5update_strings(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_3update_strings(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_3update_strings(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_strings = 0;
   PyObject *__pyx_v_sendcan = 0;
   int __pyx_lineno = 0;
@@ -4234,7 +3814,7 @@ static PyObject *__pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_5update_strings(
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "update_strings") < 0)) __PYX_ERR(0, 127, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "update_strings") < 0)) __PYX_ERR(0, 107, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -4250,23 +3830,27 @@ static PyObject *__pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_5update_strings(
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("update_strings", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 127, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("update_strings", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 107, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("opendbc.can.parser_pyx.CANParser.update_strings", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_4update_strings(((struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *)__pyx_v_self), __pyx_v_strings, __pyx_v_sendcan);
+  __pyx_r = __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_2update_strings(((struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *)__pyx_v_self), __pyx_v_strings, __pyx_v_sendcan);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_4update_strings(struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *__pyx_v_self, PyObject *__pyx_v_strings, PyObject *__pyx_v_sendcan) {
+static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_2update_strings(struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *__pyx_v_self, PyObject *__pyx_v_strings, PyObject *__pyx_v_sendcan) {
   PyObject *__pyx_v_v = NULL;
-  PyObject *__pyx_v_updated_addrs = NULL;
-  PyObject *__pyx_v_s = NULL;
+  PyObject *__pyx_v_l = NULL;
+  std::vector<struct SignalValue>  __pyx_v_new_vals;
+  std::unordered_set<uint32_t>  __pyx_v_updated_addrs;
+  std::vector<struct SignalValue> ::iterator __pyx_v_it;
+  struct SignalValue *__pyx_v_cv;
+  PyObject *__pyx_v_cv_name = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -4275,29 +3859,33 @@ static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_4update_strings(
   int __pyx_t_4;
   PyObject *__pyx_t_5 = NULL;
   int __pyx_t_6;
-  PyObject *__pyx_t_7 = NULL;
-  PyObject *__pyx_t_8 = NULL;
-  PyObject *(*__pyx_t_9)(PyObject *);
-  std::string __pyx_t_10;
-  bool __pyx_t_11;
+  Py_ssize_t __pyx_t_7;
+  Py_ssize_t __pyx_t_8;
+  PyObject *__pyx_t_9 = NULL;
+  int __pyx_t_10;
+  PyObject *__pyx_t_11 = NULL;
+  PyObject *__pyx_t_12 = NULL;
+  std::vector<std::string>  __pyx_t_13;
+  bool __pyx_t_14;
+  int __pyx_t_15;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("update_strings", 0);
 
-  /* "opendbc/can/parser_pyx.pyx":128
+  /* "opendbc/can/parser_pyx.pyx":108
  * 
  *   def update_strings(self, strings, sendcan=False):
  *     for v in self.vl_all.values():             # <<<<<<<<<<<<<<
- *       v.clear()
- * 
+ *       for l in v.values():
+ *         l.clear()
  */
   __pyx_t_2 = 0;
   if (unlikely(__pyx_v_self->vl_all == Py_None)) {
     PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "values");
-    __PYX_ERR(0, 128, __pyx_L1_error)
+    __PYX_ERR(0, 108, __pyx_L1_error)
   }
-  __pyx_t_5 = __Pyx_dict_iterator(__pyx_v_self->vl_all, 1, __pyx_n_s_values, (&__pyx_t_3), (&__pyx_t_4)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 128, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_dict_iterator(__pyx_v_self->vl_all, 1, __pyx_n_s_values, (&__pyx_t_3), (&__pyx_t_4)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 108, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_1);
   __pyx_t_1 = __pyx_t_5;
@@ -4305,173 +3893,247 @@ static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_4update_strings(
   while (1) {
     __pyx_t_6 = __Pyx_dict_iter_next(__pyx_t_1, __pyx_t_3, &__pyx_t_2, NULL, &__pyx_t_5, NULL, __pyx_t_4);
     if (unlikely(__pyx_t_6 == 0)) break;
-    if (unlikely(__pyx_t_6 == -1)) __PYX_ERR(0, 128, __pyx_L1_error)
+    if (unlikely(__pyx_t_6 == -1)) __PYX_ERR(0, 108, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_XDECREF_SET(__pyx_v_v, __pyx_t_5);
     __pyx_t_5 = 0;
 
-    /* "opendbc/can/parser_pyx.pyx":129
+    /* "opendbc/can/parser_pyx.pyx":109
  *   def update_strings(self, strings, sendcan=False):
  *     for v in self.vl_all.values():
- *       v.clear()             # <<<<<<<<<<<<<<
+ *       for l in v.values():             # <<<<<<<<<<<<<<
+ *         l.clear()
  * 
- *     updated_addrs = set()
  */
-    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_v, __pyx_n_s_clear); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 129, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_8 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
-      __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_7);
-      if (likely(__pyx_t_8)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
-        __Pyx_INCREF(__pyx_t_8);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_7, function);
-      }
+    __pyx_t_7 = 0;
+    if (unlikely(__pyx_v_v == Py_None)) {
+      PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "values");
+      __PYX_ERR(0, 109, __pyx_L1_error)
     }
-    __pyx_t_5 = (__pyx_t_8) ? __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_8) : __Pyx_PyObject_CallNoArg(__pyx_t_7);
-    __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-    if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 129, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __pyx_t_9 = __Pyx_dict_iterator(__pyx_v_v, 0, __pyx_n_s_values, (&__pyx_t_8), (&__pyx_t_6)); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 109, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __Pyx_XDECREF(__pyx_t_5);
+    __pyx_t_5 = __pyx_t_9;
+    __pyx_t_9 = 0;
+    while (1) {
+      __pyx_t_10 = __Pyx_dict_iter_next(__pyx_t_5, __pyx_t_8, &__pyx_t_7, NULL, &__pyx_t_9, NULL, __pyx_t_6);
+      if (unlikely(__pyx_t_10 == 0)) break;
+      if (unlikely(__pyx_t_10 == -1)) __PYX_ERR(0, 109, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_9);
+      __Pyx_XDECREF_SET(__pyx_v_l, __pyx_t_9);
+      __pyx_t_9 = 0;
+
+      /* "opendbc/can/parser_pyx.pyx":110
+ *     for v in self.vl_all.values():
+ *       for l in v.values():
+ *         l.clear()             # <<<<<<<<<<<<<<
+ * 
+ *     cdef vector[SignalValue] new_vals
+ */
+      __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_v_l, __pyx_n_s_clear); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 110, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_11);
+      __pyx_t_12 = NULL;
+      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_11))) {
+        __pyx_t_12 = PyMethod_GET_SELF(__pyx_t_11);
+        if (likely(__pyx_t_12)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_11);
+          __Pyx_INCREF(__pyx_t_12);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_11, function);
+        }
+      }
+      __pyx_t_9 = (__pyx_t_12) ? __Pyx_PyObject_CallOneArg(__pyx_t_11, __pyx_t_12) : __Pyx_PyObject_CallNoArg(__pyx_t_11);
+      __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
+      if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 110, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_9);
+      __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+    }
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "opendbc/can/parser_pyx.pyx":131
- *       v.clear()
+  /* "opendbc/can/parser_pyx.pyx":115
+ *     cdef unordered_set[uint32_t] updated_addrs
  * 
- *     updated_addrs = set()             # <<<<<<<<<<<<<<
- *     for s in strings:
- *       self.can.update_string(s, sendcan)
+ *     self.can.update_strings(strings, new_vals, sendcan)             # <<<<<<<<<<<<<<
+ *     cdef vector[SignalValue].iterator it = new_vals.begin()
+ *     cdef SignalValue* cv
  */
-  __pyx_t_1 = PySet_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 131, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_v_updated_addrs = ((PyObject*)__pyx_t_1);
-  __pyx_t_1 = 0;
+  __pyx_t_13 = __pyx_convert_vector_from_py_std_3a__3a_string(__pyx_v_strings); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 115, __pyx_L1_error)
+  __pyx_t_14 = __Pyx_PyObject_IsTrue(__pyx_v_sendcan); if (unlikely((__pyx_t_14 == ((bool)-1)) && PyErr_Occurred())) __PYX_ERR(0, 115, __pyx_L1_error)
+  __pyx_v_self->can->update_strings(__pyx_t_13, __pyx_v_new_vals, __pyx_t_14);
 
-  /* "opendbc/can/parser_pyx.pyx":132
+  /* "opendbc/can/parser_pyx.pyx":116
  * 
- *     updated_addrs = set()
- *     for s in strings:             # <<<<<<<<<<<<<<
- *       self.can.update_string(s, sendcan)
- *       updated_addrs.update(self.update_vl())
+ *     self.can.update_strings(strings, new_vals, sendcan)
+ *     cdef vector[SignalValue].iterator it = new_vals.begin()             # <<<<<<<<<<<<<<
+ *     cdef SignalValue* cv
+ *     while it != new_vals.end():
  */
-  if (likely(PyList_CheckExact(__pyx_v_strings)) || PyTuple_CheckExact(__pyx_v_strings)) {
-    __pyx_t_1 = __pyx_v_strings; __Pyx_INCREF(__pyx_t_1); __pyx_t_3 = 0;
-    __pyx_t_9 = NULL;
-  } else {
-    __pyx_t_3 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_v_strings); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 132, __pyx_L1_error)
+  __pyx_v_it = __pyx_v_new_vals.begin();
+
+  /* "opendbc/can/parser_pyx.pyx":118
+ *     cdef vector[SignalValue].iterator it = new_vals.begin()
+ *     cdef SignalValue* cv
+ *     while it != new_vals.end():             # <<<<<<<<<<<<<<
+ *       cv = &deref(it)
+ *       # Cast char * directly to unicode
+ */
+  while (1) {
+    __pyx_t_15 = ((__pyx_v_it != __pyx_v_new_vals.end()) != 0);
+    if (!__pyx_t_15) break;
+
+    /* "opendbc/can/parser_pyx.pyx":119
+ *     cdef SignalValue* cv
+ *     while it != new_vals.end():
+ *       cv = &deref(it)             # <<<<<<<<<<<<<<
+ *       # Cast char * directly to unicode
+ *       cv_name = <unicode>cv.name
+ */
+    __pyx_v_cv = (&(*__pyx_v_it));
+
+    /* "opendbc/can/parser_pyx.pyx":121
+ *       cv = &deref(it)
+ *       # Cast char * directly to unicode
+ *       cv_name = <unicode>cv.name             # <<<<<<<<<<<<<<
+ *       self.vl[cv.address][cv_name] = cv.value
+ *       self.vl_all[cv.address][cv_name] = cv.all_values
+ */
+    __pyx_t_1 = __pyx_convert_PyUnicode_string_to_py_std__in_string(__pyx_v_cv->name); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 121, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_9 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 132, __pyx_L1_error)
-  }
-  for (;;) {
-    if (likely(!__pyx_t_9)) {
-      if (likely(PyList_CheckExact(__pyx_t_1))) {
-        if (__pyx_t_3 >= PyList_GET_SIZE(__pyx_t_1)) break;
-        #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_5 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_3); __Pyx_INCREF(__pyx_t_5); __pyx_t_3++; if (unlikely(0 < 0)) __PYX_ERR(0, 132, __pyx_L1_error)
-        #else
-        __pyx_t_5 = PySequence_ITEM(__pyx_t_1, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 132, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_5);
-        #endif
-      } else {
-        if (__pyx_t_3 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
-        #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_5 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_3); __Pyx_INCREF(__pyx_t_5); __pyx_t_3++; if (unlikely(0 < 0)) __PYX_ERR(0, 132, __pyx_L1_error)
-        #else
-        __pyx_t_5 = PySequence_ITEM(__pyx_t_1, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 132, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_5);
-        #endif
-      }
-    } else {
-      __pyx_t_5 = __pyx_t_9(__pyx_t_1);
-      if (unlikely(!__pyx_t_5)) {
-        PyObject* exc_type = PyErr_Occurred();
-        if (exc_type) {
-          if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 132, __pyx_L1_error)
-        }
-        break;
-      }
-      __Pyx_GOTREF(__pyx_t_5);
-    }
-    __Pyx_XDECREF_SET(__pyx_v_s, __pyx_t_5);
+    __pyx_t_5 = __pyx_t_1;
+    __Pyx_INCREF(__pyx_t_5);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __Pyx_XDECREF_SET(__pyx_v_cv_name, ((PyObject*)__pyx_t_5));
     __pyx_t_5 = 0;
 
-    /* "opendbc/can/parser_pyx.pyx":133
- *     updated_addrs = set()
- *     for s in strings:
- *       self.can.update_string(s, sendcan)             # <<<<<<<<<<<<<<
- *       updated_addrs.update(self.update_vl())
- *     return updated_addrs
+    /* "opendbc/can/parser_pyx.pyx":122
+ *       # Cast char * directly to unicode
+ *       cv_name = <unicode>cv.name
+ *       self.vl[cv.address][cv_name] = cv.value             # <<<<<<<<<<<<<<
+ *       self.vl_all[cv.address][cv_name] = cv.all_values
+ *       self.ts_nanos[cv.address][cv_name] = cv.ts_nanos
  */
-    __pyx_t_10 = __pyx_convert_string_from_py_std__in_string(__pyx_v_s); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 133, __pyx_L1_error)
-    __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_v_sendcan); if (unlikely((__pyx_t_11 == ((bool)-1)) && PyErr_Occurred())) __PYX_ERR(0, 133, __pyx_L1_error)
-    __pyx_v_self->can->update_string(__pyx_t_10, __pyx_t_11);
-
-    /* "opendbc/can/parser_pyx.pyx":134
- *     for s in strings:
- *       self.can.update_string(s, sendcan)
- *       updated_addrs.update(self.update_vl())             # <<<<<<<<<<<<<<
- *     return updated_addrs
- * 
- */
-    __pyx_t_5 = __pyx_convert_unordered_set_to_py_uint32_t(((struct __pyx_vtabstruct_7opendbc_3can_10parser_pyx_CANParser *)__pyx_v_self->__pyx_vtab)->update_vl(__pyx_v_self)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 134, __pyx_L1_error)
+    __pyx_t_5 = PyFloat_FromDouble(__pyx_v_cv->value); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 122, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_7 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PySet_Type_update, __pyx_v_updated_addrs, __pyx_t_5); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 134, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
+    if (unlikely(__pyx_v_self->vl == Py_None)) {
+      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+      __PYX_ERR(0, 122, __pyx_L1_error)
+    }
+    __pyx_t_1 = __Pyx_PyInt_From_uint32_t(__pyx_v_cv->address); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 122, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_9 = __Pyx_PyDict_GetItem(__pyx_v_self->vl, __pyx_t_1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 122, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    if (unlikely(PyObject_SetItem(__pyx_t_9, __pyx_v_cv_name, __pyx_t_5) < 0)) __PYX_ERR(0, 122, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-    /* "opendbc/can/parser_pyx.pyx":132
- * 
- *     updated_addrs = set()
- *     for s in strings:             # <<<<<<<<<<<<<<
- *       self.can.update_string(s, sendcan)
- *       updated_addrs.update(self.update_vl())
+    /* "opendbc/can/parser_pyx.pyx":123
+ *       cv_name = <unicode>cv.name
+ *       self.vl[cv.address][cv_name] = cv.value
+ *       self.vl_all[cv.address][cv_name] = cv.all_values             # <<<<<<<<<<<<<<
+ *       self.ts_nanos[cv.address][cv_name] = cv.ts_nanos
+ *       updated_addrs.insert(cv.address)
  */
-  }
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_t_5 = __pyx_convert_vector_to_py_double(__pyx_v_cv->all_values); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 123, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    if (unlikely(__pyx_v_self->vl_all == Py_None)) {
+      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+      __PYX_ERR(0, 123, __pyx_L1_error)
+    }
+    __pyx_t_9 = __Pyx_PyInt_From_uint32_t(__pyx_v_cv->address); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 123, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_self->vl_all, __pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 123, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+    if (unlikely(PyObject_SetItem(__pyx_t_1, __pyx_v_cv_name, __pyx_t_5) < 0)) __PYX_ERR(0, 123, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "opendbc/can/parser_pyx.pyx":135
- *       self.can.update_string(s, sendcan)
- *       updated_addrs.update(self.update_vl())
+    /* "opendbc/can/parser_pyx.pyx":124
+ *       self.vl[cv.address][cv_name] = cv.value
+ *       self.vl_all[cv.address][cv_name] = cv.all_values
+ *       self.ts_nanos[cv.address][cv_name] = cv.ts_nanos             # <<<<<<<<<<<<<<
+ *       updated_addrs.insert(cv.address)
+ *       preinc(it)
+ */
+    __pyx_t_5 = __Pyx_PyInt_From_uint64_t(__pyx_v_cv->ts_nanos); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 124, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    if (unlikely(__pyx_v_self->ts_nanos == Py_None)) {
+      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+      __PYX_ERR(0, 124, __pyx_L1_error)
+    }
+    __pyx_t_1 = __Pyx_PyInt_From_uint32_t(__pyx_v_cv->address); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 124, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_9 = __Pyx_PyDict_GetItem(__pyx_v_self->ts_nanos, __pyx_t_1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 124, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    if (unlikely(PyObject_SetItem(__pyx_t_9, __pyx_v_cv_name, __pyx_t_5) < 0)) __PYX_ERR(0, 124, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+
+    /* "opendbc/can/parser_pyx.pyx":125
+ *       self.vl_all[cv.address][cv_name] = cv.all_values
+ *       self.ts_nanos[cv.address][cv_name] = cv.ts_nanos
+ *       updated_addrs.insert(cv.address)             # <<<<<<<<<<<<<<
+ *       preinc(it)
+ * 
+ */
+    (void)(__pyx_v_updated_addrs.insert(__pyx_v_cv->address));
+
+    /* "opendbc/can/parser_pyx.pyx":126
+ *       self.ts_nanos[cv.address][cv_name] = cv.ts_nanos
+ *       updated_addrs.insert(cv.address)
+ *       preinc(it)             # <<<<<<<<<<<<<<
+ * 
+ *     return updated_addrs
+ */
+    (void)((++__pyx_v_it));
+  }
+
+  /* "opendbc/can/parser_pyx.pyx":128
+ *       preinc(it)
+ * 
  *     return updated_addrs             # <<<<<<<<<<<<<<
  * 
  *   @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __Pyx_INCREF(__pyx_v_updated_addrs);
-  __pyx_r = __pyx_v_updated_addrs;
+  __pyx_t_5 = __pyx_convert_unordered_set_to_py_uint32_t(__pyx_v_updated_addrs); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 128, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __pyx_r = __pyx_t_5;
+  __pyx_t_5 = 0;
   goto __pyx_L0;
 
-  /* "opendbc/can/parser_pyx.pyx":127
- *     return self.update_vl()
+  /* "opendbc/can/parser_pyx.pyx":107
+ *     self.update_strings([])
  * 
  *   def update_strings(self, strings, sendcan=False):             # <<<<<<<<<<<<<<
  *     for v in self.vl_all.values():
- *       v.clear()
+ *       for l in v.values():
  */
 
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_7);
-  __Pyx_XDECREF(__pyx_t_8);
+  __Pyx_XDECREF(__pyx_t_9);
+  __Pyx_XDECREF(__pyx_t_11);
+  __Pyx_XDECREF(__pyx_t_12);
   __Pyx_AddTraceback("opendbc.can.parser_pyx.CANParser.update_strings", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_v);
-  __Pyx_XDECREF(__pyx_v_updated_addrs);
-  __Pyx_XDECREF(__pyx_v_s);
+  __Pyx_XDECREF(__pyx_v_l);
+  __Pyx_XDECREF(__pyx_v_cv_name);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "opendbc/can/parser_pyx.pyx":138
+/* "opendbc/can/parser_pyx.pyx":131
  * 
  *   @property
  *   def can_valid(self):             # <<<<<<<<<<<<<<
@@ -4501,7 +4163,7 @@ static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_9can_valid___get
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "opendbc/can/parser_pyx.pyx":139
+  /* "opendbc/can/parser_pyx.pyx":132
  *   @property
  *   def can_valid(self):
  *     return self.can.can_valid             # <<<<<<<<<<<<<<
@@ -4509,13 +4171,13 @@ static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_9can_valid___get
  *   @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_self->can->can_valid); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 139, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_self->can->can_valid); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 132, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "opendbc/can/parser_pyx.pyx":138
+  /* "opendbc/can/parser_pyx.pyx":131
  * 
  *   @property
  *   def can_valid(self):             # <<<<<<<<<<<<<<
@@ -4534,7 +4196,7 @@ static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_9can_valid___get
   return __pyx_r;
 }
 
-/* "opendbc/can/parser_pyx.pyx":142
+/* "opendbc/can/parser_pyx.pyx":135
  * 
  *   @property
  *   def bus_timeout(self):             # <<<<<<<<<<<<<<
@@ -4564,7 +4226,7 @@ static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_11bus_timeout___
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "opendbc/can/parser_pyx.pyx":143
+  /* "opendbc/can/parser_pyx.pyx":136
  *   @property
  *   def bus_timeout(self):
  *     return self.can.bus_timeout             # <<<<<<<<<<<<<<
@@ -4572,13 +4234,13 @@ static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_11bus_timeout___
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_self->can->bus_timeout); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 143, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_self->can->bus_timeout); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 136, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "opendbc/can/parser_pyx.pyx":142
+  /* "opendbc/can/parser_pyx.pyx":135
  * 
  *   @property
  *   def bus_timeout(self):             # <<<<<<<<<<<<<<
@@ -4597,7 +4259,7 @@ static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_11bus_timeout___
   return __pyx_r;
 }
 
-/* "opendbc/can/parser_pyx.pyx":27
+/* "opendbc/can/parser_pyx.pyx":28
  * 
  *   cdef readonly:
  *     dict vl             # <<<<<<<<<<<<<<
@@ -4634,7 +4296,7 @@ static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_2vl___get__(stru
   return __pyx_r;
 }
 
-/* "opendbc/can/parser_pyx.pyx":28
+/* "opendbc/can/parser_pyx.pyx":29
  *   cdef readonly:
  *     dict vl
  *     dict vl_all             # <<<<<<<<<<<<<<
@@ -4671,7 +4333,7 @@ static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_6vl_all___get__(
   return __pyx_r;
 }
 
-/* "opendbc/can/parser_pyx.pyx":29
+/* "opendbc/can/parser_pyx.pyx":30
  *     dict vl
  *     dict vl_all
  *     dict ts_nanos             # <<<<<<<<<<<<<<
@@ -4708,7 +4370,7 @@ static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_8ts_nanos___get_
   return __pyx_r;
 }
 
-/* "opendbc/can/parser_pyx.pyx":30
+/* "opendbc/can/parser_pyx.pyx":31
  *     dict vl_all
  *     dict ts_nanos
  *     string dbc_name             # <<<<<<<<<<<<<<
@@ -4738,7 +4400,7 @@ static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_8dbc_name___get_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_PyBytes_string_to_py_std__in_string(__pyx_v_self->dbc_name); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 30, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_PyBytes_string_to_py_std__in_string(__pyx_v_self->dbc_name); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 31, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -4762,19 +4424,19 @@ static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_8dbc_name___get_
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_7__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_7__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_5__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_5__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_6__reduce_cython__(((struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *)__pyx_v_self));
+  __pyx_r = __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_4__reduce_cython__(((struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_6__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *__pyx_v_self) {
+static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_4__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -4819,19 +4481,19 @@ static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_6__reduce_cython
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_9__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
-static PyObject *__pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_9__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_7__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyObject *__pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_7__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__setstate_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_8__setstate_cython__(((struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
+  __pyx_r = __pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_6__setstate_cython__(((struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_8__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_6__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -4868,7 +4530,7 @@ static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANParser_8__setstate_cyth
   return __pyx_r;
 }
 
-/* "opendbc/can/parser_pyx.pyx":154
+/* "opendbc/can/parser_pyx.pyx":147
  *     string dbc_name
  * 
  *   def __init__(self, dbc_name):             # <<<<<<<<<<<<<<
@@ -4905,7 +4567,7 @@ static int __pyx_pw_7opendbc_3can_10parser_pyx_9CANDefine_1__init__(PyObject *__
         else goto __pyx_L5_argtuple_error;
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 154, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 147, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 1) {
       goto __pyx_L5_argtuple_error;
@@ -4916,7 +4578,7 @@ static int __pyx_pw_7opendbc_3can_10parser_pyx_9CANDefine_1__init__(PyObject *__
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 154, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__init__", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 147, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("opendbc.can.parser_pyx.CANDefine.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -4964,27 +4626,27 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine___init__(struct __pyx_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "opendbc/can/parser_pyx.pyx":155
+  /* "opendbc/can/parser_pyx.pyx":148
  * 
  *   def __init__(self, dbc_name):
  *     self.dbc_name = dbc_name             # <<<<<<<<<<<<<<
  *     self.dbc = dbc_lookup(dbc_name)
  *     if not self.dbc:
  */
-  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_v_dbc_name); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 155, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_v_dbc_name); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 148, __pyx_L1_error)
   __pyx_v_self->dbc_name = __pyx_t_1;
 
-  /* "opendbc/can/parser_pyx.pyx":156
+  /* "opendbc/can/parser_pyx.pyx":149
  *   def __init__(self, dbc_name):
  *     self.dbc_name = dbc_name
  *     self.dbc = dbc_lookup(dbc_name)             # <<<<<<<<<<<<<<
  *     if not self.dbc:
  *       raise RuntimeError(f"Can't find DBC: '{dbc_name}'")
  */
-  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_v_dbc_name); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 156, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_v_dbc_name); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 149, __pyx_L1_error)
   __pyx_v_self->dbc = dbc_lookup(__pyx_t_1);
 
-  /* "opendbc/can/parser_pyx.pyx":157
+  /* "opendbc/can/parser_pyx.pyx":150
  *     self.dbc_name = dbc_name
  *     self.dbc = dbc_lookup(dbc_name)
  *     if not self.dbc:             # <<<<<<<<<<<<<<
@@ -4994,14 +4656,14 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine___init__(struct __pyx_
   __pyx_t_2 = ((!(__pyx_v_self->dbc != 0)) != 0);
   if (unlikely(__pyx_t_2)) {
 
-    /* "opendbc/can/parser_pyx.pyx":158
+    /* "opendbc/can/parser_pyx.pyx":151
  *     self.dbc = dbc_lookup(dbc_name)
  *     if not self.dbc:
  *       raise RuntimeError(f"Can't find DBC: '{dbc_name}'")             # <<<<<<<<<<<<<<
  * 
  *     address_to_msg_name = {}
  */
-    __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 158, __pyx_L1_error)
+    __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 151, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_4 = 0;
     __pyx_t_5 = 127;
@@ -5009,7 +4671,7 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine___init__(struct __pyx_
     __pyx_t_4 += 17;
     __Pyx_GIVEREF(__pyx_kp_u_Can_t_find_DBC_2);
     PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_kp_u_Can_t_find_DBC_2);
-    __pyx_t_6 = __Pyx_PyObject_FormatSimple(__pyx_v_dbc_name, __pyx_empty_unicode); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 158, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyObject_FormatSimple(__pyx_v_dbc_name, __pyx_empty_unicode); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 151, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __pyx_t_5 = (__Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_6) > __pyx_t_5) ? __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_6) : __pyx_t_5;
     __pyx_t_4 += __Pyx_PyUnicode_GET_LENGTH(__pyx_t_6);
@@ -5020,17 +4682,17 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine___init__(struct __pyx_
     __pyx_t_4 += 1;
     __Pyx_GIVEREF(__pyx_kp_u__6);
     PyTuple_SET_ITEM(__pyx_t_3, 2, __pyx_kp_u__6);
-    __pyx_t_6 = __Pyx_PyUnicode_Join(__pyx_t_3, 3, __pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 158, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyUnicode_Join(__pyx_t_3, 3, __pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 151, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_builtin_RuntimeError, __pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 158, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_builtin_RuntimeError, __pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 151, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 158, __pyx_L1_error)
+    __PYX_ERR(0, 151, __pyx_L1_error)
 
-    /* "opendbc/can/parser_pyx.pyx":157
+    /* "opendbc/can/parser_pyx.pyx":150
  *     self.dbc_name = dbc_name
  *     self.dbc = dbc_lookup(dbc_name)
  *     if not self.dbc:             # <<<<<<<<<<<<<<
@@ -5039,19 +4701,19 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine___init__(struct __pyx_
  */
   }
 
-  /* "opendbc/can/parser_pyx.pyx":160
+  /* "opendbc/can/parser_pyx.pyx":153
  *       raise RuntimeError(f"Can't find DBC: '{dbc_name}'")
  * 
  *     address_to_msg_name = {}             # <<<<<<<<<<<<<<
  * 
  *     for i in range(self.dbc[0].msgs.size()):
  */
-  __pyx_t_3 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 160, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 153, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_v_address_to_msg_name = ((PyObject*)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "opendbc/can/parser_pyx.pyx":162
+  /* "opendbc/can/parser_pyx.pyx":155
  *     address_to_msg_name = {}
  * 
  *     for i in range(self.dbc[0].msgs.size()):             # <<<<<<<<<<<<<<
@@ -5063,7 +4725,7 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine___init__(struct __pyx_
   for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
     __pyx_v_i = __pyx_t_9;
 
-    /* "opendbc/can/parser_pyx.pyx":163
+    /* "opendbc/can/parser_pyx.pyx":156
  * 
  *     for i in range(self.dbc[0].msgs.size()):
  *       msg = self.dbc[0].msgs[i]             # <<<<<<<<<<<<<<
@@ -5072,19 +4734,19 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine___init__(struct __pyx_
  */
     __pyx_v_msg = ((__pyx_v_self->dbc[0]).msgs[__pyx_v_i]);
 
-    /* "opendbc/can/parser_pyx.pyx":164
+    /* "opendbc/can/parser_pyx.pyx":157
  *     for i in range(self.dbc[0].msgs.size()):
  *       msg = self.dbc[0].msgs[i]
  *       name = msg.name.decode('utf8')             # <<<<<<<<<<<<<<
  *       address = msg.address
  *       address_to_msg_name[address] = name
  */
-    __pyx_t_3 = __Pyx_decode_cpp_string(__pyx_v_msg.name, 0, PY_SSIZE_T_MAX, NULL, NULL, PyUnicode_DecodeUTF8); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 164, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_decode_cpp_string(__pyx_v_msg.name, 0, PY_SSIZE_T_MAX, NULL, NULL, PyUnicode_DecodeUTF8); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 157, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_XDECREF_SET(__pyx_v_name, __pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "opendbc/can/parser_pyx.pyx":165
+    /* "opendbc/can/parser_pyx.pyx":158
  *       msg = self.dbc[0].msgs[i]
  *       name = msg.name.decode('utf8')
  *       address = msg.address             # <<<<<<<<<<<<<<
@@ -5094,27 +4756,27 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine___init__(struct __pyx_
     __pyx_t_10 = __pyx_v_msg.address;
     __pyx_v_address = __pyx_t_10;
 
-    /* "opendbc/can/parser_pyx.pyx":166
+    /* "opendbc/can/parser_pyx.pyx":159
  *       name = msg.name.decode('utf8')
  *       address = msg.address
  *       address_to_msg_name[address] = name             # <<<<<<<<<<<<<<
  * 
  *     dv = defaultdict(dict)
  */
-    __pyx_t_3 = __Pyx_PyInt_From_uint32_t(__pyx_v_address); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 166, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_From_uint32_t(__pyx_v_address); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 159, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    if (unlikely(PyDict_SetItem(__pyx_v_address_to_msg_name, __pyx_t_3, __pyx_v_name) < 0)) __PYX_ERR(0, 166, __pyx_L1_error)
+    if (unlikely(PyDict_SetItem(__pyx_v_address_to_msg_name, __pyx_t_3, __pyx_v_name) < 0)) __PYX_ERR(0, 159, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   }
 
-  /* "opendbc/can/parser_pyx.pyx":168
+  /* "opendbc/can/parser_pyx.pyx":161
  *       address_to_msg_name[address] = name
  * 
  *     dv = defaultdict(dict)             # <<<<<<<<<<<<<<
  * 
  *     for i in range(self.dbc[0].vals.size()):
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_defaultdict); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 168, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_defaultdict); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 161, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __pyx_t_11 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
@@ -5128,13 +4790,13 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine___init__(struct __pyx_
   }
   __pyx_t_3 = (__pyx_t_11) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_11, ((PyObject *)(&PyDict_Type))) : __Pyx_PyObject_CallOneArg(__pyx_t_6, ((PyObject *)(&PyDict_Type)));
   __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 168, __pyx_L1_error)
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 161, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __pyx_v_dv = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "opendbc/can/parser_pyx.pyx":170
+  /* "opendbc/can/parser_pyx.pyx":163
  *     dv = defaultdict(dict)
  * 
  *     for i in range(self.dbc[0].vals.size()):             # <<<<<<<<<<<<<<
@@ -5146,7 +4808,7 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine___init__(struct __pyx_
   for (__pyx_t_13 = 0; __pyx_t_13 < __pyx_t_12; __pyx_t_13+=1) {
     __pyx_v_i = __pyx_t_13;
 
-    /* "opendbc/can/parser_pyx.pyx":171
+    /* "opendbc/can/parser_pyx.pyx":164
  * 
  *     for i in range(self.dbc[0].vals.size()):
  *       val = self.dbc[0].vals[i]             # <<<<<<<<<<<<<<
@@ -5155,31 +4817,31 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine___init__(struct __pyx_
  */
     __pyx_v_val = ((__pyx_v_self->dbc[0]).vals[__pyx_v_i]);
 
-    /* "opendbc/can/parser_pyx.pyx":173
+    /* "opendbc/can/parser_pyx.pyx":166
  *       val = self.dbc[0].vals[i]
  * 
  *       sgname = val.name.decode('utf8')             # <<<<<<<<<<<<<<
  *       def_val = val.def_val.decode('utf8')
  *       address = val.address
  */
-    __pyx_t_3 = __Pyx_decode_cpp_string(__pyx_v_val.name, 0, PY_SSIZE_T_MAX, NULL, NULL, PyUnicode_DecodeUTF8); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 173, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_decode_cpp_string(__pyx_v_val.name, 0, PY_SSIZE_T_MAX, NULL, NULL, PyUnicode_DecodeUTF8); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 166, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_XDECREF_SET(__pyx_v_sgname, __pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "opendbc/can/parser_pyx.pyx":174
+    /* "opendbc/can/parser_pyx.pyx":167
  * 
  *       sgname = val.name.decode('utf8')
  *       def_val = val.def_val.decode('utf8')             # <<<<<<<<<<<<<<
  *       address = val.address
  *       msgname = address_to_msg_name[address]
  */
-    __pyx_t_3 = __Pyx_decode_cpp_string(__pyx_v_val.def_val, 0, PY_SSIZE_T_MAX, NULL, NULL, PyUnicode_DecodeUTF8); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 174, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_decode_cpp_string(__pyx_v_val.def_val, 0, PY_SSIZE_T_MAX, NULL, NULL, PyUnicode_DecodeUTF8); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 167, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_XDECREF_SET(__pyx_v_def_val, __pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "opendbc/can/parser_pyx.pyx":175
+    /* "opendbc/can/parser_pyx.pyx":168
  *       sgname = val.name.decode('utf8')
  *       def_val = val.def_val.decode('utf8')
  *       address = val.address             # <<<<<<<<<<<<<<
@@ -5189,29 +4851,29 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine___init__(struct __pyx_
     __pyx_t_10 = __pyx_v_val.address;
     __pyx_v_address = __pyx_t_10;
 
-    /* "opendbc/can/parser_pyx.pyx":176
+    /* "opendbc/can/parser_pyx.pyx":169
  *       def_val = val.def_val.decode('utf8')
  *       address = val.address
  *       msgname = address_to_msg_name[address]             # <<<<<<<<<<<<<<
  * 
  *       # separate definition/value pairs
  */
-    __pyx_t_3 = __Pyx_PyInt_From_uint32_t(__pyx_v_address); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 176, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_From_uint32_t(__pyx_v_address); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 169, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_6 = __Pyx_PyDict_GetItem(__pyx_v_address_to_msg_name, __pyx_t_3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 176, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyDict_GetItem(__pyx_v_address_to_msg_name, __pyx_t_3); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 169, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_XDECREF_SET(__pyx_v_msgname, __pyx_t_6);
     __pyx_t_6 = 0;
 
-    /* "opendbc/can/parser_pyx.pyx":179
+    /* "opendbc/can/parser_pyx.pyx":172
  * 
  *       # separate definition/value pairs
  *       def_val = def_val.split()             # <<<<<<<<<<<<<<
  *       values = [int(v) for v in def_val[::2]]
  *       defs = def_val[1::2]
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_def_val, __pyx_n_s_split); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 179, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_def_val, __pyx_n_s_split); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 172, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_11 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
@@ -5225,13 +4887,13 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine___init__(struct __pyx_
     }
     __pyx_t_6 = (__pyx_t_11) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_11) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
     __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
-    if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 179, __pyx_L1_error)
+    if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 172, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF_SET(__pyx_v_def_val, __pyx_t_6);
     __pyx_t_6 = 0;
 
-    /* "opendbc/can/parser_pyx.pyx":180
+    /* "opendbc/can/parser_pyx.pyx":173
  *       # separate definition/value pairs
  *       def_val = def_val.split()
  *       values = [int(v) for v in def_val[::2]]             # <<<<<<<<<<<<<<
@@ -5239,17 +4901,17 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine___init__(struct __pyx_
  * 
  */
     { /* enter inner scope */
-      __pyx_t_6 = PyList_New(0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 180, __pyx_L10_error)
+      __pyx_t_6 = PyList_New(0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 173, __pyx_L10_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_v_def_val, __pyx_slice__7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 180, __pyx_L10_error)
+      __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_v_def_val, __pyx_slice__7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 173, __pyx_L10_error)
       __Pyx_GOTREF(__pyx_t_3);
       if (likely(PyList_CheckExact(__pyx_t_3)) || PyTuple_CheckExact(__pyx_t_3)) {
         __pyx_t_11 = __pyx_t_3; __Pyx_INCREF(__pyx_t_11); __pyx_t_4 = 0;
         __pyx_t_14 = NULL;
       } else {
-        __pyx_t_4 = -1; __pyx_t_11 = PyObject_GetIter(__pyx_t_3); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 180, __pyx_L10_error)
+        __pyx_t_4 = -1; __pyx_t_11 = PyObject_GetIter(__pyx_t_3); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 173, __pyx_L10_error)
         __Pyx_GOTREF(__pyx_t_11);
-        __pyx_t_14 = Py_TYPE(__pyx_t_11)->tp_iternext; if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 180, __pyx_L10_error)
+        __pyx_t_14 = Py_TYPE(__pyx_t_11)->tp_iternext; if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 173, __pyx_L10_error)
       }
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       for (;;) {
@@ -5257,17 +4919,17 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine___init__(struct __pyx_
           if (likely(PyList_CheckExact(__pyx_t_11))) {
             if (__pyx_t_4 >= PyList_GET_SIZE(__pyx_t_11)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_3 = PyList_GET_ITEM(__pyx_t_11, __pyx_t_4); __Pyx_INCREF(__pyx_t_3); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 180, __pyx_L10_error)
+            __pyx_t_3 = PyList_GET_ITEM(__pyx_t_11, __pyx_t_4); __Pyx_INCREF(__pyx_t_3); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 173, __pyx_L10_error)
             #else
-            __pyx_t_3 = PySequence_ITEM(__pyx_t_11, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 180, __pyx_L10_error)
+            __pyx_t_3 = PySequence_ITEM(__pyx_t_11, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 173, __pyx_L10_error)
             __Pyx_GOTREF(__pyx_t_3);
             #endif
           } else {
             if (__pyx_t_4 >= PyTuple_GET_SIZE(__pyx_t_11)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_11, __pyx_t_4); __Pyx_INCREF(__pyx_t_3); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 180, __pyx_L10_error)
+            __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_11, __pyx_t_4); __Pyx_INCREF(__pyx_t_3); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 173, __pyx_L10_error)
             #else
-            __pyx_t_3 = PySequence_ITEM(__pyx_t_11, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 180, __pyx_L10_error)
+            __pyx_t_3 = PySequence_ITEM(__pyx_t_11, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 173, __pyx_L10_error)
             __Pyx_GOTREF(__pyx_t_3);
             #endif
           }
@@ -5277,7 +4939,7 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine___init__(struct __pyx_
             PyObject* exc_type = PyErr_Occurred();
             if (exc_type) {
               if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-              else __PYX_ERR(0, 180, __pyx_L10_error)
+              else __PYX_ERR(0, 173, __pyx_L10_error)
             }
             break;
           }
@@ -5285,9 +4947,9 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine___init__(struct __pyx_
         }
         __Pyx_XDECREF_SET(__pyx_8genexpr4__pyx_v_v, __pyx_t_3);
         __pyx_t_3 = 0;
-        __pyx_t_3 = __Pyx_PyNumber_Int(__pyx_8genexpr4__pyx_v_v); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 180, __pyx_L10_error)
+        __pyx_t_3 = __Pyx_PyNumber_Int(__pyx_8genexpr4__pyx_v_v); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 173, __pyx_L10_error)
         __Pyx_GOTREF(__pyx_t_3);
-        if (unlikely(__Pyx_ListComp_Append(__pyx_t_6, (PyObject*)__pyx_t_3))) __PYX_ERR(0, 180, __pyx_L10_error)
+        if (unlikely(__Pyx_ListComp_Append(__pyx_t_6, (PyObject*)__pyx_t_3))) __PYX_ERR(0, 173, __pyx_L10_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       }
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
@@ -5301,26 +4963,26 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine___init__(struct __pyx_
     __Pyx_XDECREF_SET(__pyx_v_values, ((PyObject*)__pyx_t_6));
     __pyx_t_6 = 0;
 
-    /* "opendbc/can/parser_pyx.pyx":181
+    /* "opendbc/can/parser_pyx.pyx":174
  *       def_val = def_val.split()
  *       values = [int(v) for v in def_val[::2]]
  *       defs = def_val[1::2]             # <<<<<<<<<<<<<<
  * 
  *       # two ways to lookup: address or msg name
  */
-    __pyx_t_6 = __Pyx_PyObject_GetItem(__pyx_v_def_val, __pyx_slice__8); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 181, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyObject_GetItem(__pyx_v_def_val, __pyx_slice__8); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 174, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_XDECREF_SET(__pyx_v_defs, __pyx_t_6);
     __pyx_t_6 = 0;
 
-    /* "opendbc/can/parser_pyx.pyx":184
+    /* "opendbc/can/parser_pyx.pyx":177
  * 
  *       # two ways to lookup: address or msg name
  *       dv[address][sgname] = dict(zip(values, defs))             # <<<<<<<<<<<<<<
  *       dv[msgname][sgname] = dv[address][sgname]
  * 
  */
-    __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 184, __pyx_L1_error)
+    __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 177, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_INCREF(__pyx_v_values);
     __Pyx_GIVEREF(__pyx_v_values);
@@ -5328,43 +4990,43 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine___init__(struct __pyx_
     __Pyx_INCREF(__pyx_v_defs);
     __Pyx_GIVEREF(__pyx_v_defs);
     PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_v_defs);
-    __pyx_t_11 = __Pyx_PyObject_Call(__pyx_builtin_zip, __pyx_t_6, NULL); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 184, __pyx_L1_error)
+    __pyx_t_11 = __Pyx_PyObject_Call(__pyx_builtin_zip, __pyx_t_6, NULL); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 177, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __pyx_t_6 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyDict_Type)), __pyx_t_11); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 184, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyDict_Type)), __pyx_t_11); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 177, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-    __pyx_t_11 = __Pyx_GetItemInt(__pyx_v_dv, __pyx_v_address, uint32_t, 0, __Pyx_PyInt_From_uint32_t, 0, 0, 1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 184, __pyx_L1_error)
+    __pyx_t_11 = __Pyx_GetItemInt(__pyx_v_dv, __pyx_v_address, uint32_t, 0, __Pyx_PyInt_From_uint32_t, 0, 0, 1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 177, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
-    if (unlikely(PyObject_SetItem(__pyx_t_11, __pyx_v_sgname, __pyx_t_6) < 0)) __PYX_ERR(0, 184, __pyx_L1_error)
+    if (unlikely(PyObject_SetItem(__pyx_t_11, __pyx_v_sgname, __pyx_t_6) < 0)) __PYX_ERR(0, 177, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-    /* "opendbc/can/parser_pyx.pyx":185
+    /* "opendbc/can/parser_pyx.pyx":178
  *       # two ways to lookup: address or msg name
  *       dv[address][sgname] = dict(zip(values, defs))
  *       dv[msgname][sgname] = dv[address][sgname]             # <<<<<<<<<<<<<<
  * 
  *     self.dv = dict(dv)
  */
-    __pyx_t_6 = __Pyx_GetItemInt(__pyx_v_dv, __pyx_v_address, uint32_t, 0, __Pyx_PyInt_From_uint32_t, 0, 0, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 185, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_GetItemInt(__pyx_v_dv, __pyx_v_address, uint32_t, 0, __Pyx_PyInt_From_uint32_t, 0, 0, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 178, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_11 = __Pyx_PyObject_GetItem(__pyx_t_6, __pyx_v_sgname); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 185, __pyx_L1_error)
+    __pyx_t_11 = __Pyx_PyObject_GetItem(__pyx_t_6, __pyx_v_sgname); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 178, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __pyx_t_6 = __Pyx_PyObject_GetItem(__pyx_v_dv, __pyx_v_msgname); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 185, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyObject_GetItem(__pyx_v_dv, __pyx_v_msgname); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 178, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    if (unlikely(PyObject_SetItem(__pyx_t_6, __pyx_v_sgname, __pyx_t_11) < 0)) __PYX_ERR(0, 185, __pyx_L1_error)
+    if (unlikely(PyObject_SetItem(__pyx_t_6, __pyx_v_sgname, __pyx_t_11) < 0)) __PYX_ERR(0, 178, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
   }
 
-  /* "opendbc/can/parser_pyx.pyx":187
+  /* "opendbc/can/parser_pyx.pyx":180
  *       dv[msgname][sgname] = dv[address][sgname]
  * 
  *     self.dv = dict(dv)             # <<<<<<<<<<<<<<
  */
-  __pyx_t_11 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyDict_Type)), __pyx_v_dv); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 187, __pyx_L1_error)
+  __pyx_t_11 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyDict_Type)), __pyx_v_dv); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 180, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_11);
   __Pyx_GIVEREF(__pyx_t_11);
   __Pyx_GOTREF(__pyx_v_self->dv);
@@ -5372,7 +5034,7 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine___init__(struct __pyx_
   __pyx_v_self->dv = ((PyObject*)__pyx_t_11);
   __pyx_t_11 = 0;
 
-  /* "opendbc/can/parser_pyx.pyx":154
+  /* "opendbc/can/parser_pyx.pyx":147
  *     string dbc_name
  * 
  *   def __init__(self, dbc_name):             # <<<<<<<<<<<<<<
@@ -5403,7 +5065,7 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine___init__(struct __pyx_
   return __pyx_r;
 }
 
-/* "opendbc/can/parser_pyx.pyx":151
+/* "opendbc/can/parser_pyx.pyx":144
  * 
  *   cdef public:
  *     dict dv             # <<<<<<<<<<<<<<
@@ -5461,7 +5123,7 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine_2dv_2__set__(struct __
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__set__", 0);
-  if (!(likely(PyDict_CheckExact(__pyx_v_value))||((__pyx_v_value) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "dict", Py_TYPE(__pyx_v_value)->tp_name), 0))) __PYX_ERR(0, 151, __pyx_L1_error)
+  if (!(likely(PyDict_CheckExact(__pyx_v_value))||((__pyx_v_value) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "dict", Py_TYPE(__pyx_v_value)->tp_name), 0))) __PYX_ERR(0, 144, __pyx_L1_error)
   __pyx_t_1 = __pyx_v_value;
   __Pyx_INCREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
@@ -5511,7 +5173,7 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine_2dv_4__del__(struct __
   return __pyx_r;
 }
 
-/* "opendbc/can/parser_pyx.pyx":152
+/* "opendbc/can/parser_pyx.pyx":145
  *   cdef public:
  *     dict dv
  *     string dbc_name             # <<<<<<<<<<<<<<
@@ -5541,7 +5203,7 @@ static PyObject *__pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine_8dbc_name___get_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_PyBytes_string_to_py_std__in_string(__pyx_v_self->dbc_name); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 152, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_PyBytes_string_to_py_std__in_string(__pyx_v_self->dbc_name); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 145, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -5579,7 +5241,7 @@ static int __pyx_pf_7opendbc_3can_10parser_pyx_9CANDefine_8dbc_name_2__set__(str
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__set__", 0);
-  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_v_value); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 152, __pyx_L1_error)
+  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_v_value); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 145, __pyx_L1_error)
   __pyx_v_self->dbc_name = __pyx_t_1;
 
   /* function exit code */
@@ -6020,6 +5682,128 @@ static CYTHON_INLINE PyObject *__pyx_convert_PyByteArray_string_to_py_std__in_st
   return __pyx_r;
 }
 
+/* "vector.from_py":45
+ * 
+ * @cname("__pyx_convert_vector_from_py_std_3a__3a_string")
+ * cdef vector[X] __pyx_convert_vector_from_py_std_3a__3a_string(object o) except *:             # <<<<<<<<<<<<<<
+ *     cdef vector[X] v
+ *     for item in o:
+ */
+
+static std::vector<std::string>  __pyx_convert_vector_from_py_std_3a__3a_string(PyObject *__pyx_v_o) {
+  std::vector<std::string>  __pyx_v_v;
+  PyObject *__pyx_v_item = NULL;
+  std::vector<std::string>  __pyx_r;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  Py_ssize_t __pyx_t_2;
+  PyObject *(*__pyx_t_3)(PyObject *);
+  PyObject *__pyx_t_4 = NULL;
+  std::string __pyx_t_5;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("__pyx_convert_vector_from_py_std_3a__3a_string", 0);
+
+  /* "vector.from_py":47
+ * cdef vector[X] __pyx_convert_vector_from_py_std_3a__3a_string(object o) except *:
+ *     cdef vector[X] v
+ *     for item in o:             # <<<<<<<<<<<<<<
+ *         v.push_back(<X>item)
+ *     return v
+ */
+  if (likely(PyList_CheckExact(__pyx_v_o)) || PyTuple_CheckExact(__pyx_v_o)) {
+    __pyx_t_1 = __pyx_v_o; __Pyx_INCREF(__pyx_t_1); __pyx_t_2 = 0;
+    __pyx_t_3 = NULL;
+  } else {
+    __pyx_t_2 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_v_o); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 47, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_3 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 47, __pyx_L1_error)
+  }
+  for (;;) {
+    if (likely(!__pyx_t_3)) {
+      if (likely(PyList_CheckExact(__pyx_t_1))) {
+        if (__pyx_t_2 >= PyList_GET_SIZE(__pyx_t_1)) break;
+        #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(1, 47, __pyx_L1_error)
+        #else
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 47, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_4);
+        #endif
+      } else {
+        if (__pyx_t_2 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
+        #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(1, 47, __pyx_L1_error)
+        #else
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 47, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_4);
+        #endif
+      }
+    } else {
+      __pyx_t_4 = __pyx_t_3(__pyx_t_1);
+      if (unlikely(!__pyx_t_4)) {
+        PyObject* exc_type = PyErr_Occurred();
+        if (exc_type) {
+          if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
+          else __PYX_ERR(1, 47, __pyx_L1_error)
+        }
+        break;
+      }
+      __Pyx_GOTREF(__pyx_t_4);
+    }
+    __Pyx_XDECREF_SET(__pyx_v_item, __pyx_t_4);
+    __pyx_t_4 = 0;
+
+    /* "vector.from_py":48
+ *     cdef vector[X] v
+ *     for item in o:
+ *         v.push_back(<X>item)             # <<<<<<<<<<<<<<
+ *     return v
+ * 
+ */
+    __pyx_t_5 = __pyx_convert_string_from_py_std__in_string(__pyx_v_item); if (unlikely(PyErr_Occurred())) __PYX_ERR(1, 48, __pyx_L1_error)
+    __pyx_v_v.push_back(((std::string)__pyx_t_5));
+
+    /* "vector.from_py":47
+ * cdef vector[X] __pyx_convert_vector_from_py_std_3a__3a_string(object o) except *:
+ *     cdef vector[X] v
+ *     for item in o:             # <<<<<<<<<<<<<<
+ *         v.push_back(<X>item)
+ *     return v
+ */
+  }
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "vector.from_py":49
+ *     for item in o:
+ *         v.push_back(<X>item)
+ *     return v             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+  __pyx_r = __pyx_v_v;
+  goto __pyx_L0;
+
+  /* "vector.from_py":45
+ * 
+ * @cname("__pyx_convert_vector_from_py_std_3a__3a_string")
+ * cdef vector[X] __pyx_convert_vector_from_py_std_3a__3a_string(object o) except *:             # <<<<<<<<<<<<<<
+ *     cdef vector[X] v
+ *     for item in o:
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_AddTraceback("vector.from_py.__pyx_convert_vector_from_py_std_3a__3a_string", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_pretend_to_initialize(&__pyx_r);
+  __pyx_L0:;
+  __Pyx_XDECREF(__pyx_v_item);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
 /* "vector.to_py":60
  * 
  * @cname("__pyx_convert_vector_to_py_double")
@@ -6190,7 +5974,6 @@ static PyObject *__pyx_convert_unordered_set_to_py_uint32_t(std::unordered_set<u
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
-static struct __pyx_vtabstruct_7opendbc_3can_10parser_pyx_CANParser __pyx_vtable_7opendbc_3can_10parser_pyx_CANParser;
 
 static PyObject *__pyx_tp_new_7opendbc_3can_10parser_pyx_CANParser(PyTypeObject *t, CYTHON_UNUSED PyObject *a, CYTHON_UNUSED PyObject *k) {
   struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *p;
@@ -6202,7 +5985,6 @@ static PyObject *__pyx_tp_new_7opendbc_3can_10parser_pyx_CANParser(PyTypeObject 
   }
   if (unlikely(!o)) return 0;
   p = ((struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *)o);
-  p->__pyx_vtab = __pyx_vtabptr_7opendbc_3can_10parser_pyx_CANParser;
   new((void*)&(p->address_to_msg_name)) std::map<uint32_t,std::string> ();
   new((void*)&(p->can_values)) std::vector<struct SignalValue> ();
   new((void*)&(p->dbc_name)) std::string();
@@ -6284,10 +6066,9 @@ static PyObject *__pyx_getprop_7opendbc_3can_10parser_pyx_9CANParser_dbc_name(Py
 }
 
 static PyMethodDef __pyx_methods_7opendbc_3can_10parser_pyx_CANParser[] = {
-  {"update_string", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_3update_string, METH_VARARGS|METH_KEYWORDS, 0},
-  {"update_strings", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_5update_strings, METH_VARARGS|METH_KEYWORDS, 0},
-  {"__reduce_cython__", (PyCFunction)__pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_7__reduce_cython__, METH_NOARGS, 0},
-  {"__setstate_cython__", (PyCFunction)__pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_9__setstate_cython__, METH_O, 0},
+  {"update_strings", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_3update_strings, METH_VARARGS|METH_KEYWORDS, 0},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_5__reduce_cython__, METH_NOARGS, 0},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_7opendbc_3can_10parser_pyx_9CANParser_7__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
 };
 
@@ -6959,11 +6740,9 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_close, __pyx_k_close, sizeof(__pyx_k_close), 0, 0, 1, 1},
   {&__pyx_n_s_collections, __pyx_k_collections, sizeof(__pyx_k_collections), 0, 0, 1, 1},
   {&__pyx_kp_u_could_not_find_message, __pyx_k_could_not_find_message, sizeof(__pyx_k_could_not_find_message), 0, 1, 0, 0},
-  {&__pyx_n_s_dat, __pyx_k_dat, sizeof(__pyx_k_dat), 0, 0, 1, 1},
   {&__pyx_n_s_dbc_name, __pyx_k_dbc_name, sizeof(__pyx_k_dbc_name), 0, 0, 1, 1},
   {&__pyx_n_s_defaultdict, __pyx_k_defaultdict, sizeof(__pyx_k_defaultdict), 0, 0, 1, 1},
   {&__pyx_n_s_enforce_checks, __pyx_k_enforce_checks, sizeof(__pyx_k_enforce_checks), 0, 0, 1, 1},
-  {&__pyx_n_s_extend, __pyx_k_extend, sizeof(__pyx_k_extend), 0, 0, 1, 1},
   {&__pyx_n_s_genexpr, __pyx_k_genexpr, sizeof(__pyx_k_genexpr), 0, 0, 1, 1},
   {&__pyx_n_s_getstate, __pyx_k_getstate, sizeof(__pyx_k_getstate), 0, 0, 1, 1},
   {&__pyx_n_s_hex, __pyx_k_hex, sizeof(__pyx_k_hex), 0, 0, 1, 1},
@@ -6977,7 +6756,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_opendbc_can_parser_pyx, __pyx_k_opendbc_can_parser_pyx, sizeof(__pyx_k_opendbc_can_parser_pyx), 0, 0, 1, 1},
   {&__pyx_n_s_os, __pyx_k_os, sizeof(__pyx_k_os), 0, 0, 1, 1},
   {&__pyx_n_s_print, __pyx_k_print, sizeof(__pyx_k_print), 0, 0, 1, 1},
-  {&__pyx_n_s_pyx_vtable, __pyx_k_pyx_vtable, sizeof(__pyx_k_pyx_vtable), 0, 0, 1, 1},
   {&__pyx_n_s_range, __pyx_k_range, sizeof(__pyx_k_range), 0, 0, 1, 1},
   {&__pyx_n_s_reduce, __pyx_k_reduce, sizeof(__pyx_k_reduce), 0, 0, 1, 1},
   {&__pyx_n_s_reduce_cython, __pyx_k_reduce_cython, sizeof(__pyx_k_reduce_cython), 0, 0, 1, 1},
@@ -6994,17 +6772,18 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
   {&__pyx_n_s_throw, __pyx_k_throw, sizeof(__pyx_k_throw), 0, 0, 1, 1},
   {&__pyx_n_s_update, __pyx_k_update, sizeof(__pyx_k_update), 0, 0, 1, 1},
+  {&__pyx_n_s_update_strings, __pyx_k_update_strings, sizeof(__pyx_k_update_strings), 0, 0, 1, 1},
   {&__pyx_n_s_values, __pyx_k_values, sizeof(__pyx_k_values), 0, 0, 1, 1},
   {&__pyx_n_s_zip, __pyx_k_zip, sizeof(__pyx_k_zip), 0, 0, 1, 1},
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_RuntimeError = __Pyx_GetBuiltinName(__pyx_n_s_RuntimeError); if (!__pyx_builtin_RuntimeError) __PYX_ERR(0, 39, __pyx_L1_error)
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 46, __pyx_L1_error)
-  __pyx_builtin_print = __Pyx_GetBuiltinName(__pyx_n_s_print); if (!__pyx_builtin_print) __PYX_ERR(0, 64, __pyx_L1_error)
-  __pyx_builtin_hex = __Pyx_GetBuiltinName(__pyx_n_s_hex); if (!__pyx_builtin_hex) __PYX_ERR(0, 83, __pyx_L1_error)
+  __pyx_builtin_RuntimeError = __Pyx_GetBuiltinName(__pyx_n_s_RuntimeError); if (!__pyx_builtin_RuntimeError) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 47, __pyx_L1_error)
+  __pyx_builtin_print = __Pyx_GetBuiltinName(__pyx_n_s_print); if (!__pyx_builtin_print) __PYX_ERR(0, 65, __pyx_L1_error)
+  __pyx_builtin_hex = __Pyx_GetBuiltinName(__pyx_n_s_hex); if (!__pyx_builtin_hex) __PYX_ERR(0, 84, __pyx_L1_error)
   __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(1, 2, __pyx_L1_error)
-  __pyx_builtin_zip = __Pyx_GetBuiltinName(__pyx_n_s_zip); if (!__pyx_builtin_zip) __PYX_ERR(0, 184, __pyx_L1_error)
+  __pyx_builtin_zip = __Pyx_GetBuiltinName(__pyx_n_s_zip); if (!__pyx_builtin_zip) __PYX_ERR(0, 177, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -7033,25 +6812,25 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__5);
   __Pyx_GIVEREF(__pyx_tuple__5);
 
-  /* "opendbc/can/parser_pyx.pyx":180
+  /* "opendbc/can/parser_pyx.pyx":173
  *       # separate definition/value pairs
  *       def_val = def_val.split()
  *       values = [int(v) for v in def_val[::2]]             # <<<<<<<<<<<<<<
  *       defs = def_val[1::2]
  * 
  */
-  __pyx_slice__7 = PySlice_New(Py_None, Py_None, __pyx_int_2); if (unlikely(!__pyx_slice__7)) __PYX_ERR(0, 180, __pyx_L1_error)
+  __pyx_slice__7 = PySlice_New(Py_None, Py_None, __pyx_int_2); if (unlikely(!__pyx_slice__7)) __PYX_ERR(0, 173, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_slice__7);
   __Pyx_GIVEREF(__pyx_slice__7);
 
-  /* "opendbc/can/parser_pyx.pyx":181
+  /* "opendbc/can/parser_pyx.pyx":174
  *       def_val = def_val.split()
  *       values = [int(v) for v in def_val[::2]]
  *       defs = def_val[1::2]             # <<<<<<<<<<<<<<
  * 
  *       # two ways to lookup: address or msg name
  */
-  __pyx_slice__8 = PySlice_New(__pyx_int_1, Py_None, __pyx_int_2); if (unlikely(!__pyx_slice__8)) __PYX_ERR(0, 181, __pyx_L1_error)
+  __pyx_slice__8 = PySlice_New(__pyx_int_1, Py_None, __pyx_int_2); if (unlikely(!__pyx_slice__8)) __PYX_ERR(0, 174, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_slice__8);
   __Pyx_GIVEREF(__pyx_slice__8);
 
@@ -7082,7 +6861,6 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
 
 static CYTHON_SMALL_CODE int __Pyx_InitGlobals(void) {
   __pyx_umethod_PyDict_Type_update.type = (PyObject*)&PyDict_Type;
-  __pyx_umethod_PySet_Type_update.type = (PyObject*)&PySet_Type;
   if (__Pyx_InitStrings(__pyx_string_tab) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
   __pyx_int_0 = PyInt_FromLong(0); if (unlikely(!__pyx_int_0)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_1 = PyInt_FromLong(1); if (unlikely(!__pyx_int_1)) __PYX_ERR(0, 1, __pyx_L1_error)
@@ -7131,30 +6909,27 @@ static int __Pyx_modinit_type_init_code(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__Pyx_modinit_type_init_code", 0);
   /*--- Type init code ---*/
-  __pyx_vtabptr_7opendbc_3can_10parser_pyx_CANParser = &__pyx_vtable_7opendbc_3can_10parser_pyx_CANParser;
-  __pyx_vtable_7opendbc_3can_10parser_pyx_CANParser.update_vl = (std::unordered_set<uint32_t>  (*)(struct __pyx_obj_7opendbc_3can_10parser_pyx_CANParser *))__pyx_f_7opendbc_3can_10parser_pyx_9CANParser_update_vl;
-  if (PyType_Ready(&__pyx_type_7opendbc_3can_10parser_pyx_CANParser) < 0) __PYX_ERR(0, 19, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_7opendbc_3can_10parser_pyx_CANParser) < 0) __PYX_ERR(0, 20, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
   __pyx_type_7opendbc_3can_10parser_pyx_CANParser.tp_print = 0;
   #endif
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_7opendbc_3can_10parser_pyx_CANParser.tp_dictoffset && __pyx_type_7opendbc_3can_10parser_pyx_CANParser.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_7opendbc_3can_10parser_pyx_CANParser.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (__Pyx_SetVtable(__pyx_type_7opendbc_3can_10parser_pyx_CANParser.tp_dict, __pyx_vtabptr_7opendbc_3can_10parser_pyx_CANParser) < 0) __PYX_ERR(0, 19, __pyx_L1_error)
-  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_CANParser, (PyObject *)&__pyx_type_7opendbc_3can_10parser_pyx_CANParser) < 0) __PYX_ERR(0, 19, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_7opendbc_3can_10parser_pyx_CANParser) < 0) __PYX_ERR(0, 19, __pyx_L1_error)
+  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_CANParser, (PyObject *)&__pyx_type_7opendbc_3can_10parser_pyx_CANParser) < 0) __PYX_ERR(0, 20, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_7opendbc_3can_10parser_pyx_CANParser) < 0) __PYX_ERR(0, 20, __pyx_L1_error)
   __pyx_ptype_7opendbc_3can_10parser_pyx_CANParser = &__pyx_type_7opendbc_3can_10parser_pyx_CANParser;
-  if (PyType_Ready(&__pyx_type_7opendbc_3can_10parser_pyx_CANDefine) < 0) __PYX_ERR(0, 146, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_7opendbc_3can_10parser_pyx_CANDefine) < 0) __PYX_ERR(0, 139, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
   __pyx_type_7opendbc_3can_10parser_pyx_CANDefine.tp_print = 0;
   #endif
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_7opendbc_3can_10parser_pyx_CANDefine.tp_dictoffset && __pyx_type_7opendbc_3can_10parser_pyx_CANDefine.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_7opendbc_3can_10parser_pyx_CANDefine.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_CANDefine, (PyObject *)&__pyx_type_7opendbc_3can_10parser_pyx_CANDefine) < 0) __PYX_ERR(0, 146, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_7opendbc_3can_10parser_pyx_CANDefine) < 0) __PYX_ERR(0, 146, __pyx_L1_error)
+  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_CANDefine, (PyObject *)&__pyx_type_7opendbc_3can_10parser_pyx_CANDefine) < 0) __PYX_ERR(0, 139, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_7opendbc_3can_10parser_pyx_CANDefine) < 0) __PYX_ERR(0, 139, __pyx_L1_error)
   __pyx_ptype_7opendbc_3can_10parser_pyx_CANDefine = &__pyx_type_7opendbc_3can_10parser_pyx_CANDefine;
-  if (PyType_Ready(&__pyx_type_7opendbc_3can_10parser_pyx___pyx_scope_struct____init__) < 0) __PYX_ERR(0, 32, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_7opendbc_3can_10parser_pyx___pyx_scope_struct____init__) < 0) __PYX_ERR(0, 33, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
   __pyx_type_7opendbc_3can_10parser_pyx___pyx_scope_struct____init__.tp_print = 0;
   #endif
@@ -7162,7 +6937,7 @@ static int __Pyx_modinit_type_init_code(void) {
     __pyx_type_7opendbc_3can_10parser_pyx___pyx_scope_struct____init__.tp_getattro = __Pyx_PyObject_GenericGetAttrNoDict;
   }
   __pyx_ptype_7opendbc_3can_10parser_pyx___pyx_scope_struct____init__ = &__pyx_type_7opendbc_3can_10parser_pyx___pyx_scope_struct____init__;
-  if (PyType_Ready(&__pyx_type_7opendbc_3can_10parser_pyx___pyx_scope_struct_1_genexpr) < 0) __PYX_ERR(0, 83, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_7opendbc_3can_10parser_pyx___pyx_scope_struct_1_genexpr) < 0) __PYX_ERR(0, 84, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
   __pyx_type_7opendbc_3can_10parser_pyx___pyx_scope_struct_1_genexpr.tp_print = 0;
   #endif
@@ -7170,7 +6945,7 @@ static int __Pyx_modinit_type_init_code(void) {
     __pyx_type_7opendbc_3can_10parser_pyx___pyx_scope_struct_1_genexpr.tp_getattro = __Pyx_PyObject_GenericGetAttrNoDict;
   }
   __pyx_ptype_7opendbc_3can_10parser_pyx___pyx_scope_struct_1_genexpr = &__pyx_type_7opendbc_3can_10parser_pyx___pyx_scope_struct_1_genexpr;
-  if (PyType_Ready(&__pyx_type_7opendbc_3can_10parser_pyx___pyx_scope_struct_2_genexpr) < 0) __PYX_ERR(0, 93, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_7opendbc_3can_10parser_pyx___pyx_scope_struct_2_genexpr) < 0) __PYX_ERR(0, 94, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
   __pyx_type_7opendbc_3can_10parser_pyx___pyx_scope_struct_2_genexpr.tp_print = 0;
   #endif
@@ -7410,48 +7185,48 @@ if (!__Pyx_RefNanny) {
   if (__Pyx_patch_abc() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
 
-  /* "opendbc/can/parser_pyx.pyx":14
+  /* "opendbc/can/parser_pyx.pyx":15
  * from .common cimport SignalParseOptions, MessageParseOptions, dbc_lookup, SignalValue, DBC
  * 
  * import os             # <<<<<<<<<<<<<<
  * import numbers
  * from collections import defaultdict
  */
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_os, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 14, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_os, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 15, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_os, __pyx_t_1) < 0) __PYX_ERR(0, 14, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_os, __pyx_t_1) < 0) __PYX_ERR(0, 15, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "opendbc/can/parser_pyx.pyx":15
+  /* "opendbc/can/parser_pyx.pyx":16
  * 
  * import os
  * import numbers             # <<<<<<<<<<<<<<
  * from collections import defaultdict
  * 
  */
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_numbers, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 15, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_numbers, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 16, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_numbers, __pyx_t_1) < 0) __PYX_ERR(0, 15, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_numbers, __pyx_t_1) < 0) __PYX_ERR(0, 16, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "opendbc/can/parser_pyx.pyx":16
+  /* "opendbc/can/parser_pyx.pyx":17
  * import os
  * import numbers
  * from collections import defaultdict             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 16, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_n_s_defaultdict);
   __Pyx_GIVEREF(__pyx_n_s_defaultdict);
   PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_s_defaultdict);
-  __pyx_t_2 = __Pyx_Import(__pyx_n_s_collections, __pyx_t_1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 16, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_Import(__pyx_n_s_collections, __pyx_t_1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 17, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_defaultdict); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 16, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_defaultdict); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_defaultdict, __pyx_t_1) < 0) __PYX_ERR(0, 16, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_defaultdict, __pyx_t_1) < 0) __PYX_ERR(0, 17, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
@@ -8269,96 +8044,6 @@ static PyObject *__Pyx_PyDict_GetItem(PyObject *d, PyObject* key) {
 }
 #endif
 
-/* PyDictVersioning */
-#if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_TYPE_SLOTS
-static CYTHON_INLINE PY_UINT64_T __Pyx_get_tp_dict_version(PyObject *obj) {
-    PyObject *dict = Py_TYPE(obj)->tp_dict;
-    return likely(dict) ? __PYX_GET_DICT_VERSION(dict) : 0;
-}
-static CYTHON_INLINE PY_UINT64_T __Pyx_get_object_dict_version(PyObject *obj) {
-    PyObject **dictptr = NULL;
-    Py_ssize_t offset = Py_TYPE(obj)->tp_dictoffset;
-    if (offset) {
-#if CYTHON_COMPILING_IN_CPYTHON
-        dictptr = (likely(offset > 0)) ? (PyObject **) ((char *)obj + offset) : _PyObject_GetDictPtr(obj);
-#else
-        dictptr = _PyObject_GetDictPtr(obj);
-#endif
-    }
-    return (dictptr && *dictptr) ? __PYX_GET_DICT_VERSION(*dictptr) : 0;
-}
-static CYTHON_INLINE int __Pyx_object_dict_version_matches(PyObject* obj, PY_UINT64_T tp_dict_version, PY_UINT64_T obj_dict_version) {
-    PyObject *dict = Py_TYPE(obj)->tp_dict;
-    if (unlikely(!dict) || unlikely(tp_dict_version != __PYX_GET_DICT_VERSION(dict)))
-        return 0;
-    return obj_dict_version == __Pyx_get_object_dict_version(obj);
-}
-#endif
-
-/* GetModuleGlobalName */
-#if CYTHON_USE_DICT_VERSIONS
-static PyObject *__Pyx__GetModuleGlobalName(PyObject *name, PY_UINT64_T *dict_version, PyObject **dict_cached_value)
-#else
-static CYTHON_INLINE PyObject *__Pyx__GetModuleGlobalName(PyObject *name)
-#endif
-{
-    PyObject *result;
-#if !CYTHON_AVOID_BORROWED_REFS
-#if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030500A1
-    result = _PyDict_GetItem_KnownHash(__pyx_d, name, ((PyASCIIObject *) name)->hash);
-    __PYX_UPDATE_DICT_CACHE(__pyx_d, result, *dict_cached_value, *dict_version)
-    if (likely(result)) {
-        return __Pyx_NewRef(result);
-    } else if (unlikely(PyErr_Occurred())) {
-        return NULL;
-    }
-#else
-    result = PyDict_GetItem(__pyx_d, name);
-    __PYX_UPDATE_DICT_CACHE(__pyx_d, result, *dict_cached_value, *dict_version)
-    if (likely(result)) {
-        return __Pyx_NewRef(result);
-    }
-#endif
-#else
-    result = PyObject_GetItem(__pyx_d, name);
-    __PYX_UPDATE_DICT_CACHE(__pyx_d, result, *dict_cached_value, *dict_version)
-    if (likely(result)) {
-        return __Pyx_NewRef(result);
-    }
-    PyErr_Clear();
-#endif
-    return __Pyx_GetBuiltinName(name);
-}
-
-/* PyObjectCall2Args */
-static CYTHON_UNUSED PyObject* __Pyx_PyObject_Call2Args(PyObject* function, PyObject* arg1, PyObject* arg2) {
-    PyObject *args, *result = NULL;
-    #if CYTHON_FAST_PYCALL
-    if (PyFunction_Check(function)) {
-        PyObject *args[2] = {arg1, arg2};
-        return __Pyx_PyFunction_FastCall(function, args, 2);
-    }
-    #endif
-    #if CYTHON_FAST_PYCCALL
-    if (__Pyx_PyFastCFunction_Check(function)) {
-        PyObject *args[2] = {arg1, arg2};
-        return __Pyx_PyCFunction_FastCall(function, args, 2);
-    }
-    #endif
-    args = PyTuple_New(2);
-    if (unlikely(!args)) goto done;
-    Py_INCREF(arg1);
-    PyTuple_SET_ITEM(args, 0, arg1);
-    Py_INCREF(arg2);
-    PyTuple_SET_ITEM(args, 1, arg2);
-    Py_INCREF(function);
-    result = __Pyx_PyObject_Call(function, args, NULL);
-    Py_DECREF(args);
-    Py_DECREF(function);
-done:
-    return result;
-}
-
 /* GetItemInt */
 static PyObject *__Pyx_GetItemInt_Generic(PyObject *o, PyObject* j) {
     PyObject *r;
@@ -8444,6 +8129,67 @@ static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Fast(PyObject *o, Py_ssize_t i, 
     }
 #endif
     return __Pyx_GetItemInt_Generic(o, PyInt_FromSsize_t(i));
+}
+
+/* PyDictVersioning */
+#if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_TYPE_SLOTS
+static CYTHON_INLINE PY_UINT64_T __Pyx_get_tp_dict_version(PyObject *obj) {
+    PyObject *dict = Py_TYPE(obj)->tp_dict;
+    return likely(dict) ? __PYX_GET_DICT_VERSION(dict) : 0;
+}
+static CYTHON_INLINE PY_UINT64_T __Pyx_get_object_dict_version(PyObject *obj) {
+    PyObject **dictptr = NULL;
+    Py_ssize_t offset = Py_TYPE(obj)->tp_dictoffset;
+    if (offset) {
+#if CYTHON_COMPILING_IN_CPYTHON
+        dictptr = (likely(offset > 0)) ? (PyObject **) ((char *)obj + offset) : _PyObject_GetDictPtr(obj);
+#else
+        dictptr = _PyObject_GetDictPtr(obj);
+#endif
+    }
+    return (dictptr && *dictptr) ? __PYX_GET_DICT_VERSION(*dictptr) : 0;
+}
+static CYTHON_INLINE int __Pyx_object_dict_version_matches(PyObject* obj, PY_UINT64_T tp_dict_version, PY_UINT64_T obj_dict_version) {
+    PyObject *dict = Py_TYPE(obj)->tp_dict;
+    if (unlikely(!dict) || unlikely(tp_dict_version != __PYX_GET_DICT_VERSION(dict)))
+        return 0;
+    return obj_dict_version == __Pyx_get_object_dict_version(obj);
+}
+#endif
+
+/* GetModuleGlobalName */
+#if CYTHON_USE_DICT_VERSIONS
+static PyObject *__Pyx__GetModuleGlobalName(PyObject *name, PY_UINT64_T *dict_version, PyObject **dict_cached_value)
+#else
+static CYTHON_INLINE PyObject *__Pyx__GetModuleGlobalName(PyObject *name)
+#endif
+{
+    PyObject *result;
+#if !CYTHON_AVOID_BORROWED_REFS
+#if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030500A1
+    result = _PyDict_GetItem_KnownHash(__pyx_d, name, ((PyASCIIObject *) name)->hash);
+    __PYX_UPDATE_DICT_CACHE(__pyx_d, result, *dict_cached_value, *dict_version)
+    if (likely(result)) {
+        return __Pyx_NewRef(result);
+    } else if (unlikely(PyErr_Occurred())) {
+        return NULL;
+    }
+#else
+    result = PyDict_GetItem(__pyx_d, name);
+    __PYX_UPDATE_DICT_CACHE(__pyx_d, result, *dict_cached_value, *dict_version)
+    if (likely(result)) {
+        return __Pyx_NewRef(result);
+    }
+#endif
+#else
+    result = PyObject_GetItem(__pyx_d, name);
+    __PYX_UPDATE_DICT_CACHE(__pyx_d, result, *dict_cached_value, *dict_version)
+    if (likely(result)) {
+        return __Pyx_NewRef(result);
+    }
+    PyErr_Clear();
+#endif
+    return __Pyx_GetBuiltinName(name);
 }
 
 /* None */
@@ -8894,46 +8640,33 @@ static CYTHON_INLINE int __Pyx_dict_iter_next(
     return 1;
 }
 
-/* WriteUnraisableException */
-static void __Pyx_WriteUnraisable(const char *name, CYTHON_UNUSED int clineno,
-                                  CYTHON_UNUSED int lineno, CYTHON_UNUSED const char *filename,
-                                  int full_traceback, CYTHON_UNUSED int nogil) {
-    PyObject *old_exc, *old_val, *old_tb;
-    PyObject *ctx;
-    __Pyx_PyThreadState_declare
-#ifdef WITH_THREAD
-    PyGILState_STATE state;
-    if (nogil)
-        state = PyGILState_Ensure();
-#ifdef _MSC_VER
-    else state = (PyGILState_STATE)-1;
-#endif
-#endif
-    __Pyx_PyThreadState_assign
-    __Pyx_ErrFetch(&old_exc, &old_val, &old_tb);
-    if (full_traceback) {
-        Py_XINCREF(old_exc);
-        Py_XINCREF(old_val);
-        Py_XINCREF(old_tb);
-        __Pyx_ErrRestore(old_exc, old_val, old_tb);
-        PyErr_PrintEx(1);
+/* PyObjectCall2Args */
+static CYTHON_UNUSED PyObject* __Pyx_PyObject_Call2Args(PyObject* function, PyObject* arg1, PyObject* arg2) {
+    PyObject *args, *result = NULL;
+    #if CYTHON_FAST_PYCALL
+    if (PyFunction_Check(function)) {
+        PyObject *args[2] = {arg1, arg2};
+        return __Pyx_PyFunction_FastCall(function, args, 2);
     }
-    #if PY_MAJOR_VERSION < 3
-    ctx = PyString_FromString(name);
-    #else
-    ctx = PyUnicode_FromString(name);
     #endif
-    __Pyx_ErrRestore(old_exc, old_val, old_tb);
-    if (!ctx) {
-        PyErr_WriteUnraisable(Py_None);
-    } else {
-        PyErr_WriteUnraisable(ctx);
-        Py_DECREF(ctx);
+    #if CYTHON_FAST_PYCCALL
+    if (__Pyx_PyFastCFunction_Check(function)) {
+        PyObject *args[2] = {arg1, arg2};
+        return __Pyx_PyCFunction_FastCall(function, args, 2);
     }
-#ifdef WITH_THREAD
-    if (nogil)
-        PyGILState_Release(state);
-#endif
+    #endif
+    args = PyTuple_New(2);
+    if (unlikely(!args)) goto done;
+    Py_INCREF(arg1);
+    PyTuple_SET_ITEM(args, 0, arg1);
+    Py_INCREF(arg2);
+    PyTuple_SET_ITEM(args, 1, arg2);
+    Py_INCREF(function);
+    result = __Pyx_PyObject_Call(function, args, NULL);
+    Py_DECREF(args);
+    Py_DECREF(function);
+done:
+    return result;
 }
 
 /* ObjectGetItem */
@@ -9014,24 +8747,6 @@ static PyObject* __Pyx_PyObject_GenericGetAttr(PyObject* obj, PyObject* attr_nam
     return __Pyx_PyObject_GenericGetAttrNoDict(obj, attr_name);
 }
 #endif
-
-/* SetVTable */
-static int __Pyx_SetVtable(PyObject *dict, void *vtable) {
-#if PY_VERSION_HEX >= 0x02070000
-    PyObject *ob = PyCapsule_New(vtable, 0, 0);
-#else
-    PyObject *ob = PyCObject_FromVoidPtr(vtable, 0);
-#endif
-    if (!ob)
-        goto bad;
-    if (PyDict_SetItem(dict, __pyx_n_s_pyx_vtable, ob) < 0)
-        goto bad;
-    Py_DECREF(ob);
-    return 0;
-bad:
-    Py_XDECREF(ob);
-    return -1;
-}
 
 /* PyErrExceptionMatches */
 #if CYTHON_FAST_THREAD_STATE

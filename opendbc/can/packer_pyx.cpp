@@ -13,7 +13,7 @@
         "language": "c++",
         "name": "opendbc.can.packer_pyx",
         "sources": [
-            "/data/openpilot/opendbc/can/packer_pyx.pyx"
+            "/data/openpilot-special/opendbc/can/packer_pyx.pyx"
         ]
     },
     "module_name": "opendbc.can.packer_pyx"

@@ -132,10 +132,27 @@ enum class EventName_baa8c5d505f727de: uint16_t {
   CONTROLSD_LAGGING,
   RESUME_BLOCKED,
   STEER_OVERRIDE,
-  ACC_FAULTED_TEMP,
+  STEER_TIME_LIMIT,
+  MANUAL_STEERING_REQUIRED,
+  MANUAL_LONGITUDINAL_REQUIRED,
+  SILENT_PEDAL_PRESSED,
+  SILENT_BUTTON_ENABLE,
+  SILENT_BRAKE_HOLD,
+  SILENT_WRONG_GEAR,
+  SP_REVERSE_GEAR,
+  PRE_KEEP_HANDS_ON_WHEEL,
+  PROMPT_KEEP_HANDS_ON_WHEEL,
+  KEEP_HANDS_ON_WHEEL,
+  SPEED_LIMIT_ACTIVE,
+  SPEED_LIMIT_VALUE_CHANGE,
+  E2E_LONG_STOP,
+  E2E_LONG_START,
+  CONTROLS_MISMATCH_LONG,
+  CRUISE_ENGAGE_BLOCKED,
 };
 CAPNP_DECLARE_ENUM(EventName, baa8c5d505f727de);
 CAPNP_DECLARE_SCHEMA(9da4fa09e052903c);
+CAPNP_DECLARE_SCHEMA(e9a322fa88c360dd);
 CAPNP_DECLARE_SCHEMA(991a37a6155935a3);
 CAPNP_DECLARE_SCHEMA(e64e81478e6e60af);
 CAPNP_DECLARE_SCHEMA(e004ca45136f6a89);
@@ -213,6 +230,7 @@ enum class AudibleAlert_f5a5e26c954e339e: uint16_t {
   PROMPT,
   PROMPT_REPEAT,
   PROMPT_DISTRACTED,
+  PROMPT_STARTING,
 };
 CAPNP_DECLARE_ENUM(AudibleAlert, f5a5e26c954e339e);
 CAPNP_DECLARE_SCHEMA(8c69372490aaa9da);
@@ -282,7 +300,7 @@ enum class Ecu_f7119bb759d1d691: uint16_t {
   ENGINE,
   UNKNOWN,
   DSU,
-  APGS,
+  PARKING_ADAS,
   TRANSMISSION,
   SRS,
   GATEWAY,
@@ -295,8 +313,9 @@ enum class Ecu_f7119bb759d1d691: uint16_t {
   DEBUG,
   HCP,
   ADAS,
-  VCU,
+  HVAC,
   CORNER_RADAR,
+  UNUSED,
 };
 CAPNP_DECLARE_ENUM(Ecu, f7119bb759d1d691);
 CAPNP_DECLARE_SCHEMA(9fd95523d8dc40ce);
@@ -342,6 +361,7 @@ struct CarState {
   class Reader;
   class Builder;
   class Pipeline;
+  struct CustomStockLong;
   struct WheelSpeeds;
   struct CruiseState;
   typedef ::capnp::schemas::GearShifter_e004ca45136f6a89 GearShifter;
@@ -349,7 +369,22 @@ struct CarState {
   struct ButtonEvent;
 
   struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(9da4fa09e052903c, 8, 6)
+    CAPNP_DECLARE_STRUCT_HEADER(9da4fa09e052903c, 8, 7)
+    #if !CAPNP_LITE
+    static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
+    #endif  // !CAPNP_LITE
+  };
+};
+
+struct CarState::CustomStockLong {
+  CustomStockLong() = delete;
+
+  class Reader;
+  class Builder;
+  class Pipeline;
+
+  struct _capnpPrivate {
+    CAPNP_DECLARE_STRUCT_HEADER(e9a322fa88c360dd, 3, 0)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -379,7 +414,7 @@ struct CarState::CruiseState {
   class Pipeline;
 
   struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(e64e81478e6e60af, 2, 0)
+    CAPNP_DECLARE_STRUCT_HEADER(e64e81478e6e60af, 3, 0)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -447,7 +482,7 @@ struct CarControl {
   struct HUDControl;
 
   struct _capnpPrivate {
-    CAPNP_DECLARE_STRUCT_HEADER(f78829049ab814af, 3, 6)
+    CAPNP_DECLARE_STRUCT_HEADER(f78829049ab814af, 4, 6)
     #if !CAPNP_LITE
     static constexpr ::capnp::_::RawBrandedSchema const* brand() { return &schema->defaultBrand; }
     #endif  // !CAPNP_LITE
@@ -871,7 +906,7 @@ public:
 
   inline bool getStandstill() const;
 
-  inline bool getBrakeLightsDEPRECATED() const;
+  inline bool getBrakeLights() const;
 
   inline bool getLeftBlinker() const;
 
@@ -924,6 +959,27 @@ public:
   inline float getVEgoCluster() const;
 
   inline bool getRegenBraking() const;
+
+  inline bool getMadsEnabled() const;
+
+  inline bool getLeftBlinkerOn() const;
+
+  inline bool getRightBlinkerOn() const;
+
+  inline bool getDisengageByBrake() const;
+
+  inline bool getBelowLaneChangeSpeed() const;
+
+  inline bool getAccEnabled() const;
+
+  inline bool getLatActive() const;
+
+  inline  ::int32_t getGapAdjustCruiseTr() const;
+
+  inline bool getEndToEndLong() const;
+
+  inline bool hasCustomStockLong() const;
+  inline  ::cereal::CarState::CustomStockLong::Reader getCustomStockLong() const;
 
 private:
   ::capnp::_::StructReader _reader;
@@ -1036,8 +1092,8 @@ public:
   inline bool getStandstill();
   inline void setStandstill(bool value);
 
-  inline bool getBrakeLightsDEPRECATED();
-  inline void setBrakeLightsDEPRECATED(bool value);
+  inline bool getBrakeLights();
+  inline void setBrakeLights(bool value);
 
   inline bool getLeftBlinker();
   inline void setLeftBlinker(bool value);
@@ -1117,6 +1173,40 @@ public:
   inline bool getRegenBraking();
   inline void setRegenBraking(bool value);
 
+  inline bool getMadsEnabled();
+  inline void setMadsEnabled(bool value);
+
+  inline bool getLeftBlinkerOn();
+  inline void setLeftBlinkerOn(bool value);
+
+  inline bool getRightBlinkerOn();
+  inline void setRightBlinkerOn(bool value);
+
+  inline bool getDisengageByBrake();
+  inline void setDisengageByBrake(bool value);
+
+  inline bool getBelowLaneChangeSpeed();
+  inline void setBelowLaneChangeSpeed(bool value);
+
+  inline bool getAccEnabled();
+  inline void setAccEnabled(bool value);
+
+  inline bool getLatActive();
+  inline void setLatActive(bool value);
+
+  inline  ::int32_t getGapAdjustCruiseTr();
+  inline void setGapAdjustCruiseTr( ::int32_t value);
+
+  inline bool getEndToEndLong();
+  inline void setEndToEndLong(bool value);
+
+  inline bool hasCustomStockLong();
+  inline  ::cereal::CarState::CustomStockLong::Builder getCustomStockLong();
+  inline void setCustomStockLong( ::cereal::CarState::CustomStockLong::Reader value);
+  inline  ::cereal::CarState::CustomStockLong::Builder initCustomStockLong();
+  inline void adoptCustomStockLong(::capnp::Orphan< ::cereal::CarState::CustomStockLong>&& value);
+  inline ::capnp::Orphan< ::cereal::CarState::CustomStockLong> disownCustomStockLong();
+
 private:
   ::capnp::_::StructBuilder _builder;
   template <typename, ::capnp::Kind>
@@ -1137,6 +1227,113 @@ public:
 
   inline  ::cereal::CarState::WheelSpeeds::Pipeline getWheelSpeeds();
   inline  ::cereal::CarState::CruiseState::Pipeline getCruiseState();
+  inline  ::cereal::CarState::CustomStockLong::Pipeline getCustomStockLong();
+private:
+  ::capnp::AnyPointer::Pipeline _typeless;
+  friend class ::capnp::PipelineHook;
+  template <typename, ::capnp::Kind>
+  friend struct ::capnp::ToDynamic_;
+};
+#endif  // !CAPNP_LITE
+
+class CarState::CustomStockLong::Reader {
+public:
+  typedef CustomStockLong Reads;
+
+  Reader() = default;
+  inline explicit Reader(::capnp::_::StructReader base): _reader(base) {}
+
+  inline ::capnp::MessageSize totalSize() const {
+    return _reader.totalSize().asPublic();
+  }
+
+#if !CAPNP_LITE
+  inline ::kj::StringTree toString() const {
+    return ::capnp::_::structString(_reader, *_capnpPrivate::brand());
+  }
+#endif  // !CAPNP_LITE
+
+  inline  ::int16_t getCruiseButton() const;
+
+  inline float getFinalSpeedKph() const;
+
+  inline float getVCruiseKphPrev() const;
+
+  inline float getTargetSpeed() const;
+
+  inline float getVSetDis() const;
+
+  inline float getSpeedDiff() const;
+
+  inline  ::int16_t getButtonType() const;
+
+private:
+  ::capnp::_::StructReader _reader;
+  template <typename, ::capnp::Kind>
+  friend struct ::capnp::ToDynamic_;
+  template <typename, ::capnp::Kind>
+  friend struct ::capnp::_::PointerHelpers;
+  template <typename, ::capnp::Kind>
+  friend struct ::capnp::List;
+  friend class ::capnp::MessageBuilder;
+  friend class ::capnp::Orphanage;
+};
+
+class CarState::CustomStockLong::Builder {
+public:
+  typedef CustomStockLong Builds;
+
+  Builder() = delete;  // Deleted to discourage incorrect usage.
+                       // You can explicitly initialize to nullptr instead.
+  inline Builder(decltype(nullptr)) {}
+  inline explicit Builder(::capnp::_::StructBuilder base): _builder(base) {}
+  inline operator Reader() const { return Reader(_builder.asReader()); }
+  inline Reader asReader() const { return *this; }
+
+  inline ::capnp::MessageSize totalSize() const { return asReader().totalSize(); }
+#if !CAPNP_LITE
+  inline ::kj::StringTree toString() const { return asReader().toString(); }
+#endif  // !CAPNP_LITE
+
+  inline  ::int16_t getCruiseButton();
+  inline void setCruiseButton( ::int16_t value);
+
+  inline float getFinalSpeedKph();
+  inline void setFinalSpeedKph(float value);
+
+  inline float getVCruiseKphPrev();
+  inline void setVCruiseKphPrev(float value);
+
+  inline float getTargetSpeed();
+  inline void setTargetSpeed(float value);
+
+  inline float getVSetDis();
+  inline void setVSetDis(float value);
+
+  inline float getSpeedDiff();
+  inline void setSpeedDiff(float value);
+
+  inline  ::int16_t getButtonType();
+  inline void setButtonType( ::int16_t value);
+
+private:
+  ::capnp::_::StructBuilder _builder;
+  template <typename, ::capnp::Kind>
+  friend struct ::capnp::ToDynamic_;
+  friend class ::capnp::Orphanage;
+  template <typename, ::capnp::Kind>
+  friend struct ::capnp::_::PointerHelpers;
+};
+
+#if !CAPNP_LITE
+class CarState::CustomStockLong::Pipeline {
+public:
+  typedef CustomStockLong Pipelines;
+
+  inline Pipeline(decltype(nullptr)): _typeless(nullptr) {}
+  inline explicit Pipeline(::capnp::AnyPointer::Pipeline&& typeless)
+      : _typeless(kj::mv(typeless)) {}
+
 private:
   ::capnp::AnyPointer::Pipeline _typeless;
   friend class ::capnp::PipelineHook;
@@ -1267,6 +1464,8 @@ public:
 
   inline float getSpeedCluster() const;
 
+  inline float getSpeedLimit() const;
+
 private:
   ::capnp::_::StructReader _reader;
   template <typename, ::capnp::Kind>
@@ -1315,6 +1514,9 @@ public:
 
   inline float getSpeedCluster();
   inline void setSpeedCluster(float value);
+
+  inline float getSpeedLimit();
+  inline void setSpeedLimit(float value);
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -1689,6 +1891,8 @@ public:
 
   inline bool getRightBlinker() const;
 
+  inline float getVCruise() const;
+
 private:
   ::capnp::_::StructReader _reader;
   template <typename, ::capnp::Kind>
@@ -1793,6 +1997,9 @@ public:
 
   inline bool getRightBlinker();
   inline void setRightBlinker(bool value);
+
+  inline float getVCruise();
+  inline void setVCruise(float value);
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -2325,6 +2532,10 @@ public:
 
   inline bool getExperimentalLongitudinalAvailable() const;
 
+  inline bool getPcmCruiseSpeed() const;
+
+  inline bool getCustomStockLongAvailable() const;
+
 private:
   ::capnp::_::StructReader _reader;
   template <typename, ::capnp::Kind>
@@ -2617,6 +2828,12 @@ public:
 
   inline bool getExperimentalLongitudinalAvailable();
   inline void setExperimentalLongitudinalAvailable(bool value);
+
+  inline bool getPcmCruiseSpeed();
+  inline void setPcmCruiseSpeed(bool value);
+
+  inline bool getCustomStockLongAvailable();
+  inline void setCustomStockLongAvailable(bool value);
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -3562,6 +3779,8 @@ public:
 
   inline bool getLogging() const;
 
+  inline bool getObdMultiplexing() const;
+
 private:
   ::capnp::_::StructReader _reader;
   template <typename, ::capnp::Kind>
@@ -3629,6 +3848,9 @@ public:
 
   inline bool getLogging();
   inline void setLogging(bool value);
+
+  inline bool getObdMultiplexing();
+  inline void setObdMultiplexing(bool value);
 
 private:
   ::capnp::_::StructBuilder _builder;
@@ -4337,16 +4559,16 @@ inline void CarState::Builder::setStandstill(bool value) {
       ::capnp::bounded<67>() * ::capnp::ELEMENTS, value);
 }
 
-inline bool CarState::Reader::getBrakeLightsDEPRECATED() const {
+inline bool CarState::Reader::getBrakeLights() const {
   return _reader.getDataField<bool>(
       ::capnp::bounded<68>() * ::capnp::ELEMENTS);
 }
 
-inline bool CarState::Builder::getBrakeLightsDEPRECATED() {
+inline bool CarState::Builder::getBrakeLights() {
   return _builder.getDataField<bool>(
       ::capnp::bounded<68>() * ::capnp::ELEMENTS);
 }
-inline void CarState::Builder::setBrakeLightsDEPRECATED(bool value) {
+inline void CarState::Builder::setBrakeLights(bool value) {
   _builder.setDataField<bool>(
       ::capnp::bounded<68>() * ::capnp::ELEMENTS, value);
 }
@@ -4715,6 +4937,269 @@ inline void CarState::Builder::setRegenBraking(bool value) {
       ::capnp::bounded<361>() * ::capnp::ELEMENTS, value);
 }
 
+inline bool CarState::Reader::getMadsEnabled() const {
+  return _reader.getDataField<bool>(
+      ::capnp::bounded<362>() * ::capnp::ELEMENTS);
+}
+
+inline bool CarState::Builder::getMadsEnabled() {
+  return _builder.getDataField<bool>(
+      ::capnp::bounded<362>() * ::capnp::ELEMENTS);
+}
+inline void CarState::Builder::setMadsEnabled(bool value) {
+  _builder.setDataField<bool>(
+      ::capnp::bounded<362>() * ::capnp::ELEMENTS, value);
+}
+
+inline bool CarState::Reader::getLeftBlinkerOn() const {
+  return _reader.getDataField<bool>(
+      ::capnp::bounded<363>() * ::capnp::ELEMENTS);
+}
+
+inline bool CarState::Builder::getLeftBlinkerOn() {
+  return _builder.getDataField<bool>(
+      ::capnp::bounded<363>() * ::capnp::ELEMENTS);
+}
+inline void CarState::Builder::setLeftBlinkerOn(bool value) {
+  _builder.setDataField<bool>(
+      ::capnp::bounded<363>() * ::capnp::ELEMENTS, value);
+}
+
+inline bool CarState::Reader::getRightBlinkerOn() const {
+  return _reader.getDataField<bool>(
+      ::capnp::bounded<364>() * ::capnp::ELEMENTS);
+}
+
+inline bool CarState::Builder::getRightBlinkerOn() {
+  return _builder.getDataField<bool>(
+      ::capnp::bounded<364>() * ::capnp::ELEMENTS);
+}
+inline void CarState::Builder::setRightBlinkerOn(bool value) {
+  _builder.setDataField<bool>(
+      ::capnp::bounded<364>() * ::capnp::ELEMENTS, value);
+}
+
+inline bool CarState::Reader::getDisengageByBrake() const {
+  return _reader.getDataField<bool>(
+      ::capnp::bounded<365>() * ::capnp::ELEMENTS);
+}
+
+inline bool CarState::Builder::getDisengageByBrake() {
+  return _builder.getDataField<bool>(
+      ::capnp::bounded<365>() * ::capnp::ELEMENTS);
+}
+inline void CarState::Builder::setDisengageByBrake(bool value) {
+  _builder.setDataField<bool>(
+      ::capnp::bounded<365>() * ::capnp::ELEMENTS, value);
+}
+
+inline bool CarState::Reader::getBelowLaneChangeSpeed() const {
+  return _reader.getDataField<bool>(
+      ::capnp::bounded<366>() * ::capnp::ELEMENTS);
+}
+
+inline bool CarState::Builder::getBelowLaneChangeSpeed() {
+  return _builder.getDataField<bool>(
+      ::capnp::bounded<366>() * ::capnp::ELEMENTS);
+}
+inline void CarState::Builder::setBelowLaneChangeSpeed(bool value) {
+  _builder.setDataField<bool>(
+      ::capnp::bounded<366>() * ::capnp::ELEMENTS, value);
+}
+
+inline bool CarState::Reader::getAccEnabled() const {
+  return _reader.getDataField<bool>(
+      ::capnp::bounded<367>() * ::capnp::ELEMENTS);
+}
+
+inline bool CarState::Builder::getAccEnabled() {
+  return _builder.getDataField<bool>(
+      ::capnp::bounded<367>() * ::capnp::ELEMENTS);
+}
+inline void CarState::Builder::setAccEnabled(bool value) {
+  _builder.setDataField<bool>(
+      ::capnp::bounded<367>() * ::capnp::ELEMENTS, value);
+}
+
+inline bool CarState::Reader::getLatActive() const {
+  return _reader.getDataField<bool>(
+      ::capnp::bounded<368>() * ::capnp::ELEMENTS);
+}
+
+inline bool CarState::Builder::getLatActive() {
+  return _builder.getDataField<bool>(
+      ::capnp::bounded<368>() * ::capnp::ELEMENTS);
+}
+inline void CarState::Builder::setLatActive(bool value) {
+  _builder.setDataField<bool>(
+      ::capnp::bounded<368>() * ::capnp::ELEMENTS, value);
+}
+
+inline  ::int32_t CarState::Reader::getGapAdjustCruiseTr() const {
+  return _reader.getDataField< ::int32_t>(
+      ::capnp::bounded<15>() * ::capnp::ELEMENTS);
+}
+
+inline  ::int32_t CarState::Builder::getGapAdjustCruiseTr() {
+  return _builder.getDataField< ::int32_t>(
+      ::capnp::bounded<15>() * ::capnp::ELEMENTS);
+}
+inline void CarState::Builder::setGapAdjustCruiseTr( ::int32_t value) {
+  _builder.setDataField< ::int32_t>(
+      ::capnp::bounded<15>() * ::capnp::ELEMENTS, value);
+}
+
+inline bool CarState::Reader::getEndToEndLong() const {
+  return _reader.getDataField<bool>(
+      ::capnp::bounded<369>() * ::capnp::ELEMENTS);
+}
+
+inline bool CarState::Builder::getEndToEndLong() {
+  return _builder.getDataField<bool>(
+      ::capnp::bounded<369>() * ::capnp::ELEMENTS);
+}
+inline void CarState::Builder::setEndToEndLong(bool value) {
+  _builder.setDataField<bool>(
+      ::capnp::bounded<369>() * ::capnp::ELEMENTS, value);
+}
+
+inline bool CarState::Reader::hasCustomStockLong() const {
+  return !_reader.getPointerField(
+      ::capnp::bounded<6>() * ::capnp::POINTERS).isNull();
+}
+inline bool CarState::Builder::hasCustomStockLong() {
+  return !_builder.getPointerField(
+      ::capnp::bounded<6>() * ::capnp::POINTERS).isNull();
+}
+inline  ::cereal::CarState::CustomStockLong::Reader CarState::Reader::getCustomStockLong() const {
+  return ::capnp::_::PointerHelpers< ::cereal::CarState::CustomStockLong>::get(_reader.getPointerField(
+      ::capnp::bounded<6>() * ::capnp::POINTERS));
+}
+inline  ::cereal::CarState::CustomStockLong::Builder CarState::Builder::getCustomStockLong() {
+  return ::capnp::_::PointerHelpers< ::cereal::CarState::CustomStockLong>::get(_builder.getPointerField(
+      ::capnp::bounded<6>() * ::capnp::POINTERS));
+}
+#if !CAPNP_LITE
+inline  ::cereal::CarState::CustomStockLong::Pipeline CarState::Pipeline::getCustomStockLong() {
+  return  ::cereal::CarState::CustomStockLong::Pipeline(_typeless.getPointerField(6));
+}
+#endif  // !CAPNP_LITE
+inline void CarState::Builder::setCustomStockLong( ::cereal::CarState::CustomStockLong::Reader value) {
+  ::capnp::_::PointerHelpers< ::cereal::CarState::CustomStockLong>::set(_builder.getPointerField(
+      ::capnp::bounded<6>() * ::capnp::POINTERS), value);
+}
+inline  ::cereal::CarState::CustomStockLong::Builder CarState::Builder::initCustomStockLong() {
+  return ::capnp::_::PointerHelpers< ::cereal::CarState::CustomStockLong>::init(_builder.getPointerField(
+      ::capnp::bounded<6>() * ::capnp::POINTERS));
+}
+inline void CarState::Builder::adoptCustomStockLong(
+    ::capnp::Orphan< ::cereal::CarState::CustomStockLong>&& value) {
+  ::capnp::_::PointerHelpers< ::cereal::CarState::CustomStockLong>::adopt(_builder.getPointerField(
+      ::capnp::bounded<6>() * ::capnp::POINTERS), kj::mv(value));
+}
+inline ::capnp::Orphan< ::cereal::CarState::CustomStockLong> CarState::Builder::disownCustomStockLong() {
+  return ::capnp::_::PointerHelpers< ::cereal::CarState::CustomStockLong>::disown(_builder.getPointerField(
+      ::capnp::bounded<6>() * ::capnp::POINTERS));
+}
+
+inline  ::int16_t CarState::CustomStockLong::Reader::getCruiseButton() const {
+  return _reader.getDataField< ::int16_t>(
+      ::capnp::bounded<0>() * ::capnp::ELEMENTS);
+}
+
+inline  ::int16_t CarState::CustomStockLong::Builder::getCruiseButton() {
+  return _builder.getDataField< ::int16_t>(
+      ::capnp::bounded<0>() * ::capnp::ELEMENTS);
+}
+inline void CarState::CustomStockLong::Builder::setCruiseButton( ::int16_t value) {
+  _builder.setDataField< ::int16_t>(
+      ::capnp::bounded<0>() * ::capnp::ELEMENTS, value);
+}
+
+inline float CarState::CustomStockLong::Reader::getFinalSpeedKph() const {
+  return _reader.getDataField<float>(
+      ::capnp::bounded<1>() * ::capnp::ELEMENTS);
+}
+
+inline float CarState::CustomStockLong::Builder::getFinalSpeedKph() {
+  return _builder.getDataField<float>(
+      ::capnp::bounded<1>() * ::capnp::ELEMENTS);
+}
+inline void CarState::CustomStockLong::Builder::setFinalSpeedKph(float value) {
+  _builder.setDataField<float>(
+      ::capnp::bounded<1>() * ::capnp::ELEMENTS, value);
+}
+
+inline float CarState::CustomStockLong::Reader::getVCruiseKphPrev() const {
+  return _reader.getDataField<float>(
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS);
+}
+
+inline float CarState::CustomStockLong::Builder::getVCruiseKphPrev() {
+  return _builder.getDataField<float>(
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS);
+}
+inline void CarState::CustomStockLong::Builder::setVCruiseKphPrev(float value) {
+  _builder.setDataField<float>(
+      ::capnp::bounded<2>() * ::capnp::ELEMENTS, value);
+}
+
+inline float CarState::CustomStockLong::Reader::getTargetSpeed() const {
+  return _reader.getDataField<float>(
+      ::capnp::bounded<3>() * ::capnp::ELEMENTS);
+}
+
+inline float CarState::CustomStockLong::Builder::getTargetSpeed() {
+  return _builder.getDataField<float>(
+      ::capnp::bounded<3>() * ::capnp::ELEMENTS);
+}
+inline void CarState::CustomStockLong::Builder::setTargetSpeed(float value) {
+  _builder.setDataField<float>(
+      ::capnp::bounded<3>() * ::capnp::ELEMENTS, value);
+}
+
+inline float CarState::CustomStockLong::Reader::getVSetDis() const {
+  return _reader.getDataField<float>(
+      ::capnp::bounded<4>() * ::capnp::ELEMENTS);
+}
+
+inline float CarState::CustomStockLong::Builder::getVSetDis() {
+  return _builder.getDataField<float>(
+      ::capnp::bounded<4>() * ::capnp::ELEMENTS);
+}
+inline void CarState::CustomStockLong::Builder::setVSetDis(float value) {
+  _builder.setDataField<float>(
+      ::capnp::bounded<4>() * ::capnp::ELEMENTS, value);
+}
+
+inline float CarState::CustomStockLong::Reader::getSpeedDiff() const {
+  return _reader.getDataField<float>(
+      ::capnp::bounded<5>() * ::capnp::ELEMENTS);
+}
+
+inline float CarState::CustomStockLong::Builder::getSpeedDiff() {
+  return _builder.getDataField<float>(
+      ::capnp::bounded<5>() * ::capnp::ELEMENTS);
+}
+inline void CarState::CustomStockLong::Builder::setSpeedDiff(float value) {
+  _builder.setDataField<float>(
+      ::capnp::bounded<5>() * ::capnp::ELEMENTS, value);
+}
+
+inline  ::int16_t CarState::CustomStockLong::Reader::getButtonType() const {
+  return _reader.getDataField< ::int16_t>(
+      ::capnp::bounded<1>() * ::capnp::ELEMENTS);
+}
+
+inline  ::int16_t CarState::CustomStockLong::Builder::getButtonType() {
+  return _builder.getDataField< ::int16_t>(
+      ::capnp::bounded<1>() * ::capnp::ELEMENTS);
+}
+inline void CarState::CustomStockLong::Builder::setButtonType( ::int16_t value) {
+  _builder.setDataField< ::int16_t>(
+      ::capnp::bounded<1>() * ::capnp::ELEMENTS, value);
+}
+
 inline float CarState::WheelSpeeds::Reader::getFl() const {
   return _reader.getDataField<float>(
       ::capnp::bounded<0>() * ::capnp::ELEMENTS);
@@ -4867,6 +5352,20 @@ inline float CarState::CruiseState::Builder::getSpeedCluster() {
 inline void CarState::CruiseState::Builder::setSpeedCluster(float value) {
   _builder.setDataField<float>(
       ::capnp::bounded<3>() * ::capnp::ELEMENTS, value);
+}
+
+inline float CarState::CruiseState::Reader::getSpeedLimit() const {
+  return _reader.getDataField<float>(
+      ::capnp::bounded<4>() * ::capnp::ELEMENTS);
+}
+
+inline float CarState::CruiseState::Builder::getSpeedLimit() {
+  return _builder.getDataField<float>(
+      ::capnp::bounded<4>() * ::capnp::ELEMENTS);
+}
+inline void CarState::CruiseState::Builder::setSpeedLimit(float value) {
+  _builder.setDataField<float>(
+      ::capnp::bounded<4>() * ::capnp::ELEMENTS, value);
 }
 
 inline bool CarState::ButtonEvent::Reader::getPressed() const {
@@ -5489,6 +5988,20 @@ inline bool CarControl::Builder::getRightBlinker() {
 inline void CarControl::Builder::setRightBlinker(bool value) {
   _builder.setDataField<bool>(
       ::capnp::bounded<5>() * ::capnp::ELEMENTS, value);
+}
+
+inline float CarControl::Reader::getVCruise() const {
+  return _reader.getDataField<float>(
+      ::capnp::bounded<6>() * ::capnp::ELEMENTS);
+}
+
+inline float CarControl::Builder::getVCruise() {
+  return _builder.getDataField<float>(
+      ::capnp::bounded<6>() * ::capnp::ELEMENTS);
+}
+inline void CarControl::Builder::setVCruise(float value) {
+  _builder.setDataField<float>(
+      ::capnp::bounded<6>() * ::capnp::ELEMENTS, value);
 }
 
 inline float CarControl::Actuators::Reader::getGas() const {
@@ -7089,6 +7602,34 @@ inline void CarParams::Builder::setExperimentalLongitudinalAvailable(bool value)
       ::capnp::bounded<995>() * ::capnp::ELEMENTS, value);
 }
 
+inline bool CarParams::Reader::getPcmCruiseSpeed() const {
+  return _reader.getDataField<bool>(
+      ::capnp::bounded<996>() * ::capnp::ELEMENTS);
+}
+
+inline bool CarParams::Builder::getPcmCruiseSpeed() {
+  return _builder.getDataField<bool>(
+      ::capnp::bounded<996>() * ::capnp::ELEMENTS);
+}
+inline void CarParams::Builder::setPcmCruiseSpeed(bool value) {
+  _builder.setDataField<bool>(
+      ::capnp::bounded<996>() * ::capnp::ELEMENTS, value);
+}
+
+inline bool CarParams::Reader::getCustomStockLongAvailable() const {
+  return _reader.getDataField<bool>(
+      ::capnp::bounded<997>() * ::capnp::ELEMENTS);
+}
+
+inline bool CarParams::Builder::getCustomStockLongAvailable() {
+  return _builder.getDataField<bool>(
+      ::capnp::bounded<997>() * ::capnp::ELEMENTS);
+}
+inline void CarParams::Builder::setCustomStockLongAvailable(bool value) {
+  _builder.setDataField<bool>(
+      ::capnp::bounded<997>() * ::capnp::ELEMENTS, value);
+}
+
 inline  ::cereal::CarParams::SafetyModel CarParams::SafetyConfig::Reader::getSafetyModel() const {
   return _reader.getDataField< ::cereal::CarParams::SafetyModel>(
       ::capnp::bounded<0>() * ::capnp::ELEMENTS);
@@ -8521,6 +9062,20 @@ inline bool CarParams::CarFw::Builder::getLogging() {
 inline void CarParams::CarFw::Builder::setLogging(bool value) {
   _builder.setDataField<bool>(
       ::capnp::bounded<96>() * ::capnp::ELEMENTS, value);
+}
+
+inline bool CarParams::CarFw::Reader::getObdMultiplexing() const {
+  return _reader.getDataField<bool>(
+      ::capnp::bounded<97>() * ::capnp::ELEMENTS);
+}
+
+inline bool CarParams::CarFw::Builder::getObdMultiplexing() {
+  return _builder.getDataField<bool>(
+      ::capnp::bounded<97>() * ::capnp::ELEMENTS);
+}
+inline void CarParams::CarFw::Builder::setObdMultiplexing(bool value) {
+  _builder.setDataField<bool>(
+      ::capnp::bounded<97>() * ::capnp::ELEMENTS, value);
 }
 
 inline  ::cereal::CarParams::LateralTuning::Which CarParams::LateralTuning::Reader::which() const {

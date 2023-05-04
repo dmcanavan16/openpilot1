@@ -1,42 +1,47 @@
 #!/usr/bin/env python3
 from cereal import car
 from common.conversions import Conversions as CV
+from common.params import Params, put_nonblocking
 from panda import Panda
-from selfdrive.car.toyota.values import Ecu, CAR, ToyotaFlags, TSS2_CAR, RADAR_ACC_CAR, NO_DSU_CAR, MIN_ACC_SPEED, EPS_SCALE, EV_HYBRID_CAR, UNSUPPORTED_DSU_CAR, CarControllerParams, NO_STOP_TIMER_CAR
-from selfdrive.car import STD_CARGO_KG, scale_tire_stiffness, get_safety_config
+from selfdrive.car.toyota.values import Ecu, CAR, DBC, ToyotaFlags, CarControllerParams, TSS2_CAR, RADAR_ACC_CAR, NO_DSU_CAR, \
+                                        MIN_ACC_SPEED, EPS_SCALE, EV_HYBRID_CAR, UNSUPPORTED_DSU_CAR, NO_STOP_TIMER_CAR, ANGLE_CONTROL_CAR
+from selfdrive.car import STD_CARGO_KG, create_button_event, scale_tire_stiffness, get_safety_config, create_mads_event
 from selfdrive.car.interfaces import CarInterfaceBase
-from common.numpy_fast import interp
 
+ButtonType = car.CarState.ButtonEvent.Type
 EventName = car.CarEvent.EventName
+GearShifter = car.CarState.GearShifter
+
+GAC_DICT = {3: 1, 2: 2, 1: 3}
 
 
 class CarInterface(CarInterfaceBase):
   @staticmethod
   def get_pid_accel_limits(CP, current_speed, cruise_speed):
-    if CP.carFingerprint in TSS2_CAR:
-       # Allow for higher accel from PID controller at low speeds
-       return CarControllerParams.ACCEL_MIN, interp(current_speed,
-                                                    CarControllerParams.ACCEL_MAX_TSS2_BP,
-                                                    CarControllerParams.ACCEL_MAX_TSS2_VALS)
-    else:
-       return CarControllerParams.ACCEL_MIN, CarControllerParams.ACCEL_MAX
+    return CarControllerParams.ACCEL_MIN, CarControllerParams.ACCEL_MAX
 
   @staticmethod
-  def _get_params(ret, candidate, fingerprint, car_fw, experimental_long):
+  def _get_params(ret, candidate, fingerprint, car_fw, experimental_long, docs):
     ret.carName = "toyota"
     ret.safetyConfigs = [get_safety_config(car.CarParams.SafetyModel.toyota)]
     ret.safetyConfigs[0].safetyParam = EPS_SCALE[candidate]
 
-    if candidate in (CAR.RAV4, CAR.PRIUS_V, CAR.COROLLA, CAR.LEXUS_ESH, CAR.LEXUS_CTH):
+    # BRAKE_MODULE is on a different address for these cars
+    if DBC[candidate]["pt"] == "toyota_new_mc_pt_generated":
       ret.safetyConfigs[0].safetyParam |= Panda.FLAG_TOYOTA_ALT_BRAKE
+
+    if candidate in ANGLE_CONTROL_CAR:
+      ret.dashcamOnly = True
+      ret.steerControlType = car.CarParams.SteerControlType.angle
+      ret.safetyConfigs[0].safetyParam |= Panda.FLAG_TOYOTA_LTA
+    else:
+      CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning)
 
     ret.steerActuatorDelay = 0.12  # Default delay, Prius has larger delay
     ret.steerLimitTimer = 0.4
     ret.stoppingControl = False  # Toyota starts braking more when it thinks you want to stop
 
     stop_and_go = False
-    steering_angle_deadzone_deg = 0.0
-    CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning, steering_angle_deadzone_deg)
 
     if candidate == CAR.PRIUS:
       stop_and_go = True
@@ -47,9 +52,8 @@ class CarInterface(CarInterfaceBase):
       # Only give steer angle deadzone to for bad angle sensor prius
       for fw in car_fw:
         if fw.ecu == "eps" and not fw.fwVersion == b'8965B47060\x00\x00\x00\x00\x00\x00':
-          steering_angle_deadzone_deg = 0.2
           ret.steerActuatorDelay = 0.25
-          CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning, steering_angle_deadzone_deg)
+          CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning, steering_angle_deadzone_deg=0.2)
 
     elif candidate == CAR.PRIUS_V:
       stop_and_go = True
@@ -109,7 +113,8 @@ class CarInterface(CarInterfaceBase):
       tire_stiffness_factor = 0.7983
       ret.mass = 3505. * CV.LB_TO_KG + STD_CARGO_KG  # mean between normal and hybrid
 
-    elif candidate in (CAR.RAV4_TSS2, CAR.RAV4_TSS2_2022, CAR.RAV4H_TSS2, CAR.RAV4H_TSS2_2022):
+    elif candidate in (CAR.RAV4_TSS2, CAR.RAV4_TSS2_2022, CAR.RAV4H_TSS2, CAR.RAV4H_TSS2_2022,
+                       CAR.RAV4_TSS2_2023, CAR.RAV4H_TSS2_2023):
       stop_and_go = True
       ret.wheelbase = 2.68986
       ret.steerRatio = 14.3
@@ -138,8 +143,9 @@ class CarInterface(CarInterfaceBase):
       tire_stiffness_factor = 0.444  # not optimized yet
       ret.mass = 3060. * CV.LB_TO_KG + STD_CARGO_KG
 
-    elif candidate in (CAR.LEXUS_ES_TSS2, CAR.LEXUS_ESH_TSS2, CAR.LEXUS_ESH):
-      stop_and_go = True
+    elif candidate in (CAR.LEXUS_ES, CAR.LEXUS_ESH, CAR.LEXUS_ES_TSS2, CAR.LEXUS_ESH_TSS2):
+      if candidate not in (CAR.LEXUS_ES,):  # TODO: LEXUS_ES may have sng
+        stop_and_go = True
       ret.wheelbase = 2.8702
       ret.steerRatio = 16.0  # not optimized
       tire_stiffness_factor = 0.444  # not optimized yet
@@ -201,14 +207,18 @@ class CarInterface(CarInterfaceBase):
                                                                          tire_stiffness_factor=tire_stiffness_factor)
 
     ret.enableBsm = 0x3F6 in fingerprint[0] and candidate in TSS2_CAR
-    # Detect smartDSU, which intercepts ACC_CMD from the DSU allowing openpilot to send it
-    smartDsu = 0x2FF in fingerprint[0]
-    # In TSS2 cars the camera does long control
+
+    # Detect smartDSU, which intercepts ACC_CMD from the DSU (or radar) allowing openpilot to send it
+    if 0x2FF in fingerprint[0]:
+      ret.flags |= ToyotaFlags.SMART_DSU.value
+
+    # In TSS2 cars, the camera does long control
     found_ecus = [fw.ecu for fw in car_fw]
-    ret.enableDsu = len(found_ecus) > 0 and Ecu.dsu not in found_ecus and candidate not in (NO_DSU_CAR | UNSUPPORTED_DSU_CAR) and not smartDsu
+    ret.enableDsu = len(found_ecus) > 0 and Ecu.dsu not in found_ecus and candidate not in (NO_DSU_CAR | UNSUPPORTED_DSU_CAR) and not (ret.flags & ToyotaFlags.SMART_DSU)
     ret.enableGasInterceptor = 0x201 in fingerprint[0]
+
     # if the smartDSU is detected, openpilot can send ACC_CMD (and the smartDSU will block it from the DSU) or not (the DSU is "connected")
-    ret.openpilotLongitudinalControl = smartDsu or ret.enableDsu or candidate in (TSS2_CAR - RADAR_ACC_CAR)
+    ret.openpilotLongitudinalControl = (bool(ret.flags & ToyotaFlags.SMART_DSU) or ret.enableDsu or candidate in (TSS2_CAR - RADAR_ACC_CAR)) and not Params().get_bool("StockLongToyota")
     ret.autoResumeSng = ret.openpilotLongitudinalControl and candidate in NO_STOP_TIMER_CAR
 
     if not ret.openpilotLongitudinalControl:
@@ -224,17 +234,17 @@ class CarInterface(CarInterfaceBase):
     ret.minEnableSpeed = -1. if (stop_and_go or ret.enableGasInterceptor) else MIN_ACC_SPEED
 
     tune = ret.longitudinalTuning
-    tune.deadzoneBP = [0., 9., 26.]
-    tune.deadzoneV = [.0, .20, .25]
+    tune.deadzoneBP = [0., 9.]
+    tune.deadzoneV = [.0, .15]
     if candidate in TSS2_CAR or ret.enableGasInterceptor:
-      tune.kpBP = [0., 5., 20.]
-      tune.kpV = [1.3, 1.0, 0.7]
-      tune.kiBP = [0., 5., 12., 20., 27.]
-      tune.kiV = [.35, .23, .20, .17, .1]
+      tune.kpBP = [0., 5., 20., 30.]
+      tune.kpV = [1.3, 1.0, 0.7, 0.1]
+      tune.kiBP = [0., 8.3, 11.9, 13.8, 19.7, 30., 33., 40.]
+      tune.kiV = [.02, .03, .14, .18, .18, .06, .01, .001]
       if candidate in TSS2_CAR:
         ret.vEgoStopping = 0.25
         ret.vEgoStarting = 0.25
-        ret.stoppingDecelRate = 0.3  # reach stopping target smoothly
+        ret.stoppingDecelRate = 0.009  # reach stopping target smoothly
     else:
       tune.kpBP = [0., 5., 35.]
       tune.kiBP = [0., 35.]
@@ -246,9 +256,93 @@ class CarInterface(CarInterfaceBase):
   # returns a car.CarState
   def _update(self, c):
     ret = self.CS.update(self.cp, self.cp_cam)
+    self.sp_update_params(self.CS)
+
+    buttonEvents = []
+
+    if self.CS.gap_dist_button != self.CS.prev_gap_dist_button:
+      buttonEvents.append(create_button_event(self.CS.gap_dist_button, self.CS.prev_gap_dist_button, {1: ButtonType.gapAdjustCruise}))
+
+    self.CS.mads_enabled = False if not self.CS.control_initialized else ret.cruiseState.available
+
+    if ret.cruiseState.available:
+      if self.enable_mads:
+        if not self.CS.prev_mads_enabled and self.CS.mads_enabled:
+          self.CS.madsEnabled = True
+        if self.CS.lta_status_active:
+          if (self.CS.prev_lkas_enabled == 16 and self.CS.lkas_enabled == 0) or \
+            (self.CS.prev_lkas_enabled == 0 and self.CS.lkas_enabled == 16):
+            self.CS.madsEnabled = not self.CS.madsEnabled
+        else:
+          if (not self.CS.prev_lkas_enabled and self.CS.lkas_enabled) or \
+            (self.CS.prev_lkas_enabled == 1 and not self.CS.lkas_enabled):
+            self.CS.madsEnabled = not self.CS.madsEnabled
+        self.CS.madsEnabled = self.get_acc_mads(ret.cruiseState.enabled, self.CS.accEnabled, self.CS.madsEnabled)
+      if (not (self.CP.openpilotLongitudinalControl or self.gac)) or (self.experimental_mode and self.CP.openpilotLongitudinalControl):
+        ret.gapAdjustCruiseTr = 3
+      else:
+        if self.gac_min != 1:
+          self.gac_min = 1
+          put_nonblocking("GapAdjustCruiseMin", str(self.gac_min))
+        if self.gac_max != 3:
+          self.gac_max = 3
+          put_nonblocking("GapAdjustCruiseMax", str(self.gac_max))
+        gap_dist_button = bool(self.CS.gap_dist_button)
+        if self.gac_mode in (0, 2):
+          if gap_dist_button:
+            self.gac_button_counter += 1
+          elif self.prev_gac_button and not gap_dist_button and self.gac_button_counter < 50:
+            self.gac_button_counter = 0
+            follow_distance_converted = self.get_sp_gac_state(self.CS.follow_distance, self.gac_min, self.gac_max, "+")
+            gac_tr = self.get_sp_distance(follow_distance_converted, self.gac_max, gac_dict=GAC_DICT)
+            if gac_tr != self.CS.gac_tr:
+              put_nonblocking("GapAdjustCruiseTr", str(gac_tr))
+              self.CS.gac_tr = gac_tr
+          else:
+            self.gac_button_counter = 0
+        self.prev_gac_button = gap_dist_button
+        ret.gapAdjustCruiseTr = self.CS.gac_tr
+      gap_distance = self.get_sp_distance(ret.gapAdjustCruiseTr, self.gac_max, gac_dict=GAC_DICT)
+      if self.CS.gac_send_counter < 10 and gap_distance != self.CS.follow_distance:
+        self.CS.gac_send_counter += 1
+        self.CS.gac_send = 1
+      else:
+        self.CS.gac_send_counter = 0
+        self.CS.gac_send = 0
+    else:
+      self.CS.madsEnabled = False
+
+    if (not ret.cruiseState.enabled and self.CS.out.cruiseState.enabled) or \
+       self.get_sp_pedal_disengage(ret):
+      self.CS.madsEnabled, self.CS.accEnabled = self.get_sp_cancel_cruise_state(self.CS.madsEnabled)
+      ret.cruiseState.enabled = False if self.CP.pcmCruise else self.CS.accEnabled
+
+    ret, self.CS = self.get_sp_common_state(ret, self.CS, gap_button=bool(self.CS.gap_dist_button))
+
+    # CANCEL
+    if self.CS.out.cruiseState.enabled and not ret.cruiseState.enabled:
+      be = car.CarState.ButtonEvent.new_message()
+      be.pressed = True
+      be.type = ButtonType.cancel
+      buttonEvents.append(be)
+
+    # MADS BUTTON
+    if self.CS.out.madsEnabled != self.CS.madsEnabled:
+      if self.mads_event_lock:
+        buttonEvents.append(create_mads_event(self.mads_event_lock))
+        self.mads_event_lock = False
+    else:
+      if not self.mads_event_lock:
+        buttonEvents.append(create_mads_event(self.mads_event_lock))
+        self.mads_event_lock = True
+
+    ret.buttonEvents = buttonEvents
 
     # events
-    events = self.create_common_events(ret)
+    events = self.create_common_events(ret, c, extra_gears=[GearShifter.sport, GearShifter.low, GearShifter.brake],
+                                       pcm_enable=False)
+
+    events, ret = self.create_sp_events(self.CS, ret, events)
 
     if self.CP.openpilotLongitudinalControl:
       if ret.cruiseState.standstill and not ret.brakePressed and not self.CP.enableGasInterceptor:
