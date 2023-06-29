@@ -33,6 +33,7 @@ class ExperimentalButton : public QPushButton {
   Q_OBJECT
 
   // FrogPilot properties
+  Q_PROPERTY(int steeringWheel MEMBER steeringWheel);
 
 public:
   explicit ExperimentalButton(QWidget *parent = 0);
@@ -46,6 +47,8 @@ private:
   QPixmap experimental_img;
 
   // FrogPilot variables
+  int steeringWheel;
+  std::map<int, QPixmap> wheel_images;
 
 };
 
@@ -72,6 +75,7 @@ class AnnotatedCameraWidget : public CameraWidget {
   Q_PROPERTY(bool muteDM MEMBER muteDM);
   Q_PROPERTY(bool rotatingWheel MEMBER rotatingWheel);
   Q_PROPERTY(int steeringAngleDeg MEMBER steeringAngleDeg);
+  Q_PROPERTY(int steeringWheel MEMBER steeringWheel);
 
 public:
   explicit AnnotatedCameraWidget(VisionStreamType type, QWidget* parent = 0);
@@ -112,8 +116,10 @@ private:
   bool muteDM;
   bool rotatingWheel;
   int steeringAngleDeg;
+  int steeringWheel;
   QPixmap engage_img;
   QPixmap experimental_img;
+  std::map<int, QPixmap> wheel_images;
 
 protected:
   void paintGL() override;
