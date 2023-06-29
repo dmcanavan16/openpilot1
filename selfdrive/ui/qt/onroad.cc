@@ -81,8 +81,21 @@ void OnroadWindow::mousePressEvent(QMouseEvent* e) {
     map->setVisible(!sidebarVisible && !map->isVisible());
   }
 #endif
+
+  // FrogPilot clickable widgets
+  const auto &scene = uiState()->scene;
+  const SubMaster &sm = *uiState()->sm;
+  static auto params = Params();
+  static bool propagateEvent = false;
+  static bool recentlyTapped = false;
+  static bool rightHandDM = false;
+
+  rightHandDM = sm["driverMonitoringState"].getDriverMonitoringState().getIsRHD();
+
   // propagation event to parent(HomeWindow)
-  QWidget::mousePressEvent(e);
+  if (propagateEvent) {
+    QWidget::mousePressEvent(e);
+  }
 }
 
 void OnroadWindow::offroadTransition(bool offroad) {
@@ -207,6 +220,8 @@ void ExperimentalButton::updateState(const UIState &s) {
   const auto cp = sm["carParams"].getCarParams();
   const bool experimental_mode_available = cp.getExperimentalLongitudinalAvailable() ? params.getBool("ExperimentalLongitudinalEnabled") : cp.getOpenpilotLongitudinalControl();
   setEnabled(params.getBool("ExperimentalModeConfirmed") && experimental_mode_available);
+
+  // FrogPilot properties
 }
 
 void ExperimentalButton::paintEvent(QPaintEvent *event) {
@@ -237,6 +252,8 @@ AnnotatedCameraWidget::AnnotatedCameraWidget(VisionStreamType type, QWidget* par
   main_layout->addWidget(experimental_btn, 0, Qt::AlignTop | Qt::AlignRight);
 
   dm_img = loadPixmap("../assets/img_driver_face.png", {img_size + 5, img_size + 5});
+
+  // FrogPilot images
 }
 
 void AnnotatedCameraWidget::updateState(const UIState &s) {
@@ -292,6 +309,9 @@ void AnnotatedCameraWidget::updateState(const UIState &s) {
   setProperty("rightHandDM", dm_state.getIsRHD());
   // DM icon transition
   dm_fade_state = std::clamp(dm_fade_state+0.2*(0.5-dmActive), 0.0, 1.0);
+
+  // FrogPilot properties
+  setProperty("experimentalMode", s.scene.experimental_mode);
 }
 
 void AnnotatedCameraWidget::drawHud(QPainter &p) {
@@ -390,6 +410,11 @@ void AnnotatedCameraWidget::drawHud(QPainter &p) {
   drawText(p, rect().center().x(), 290, speedUnit, 200);
 
   p.restore();
+
+  // FrogPilot status bar
+  if (true) {
+    drawStatusBar(p);
+  }
 }
 
 void AnnotatedCameraWidget::drawText(QPainter &p, int x, int y, const QString &text, int alpha) {
@@ -459,7 +484,7 @@ void AnnotatedCameraWidget::drawLaneLines(QPainter &painter, const UIState *s) {
 
   // paint path
   QLinearGradient bg(0, height(), 0, 0);
-  if (sm["controlsState"].getControlsState().getExperimentalMode()) {
+  if (experimentalMode) {
     // The first half of track_vertices are the points for the right side of the path
     // and the indices match the positions of accel from uiPlan
     const auto &acceleration = sm["uiPlan"].getUiPlan().getAccel();
@@ -679,4 +704,24 @@ void AnnotatedCameraWidget::showEvent(QShowEvent *event) {
 
   ui_update_params(uiState());
   prev_draw_t = millis_since_boot();
+}
+
+// FrogPilot widgets
+
+void AnnotatedCameraWidget::drawStatusBar(QPainter &p) {
+  // Variable declarations
+  QRect statusBarRect(rect().left() - 1, rect().bottom() - 50, rect().width() + 2, 100);
+  QString statusText;
+  configFont(p, "Inter", 40, "Bold");
+  p.setOpacity(1.0);
+  p.drawRoundedRect(statusBarRect, 30, 30);
+
+  // Use statusText to calculate textRect size
+  QRect textRect = p.fontMetrics().boundingRect(statusText);
+  // Move text up 50 pixels to hide the bottom rounded edges to give it a cleaner look
+  textRect.moveBottom(statusBarRect.bottom() - 50);
+  // Place the text in the center of the adjusted box
+  textRect.moveCenter(QPoint(statusBarRect.center().x(), textRect.center().y()));
+  p.setPen(Qt::white);
+  p.drawText(textRect, Qt::AlignCenter, statusText);
 }

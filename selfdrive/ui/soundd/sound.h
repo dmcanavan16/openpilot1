@@ -31,4 +31,6 @@ protected:
   QMap<AudibleAlert, QPair<QSoundEffect *, int>> sounds;
   SubMaster sm;
   uint64_t started_frame;
+
+  // FrogPilot variables
 };

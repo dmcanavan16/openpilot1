@@ -432,6 +432,75 @@ def thermald_thread(end_event, hw_queue):
     if not os.path.isfile('/data/openpilot/prebuilt'):
       os.system(f"touch {'/data/openpilot/prebuilt'}")
 
+    # Set default FrogPilot paramaters if they're not set yet
+    if not params.get_bool("DefaultParamsSet") and (params.get("CompletedTrainingVersion") == training_version or params.get_bool("Passive")):
+      keys = [
+        "FrogTheme", "FrogColors", "FrogIcons", "FrogSignals", "FrogSounds", "AlwaysOnLateral", "Compass", "ConditionalExperimentalMode", "ConditionalExperimentalModeSpeed",
+        "ConditionalExperimentalModeSpeedLead", "ConditionalExperimentalModeStopLights", "ConditionalExperimentalModeCurves", "ConditionalExperimentalModeCurvesLead", 
+        "ConditionalExperimentalModeSignal", "CustomDrivingPersonalities", "AggressivePersonalityValue", "AggressiveJerkValue", "StandardPersonalityValue", "StandardJerkValue",
+        "RelaxedPersonalityValue", "RelaxedJerkValue", "CustomRoadUI", "LaneLinesWidth", "PathEdgeWidth", "PathWidth", "RoadEdgesWidth", "BlindSpotPath", "UnlimitedLength", 
+        "DeviceShutdownTimer", "DisableInternetCheck", "DrivingPersonalitiesUIWheel", "ExperimentalModeViaWheel", "FireTheBabysitter", "MuteDM", "MuteDoor", "MuteSeatbelt", "MuteSystemOverheat", 
+        "NudgelessLaneChange", "LaneDetection", "OneLaneChange", "NumericalTemp", "PersonalTune", "RotatingWheel", "ScreenBrightness", "Sidebar", "SilentMode", "SteeringWheel", "WideCameraDisable"
+      ]
+      default_values = {
+        "AggressiveJerkValue": "10",
+        "AggressivePersonalityValue": "10",
+        "AlwaysOnLateral": "1",
+        "BlindSpotPath": "1",
+        "Celsius": "1",
+        "Compass": "1",
+        "ConditionalExperimentalMode": "1",
+        "ConditionalExperimentalModeCurves": "1",
+        "ConditionalExperimentalModeCurvesLead": "0",
+        "ConditionalExperimentalModeSignal": "1",
+        "ConditionalExperimentalModeSpeed": "0",
+        "ConditionalExperimentalModeSpeedLead": "0",
+        "ConditionalExperimentalModeStopLights": "1",
+        "CustomDrivingPersonalities": "1",
+        "CustomRoadUI": "1",
+        "DeviceShutdownTimer": "9",
+        "DisableInternetCheck": "1",
+        "DrivingPersonalitiesUIWheel": "1",
+        "ExperimentalModeViaWheel": "1",
+        "FireTheBabysitter": "1",
+        "FrogColors": "1",
+        "FrogIcons": "1",
+        "FrogSignals": "1",
+        "FrogSounds": "1",
+        "FrogTheme": "1",
+        "LaneChangeTimer": "0",
+        "LaneDetection": "1",
+        "LaneLinesWidth": "4",
+        "MuteDM": "1",
+        "MuteDoor": "1",
+        "MuteSeatbelt": "1",
+        "MuteSystemOverheat": "0",
+        "NudgelessLaneChange": "1",
+        "NumericalTemp": "1",
+        "OneLaneChange": "1",
+        "PathEdgeWidth": "20",
+        "PathWidth": "61",
+        "PersonalTune": "1",
+        "RelaxedJerkValue": "50",
+        "RelaxedPersonalityValue": "30",
+        "RoadEdgesWidth": "2",
+        "RotatingWheel": "1",
+        "ScreenBrightness": "100",
+        "Sidebar": "1",
+        "SilentMode": "0",
+        "StandardJerkValue": "10",
+        "StandardPersonalityValue": "15",
+        "SteeringWheel": "1",
+        "UnlimitedLength": "1",
+        "WideCameraDisable": "1",
+      }
+      # Check each key and if it is None or empty, assign the default value
+      for key in keys:
+        if params.get(key) is None or params.get(key) == "":
+          params.put(key, default_values.get(key, "0"))
+      params.put_bool("DefaultParamsSet", True)
+      params.put_bool("DoReboot", True)
+
 def main():
   hw_queue = queue.Queue(maxsize=1)
   end_event = threading.Event()

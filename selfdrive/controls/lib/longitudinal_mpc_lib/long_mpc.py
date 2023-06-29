@@ -2,6 +2,7 @@
 import os
 import numpy as np
 from cereal import log
+from common.params import Params
 from common.realtime import sec_since_boot
 from common.numpy_fast import clip
 from system.swaglog import cloudlog
@@ -220,6 +221,9 @@ def gen_long_ocp():
 
 class LongitudinalMpc:
   def __init__(self, mode='acc'):
+    # FrogPilot variables
+    self.param = Params()
+
     self.mode = mode
     self.solver = AcadosOcpSolverCython(MODEL_NAME, ACADOS_SOLVER_TYPE, N)
     self.reset()

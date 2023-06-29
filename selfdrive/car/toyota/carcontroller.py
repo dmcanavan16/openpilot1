@@ -42,6 +42,8 @@ class CarController:
     self.gas = 0
     self.accel = 0
 
+    # FrogPilot variables
+
   def update(self, CC, CS, now_nanos):
     actuators = CC.actuators
     hud_control = CC.hudControl

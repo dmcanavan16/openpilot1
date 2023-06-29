@@ -113,6 +113,8 @@ class Controls:
     openpilot_enabled_toggle = self.params.get_bool("OpenpilotEnabledToggle")
     passive = self.params.get_bool("Passive") or not openpilot_enabled_toggle
 
+    # FrogPilot variables
+
     # detect sound card presence and ensure successful init
     sounds_available = HARDWARE.get_sound_card_online()
 

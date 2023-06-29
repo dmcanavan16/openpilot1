@@ -4,6 +4,7 @@ from cereal import car
 from common.numpy_fast import interp
 from common.realtime import DT_DMON
 from common.filter_simple import FirstOrderFilter
+from common.params import Params
 from common.stat_live import RunningStatFilter
 from common.transformations.camera import tici_d_frame_size
 
@@ -155,6 +156,9 @@ class DriverStatus():
     self.threshold_prompt = self.settings._DISTRACTED_PROMPT_TIME_TILL_TERMINAL / self.settings._DISTRACTED_TIME
 
     self._set_timers(active_monitoring=True)
+
+    # FrogPilot variables
+    params = Params()
 
   def _reset_awareness(self):
     self.awareness = 1.
