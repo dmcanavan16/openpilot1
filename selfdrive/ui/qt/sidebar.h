@@ -62,7 +62,9 @@ private:
   std::unique_ptr<PubMaster> pm;
 
   // FrogPilot variables
+  bool fahrenheit;
   bool isFrogColors;
   bool isFrogIcons;
+  bool isNumericalTemp;
   QPixmap frog_home_img, frog_settings_img;
 };
