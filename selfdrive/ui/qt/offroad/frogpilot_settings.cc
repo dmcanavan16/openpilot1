@@ -15,6 +15,7 @@ FrogPilotPanel::FrogPilotPanel(QWidget *parent) : QWidget(parent) {
     {"FrogTheme", "FrogPilot Theme", "Enable the beloved FrogPilot Theme! Disable toggle to revert back to the stock openpilot theme.", "../assets/images/frog_button_home.png"},
     {"DeviceShutdownTimer", "Device Shutdown Timer", "Set the timer for when the device turns off after being offroad to reduce energy waste and prevent battery drain.", "../assets/offroad/icon_time.png"},
     {"DisableInternetCheck", "Disable Internet Check", "Allows the device to remain offline indefinitely.", "../assets/offroad/icon_warning.png"},
+    {"FireTheBabysitter", "Fire the Babysitter", "Disable some of openpilot's 'Babysitter Protocols'.", "../assets/offroad/icon_babysitter.png"},
     {"ScreenBrightness", "Screen Brightness", "Choose a custom screen brightness level or use the default 'Auto' brightness setting.", "../assets/offroad/icon_light.png"},
     {"Sidebar", "Sidebar Shown By Default", "Sidebar is shown by default while onroad as opposed to hidden.", "../assets/offroad/icon_metric.png"},
     {"SilentMode", "Silent Mode", "Disables all openpilot sounds for a completely silent experience.", "../assets/offroad/icon_mute.png"},
@@ -34,6 +35,15 @@ FrogPilotPanel::FrogPilotPanel(QWidget *parent) : QWidget(parent) {
     } else if (key == "DeviceShutdownTimer") {
       mainLayout->addWidget(new DeviceShutdownTimer());
       mainLayout->addWidget(horizontal_line());
+    } else if (key == "FireTheBabysitter") {
+      mainLayout->addWidget(control);
+      mainLayout->addWidget(horizontal_line());
+      createSubButtonControl(key, {
+        {"MuteDM", "Mute DM"},
+        {"MuteDoor", "Door Open"},
+        {"MuteSeatbelt", "Seatbelt Unlatched"},
+        {"MuteSystemOverheat", "System Overheated"}
+      }, mainLayout);
     } else if (key == "ScreenBrightness") {
       mainLayout->addWidget(new ScreenBrightness());
       mainLayout->addWidget(horizontal_line());

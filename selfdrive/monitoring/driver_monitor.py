@@ -159,6 +159,8 @@ class DriverStatus():
 
     # FrogPilot variables
     params = Params()
+    fire_the_babysitter = params.get_bool("FireTheBabysitter")
+    self.mute_dm = fire_the_babysitter and params.get_bool("MuteDM")
 
   def _reset_awareness(self):
     self.awareness = 1.
@@ -322,7 +324,7 @@ class DriverStatus():
     maybe_distracted = self.hi_stds > self.settings._HI_STD_FALLBACK_TIME or not self.face_detected
     if certainly_distracted or maybe_distracted:
       # should always be counting if distracted unless at standstill and reaching orange
-      if not standstill_exemption:
+      if not standstill_exemption and not self.mute_dm:
         self.awareness = max(self.awareness - self.step_change, -0.1)
 
     alert = None
