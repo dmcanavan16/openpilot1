@@ -111,6 +111,7 @@ public:
 
 private:
   QVBoxLayout *mainLayout;
+  QWidget *laneChangeTimer;
   std::map<std::string, std::vector<QWidget*>> childControls;
 
   ParamControl *createParamControl(const QString &key, const QString &label, const QString &desc, const QString &icon, QWidget *parent);
@@ -151,6 +152,12 @@ ParamControllerInt(DeviceShutdownTimer, "DeviceShutdownTimer", "Device Shutdown 
   int value = params.getInt("DeviceShutdownTimer");
   return value == 0 ? "Instant" : (value > 0 && value <= 3) ? QString::number(value * 15) + " mins" : QString::number(value - 3) + (value == 4 ? " hour" : " hours");,
   return std::clamp(v, 0, 33);
+)
+
+ParamControllerInt(LaneChangeTimer, "LaneChangeTimer", "Lane Change Timer", "Set a time delay before openpilot conducts a nudgeless lane change.", "../assets/offroad/icon_blank.png",
+  int delay = params.getInt("LaneChangeTimer");
+  return delay == 0 ? "Instant" : QString::number(static_cast<double>(delay) / 2.0) + " sec";,
+  return std::clamp(v, 0, 10);
 )
 
 ParamControllerInt(ScreenBrightness, "ScreenBrightness", "Screen Brightness", "Set a custom screen brightness level or use the default 'Auto' brightness setting.", "../assets/offroad/icon_light.png",
