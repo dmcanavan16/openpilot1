@@ -73,6 +73,7 @@ class AnnotatedCameraWidget : public CameraWidget {
   Q_PROPERTY(bool blindSpotLeft MEMBER blindSpotLeft);
   Q_PROPERTY(bool blindSpotRight MEMBER blindSpotRight);
   Q_PROPERTY(bool compass MEMBER compass);
+  Q_PROPERTY(bool conditionalExperimental MEMBER conditionalExperimental);
   Q_PROPERTY(bool drivingPersonalitiesUIWheel MEMBER drivingPersonalitiesUIWheel);
   Q_PROPERTY(bool drivingPersonalitiesViaUICar MEMBER drivingPersonalitiesViaUICar);
   Q_PROPERTY(bool experimentalMode MEMBER experimentalMode);
@@ -80,9 +81,13 @@ class AnnotatedCameraWidget : public CameraWidget {
   Q_PROPERTY(bool frogSignals MEMBER frogSignals);
   Q_PROPERTY(bool muteDM MEMBER muteDM);
   Q_PROPERTY(bool rotatingWheel MEMBER rotatingWheel);
+  Q_PROPERTY(bool steeringWheelCar MEMBER steeringWheelCar);
   Q_PROPERTY(bool turnSignalLeft MEMBER turnSignalLeft);
   Q_PROPERTY(bool turnSignalRight MEMBER turnSignalRight);
   Q_PROPERTY(int bearingDeg MEMBER bearingDeg);
+  Q_PROPERTY(int conditionalSpeed MEMBER conditionalSpeed);
+  Q_PROPERTY(int conditionalSpeedLead MEMBER conditionalSpeedLead);
+  Q_PROPERTY(int conditionalStatus MEMBER conditionalStatus);
   Q_PROPERTY(int personalityProfile MEMBER personalityProfile);
   Q_PROPERTY(int steeringAngleDeg MEMBER steeringAngleDeg);
   Q_PROPERTY(int steeringWheel MEMBER steeringWheel);
@@ -127,6 +132,7 @@ private:
   bool blindSpotLeft;
   bool blindSpotRight;
   bool compass;
+  bool conditionalExperimental;
   bool drivingPersonalitiesUIWheel;
   bool drivingPersonalitiesViaUICar;
   bool experimentalMode;
@@ -134,10 +140,14 @@ private:
   bool frogSignals;
   bool muteDM;
   bool rotatingWheel;
+  bool steeringWheelCar;
   bool turnSignalLeft;
   bool turnSignalRight;
   int animationFrameIndex;
   int bearingDeg;
+  int conditionalSpeed;
+  int conditionalSpeedLead;
+  int conditionalStatus;
   int personalityProfile;
   int steeringAngleDeg;
   int steeringWheel;

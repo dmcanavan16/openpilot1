@@ -213,6 +213,7 @@ static void update_state(UIState *s) {
   if (sm.updated("carParams")) {
     scene.longitudinal_control = sm["carParams"].getCarParams().getOpenpilotLongitudinalControl();
     if (scene.longitudinal_control) {
+      scene.conditional_experimental = sm["carParams"].getCarParams().getConditionalExperimentalMode();
       scene.experimental_mode_via_wheel = sm["carParams"].getCarParams().getExperimentalModeViaWheel();
     }
   }
@@ -223,6 +224,9 @@ static void update_state(UIState *s) {
     }
     if (scene.driving_personalities_ui_wheel) {
       scene.driving_personalities_via_ui_car = !sm["carState"].getCarState().getDrivingProfilesViaWheelCar();
+    }
+    if (scene.experimental_mode_via_wheel) {
+      scene.steering_wheel_car = sm["carState"].getCarState().getSteeringWheelCar();
     }
     if (scene.frog_signals) {
       scene.turn_signal_left = sm["carState"].getCarState().getLeftBlinker();
@@ -274,8 +278,15 @@ void ui_live_update_params(UIState *s) {
   if (scene.driving_personalities_ui_wheel && scene.driving_personalities_via_ui_car) {
     scene.personality_profile = params.getInt("LongitudinalPersonality");
   }
+  if (scene.longitudinal_control && scene.conditional_experimental) {
+    scene.conditional_status = params.getInt("ConditionalStatus");
+  }
   // FrogPilot variables that need to be updated whenever the user changes its toggle value
   if (params.getBool("FrogPilotTogglesUpdated") || !scene.started) {
+    if (scene.longitudinal_control && scene.conditional_experimental) {
+      scene.conditional_speed = params.getInt("ConditionalExperimentalModeSpeed");
+      scene.conditional_speed_lead = params.getInt("ConditionalExperimentalModeSpeedLead");
+    }
     if (scene.custom_road_ui) {
       scene.lane_line_width = params.getInt("LaneLinesWidth") / 12.0 * 0.1524; // Convert from inches to meters
       scene.path_edge_width = params.getInt("PathEdgeWidth");

@@ -43,6 +43,7 @@ class CarState(CarStateBase):
 
     # FrogPilot variables
     self.params = Params()
+    self.conditional_experimental_mode = self.CP.conditionalExperimentalMode
     self.driving_personalities_via_wheel = self.params.get_bool("DrivingPersonalitiesUIWheel")
     self.experimental_mode_via_wheel = self.CP.experimentalModeViaWheel
     self.lkas_pressed = False
@@ -196,12 +197,19 @@ class CarState(CarStateBase):
       self.lkas_pressed = any(cp_cam.vl["LKAS_HUD"].get(key) == 1 for key in message_keys)
       if self.lkas_pressed and not self.lkas_previously_pressed:
         experimental_mode = self.params.get_bool("ExperimentalMode")
-        # Invert the value of "ExperimentalMode"
-        self.params.put_bool("ExperimentalMode", not experimental_mode)
+        if self.conditional_experimental_mode:
+          # Set "ConditionalStatus" to work with "Conditional Experimental Mode"
+          conditional_status = self.params.get_int("ConditionalStatus")
+          override_value = 0 if conditional_status in [1, 2] else 1 if experimental_mode else 2
+          self.params.put_int("ConditionalStatus", override_value)
+        else:
+          # Invert the value of "ExperimentalMode"
+          self.params.put_bool("ExperimentalMode", not experimental_mode)
       self.lkas_previously_pressed = self.lkas_pressed
 
     # Disable the onroad widgets since they're not needed
     ret.drivingProfilesViaWheelCar = any(self.CP.carFingerprint in car for car in (TSS2_CAR, RADAR_ACC_CAR))
+    ret.steeringWheelCar = self.lkas_pressed
 
     return ret
 

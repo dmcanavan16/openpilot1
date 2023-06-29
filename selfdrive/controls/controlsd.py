@@ -116,6 +116,7 @@ class Controls:
     # FrogPilot variables
     fire_the_babysitter = self.params.get_bool("FireTheBabysitter")
     frog_theme = self.params.get_bool("FrogTheme")
+    self.conditional_experimental_mode = self.CP.conditionalExperimentalMode
     self.frog_sounds = frog_theme and self.params.get_bool("FrogSounds")
     self.mute_overheat = fire_the_babysitter and self.params.get_bool("MuteSystemOverheat")
     self.personal_tune = self.CP.personalTune
@@ -854,7 +855,11 @@ class Controls:
     self.prof.checkpoint("Ratekeeper", ignore=True)
 
     self.is_metric = self.params.get_bool("IsMetric")
-    self.experimental_mode = self.params.get_bool("ExperimentalMode") and self.CP.openpilotLongitudinalControl
+    if self.CP.openpilotLongitudinalControl:
+      if self.conditional_experimental_mode:
+        self.experimental_mode = self.sm['longitudinalPlan'].conditionalExperimentalMode
+      else:
+        self.experimental_mode = self.params.get_bool("ExperimentalMode")
 
     # Sample data from sockets and get a carState
     CS = self.data_sample()

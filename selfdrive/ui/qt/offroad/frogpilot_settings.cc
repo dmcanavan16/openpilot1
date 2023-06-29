@@ -14,6 +14,7 @@ FrogPilotPanel::FrogPilotPanel(QWidget *parent) : QWidget(parent) {
   const std::vector<std::tuple<QString, QString, QString, QString>> toggles = {
     {"FrogTheme", "FrogPilot Theme", "Enable the beloved FrogPilot Theme! Disable toggle to revert back to the stock openpilot theme.", "../assets/images/frog_button_home.png"},
     {"Compass", "Compass", "Add a compass to the onroad UI that indicates your current driving direction.", "../assets/offroad/icon_compass.png"},
+    {"ConditionalExperimentalMode", "Conditional Experimental Mode", "Automatically activate 'Experimental Mode' based on specified conditions.", "../assets/offroad/icon_conditional.png"},
     {"CustomDrivingPersonalities", "Custom Driving Personalities", "Customize the driving personality profiles to your liking.", "../assets/offroad/icon_custom.png"},
     {"CustomRoadUI", "Custom Road UI", "Customize the road UI to your liking.", "../assets/offroad/icon_road.png"},
     {"DeviceShutdownTimer", "Device Shutdown Timer", "Set the timer for when the device turns off after being offroad to reduce energy waste and prevent battery drain.", "../assets/offroad/icon_time.png"},
@@ -42,6 +43,16 @@ FrogPilotPanel::FrogPilotPanel(QWidget *parent) : QWidget(parent) {
         {"FrogIcons", "Icons"},
         {"FrogSounds", "Sounds"},
         {"FrogSignals", "Turn Signals"}
+      }, mainLayout);
+    } else if (key == "ConditionalExperimentalMode") {
+      createSubControl(key, label, desc, icon, {
+        createDualParamControl(new ConditionalExperimentalModeSpeed(), new ConditionalExperimentalModeSpeedLead()),
+      });
+      createSubButtonControl(key, {
+        {"ConditionalExperimentalModeCurves", "Curves"},
+        {"ConditionalExperimentalModeCurvesLead", "Curves With Lead"},
+        {"ConditionalExperimentalModeStopLights", "Stop Lights"},
+        {"ConditionalExperimentalModeSignal", "Turn Signal"}
       }, mainLayout);
     } else if (key == "CustomDrivingPersonalities") {
       createSubControl(key, label, desc, icon, {
