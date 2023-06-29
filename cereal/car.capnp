@@ -221,6 +221,7 @@ struct CarState {
   charging @43 :Bool;
 
   # FrogPilot CarStates
+  alwaysOnLateral @48 :Bool;
   drivingProfilesViaWheelCar @49 :Bool;
   steeringWheelCar @50 :Bool;
 
@@ -498,6 +499,7 @@ struct CarParams {
   wheelSpeedFactor @63 :Float32; # Multiplier on wheels speeds to computer actual speeds
 
   # FrogPilot CarParams
+  alwaysOnLateral @72 :Bool;
   conditionalExperimentalMode @73 :Bool;
   experimentalModeViaWheel @74 :Bool;
   personalTune @75 :Bool;

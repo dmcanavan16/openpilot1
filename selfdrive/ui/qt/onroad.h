@@ -70,6 +70,7 @@ class AnnotatedCameraWidget : public CameraWidget {
   Q_PROPERTY(int status MEMBER status);
 
   // FrogPilot properties
+  Q_PROPERTY(bool alwaysOnLateral MEMBER alwaysOnLateral);
   Q_PROPERTY(bool blindSpotLeft MEMBER blindSpotLeft);
   Q_PROPERTY(bool blindSpotRight MEMBER blindSpotRight);
   Q_PROPERTY(bool compass MEMBER compass);
@@ -129,6 +130,7 @@ private:
   bool wide_cam_requested = false;
 
   // FrogPilot variables
+  bool alwaysOnLateral;
   bool blindSpotLeft;
   bool blindSpotRight;
   bool compass;

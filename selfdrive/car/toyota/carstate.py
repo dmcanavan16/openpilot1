@@ -43,9 +43,11 @@ class CarState(CarStateBase):
 
     # FrogPilot variables
     self.params = Params()
+    self.always_on_lateral = self.CP.alwaysOnLateral
     self.conditional_experimental_mode = self.CP.conditionalExperimentalMode
     self.driving_personalities_via_wheel = self.params.get_bool("DrivingPersonalitiesUIWheel")
     self.experimental_mode_via_wheel = self.CP.experimentalModeViaWheel
+    self.cruiseState_previously_enabled = False
     self.lkas_pressed = False
     self.lkas_previously_pressed = False
     self.distance_button = 0
@@ -206,6 +208,14 @@ class CarState(CarStateBase):
           # Invert the value of "ExperimentalMode"
           self.params.put_bool("ExperimentalMode", not experimental_mode)
       self.lkas_previously_pressed = self.lkas_pressed
+
+    # Always on lateral function
+    if self.always_on_lateral:
+      self.cruiseState_previously_enabled &= ret.cruiseState.available
+      self.cruiseState_previously_enabled |= ret.cruiseState.enabled
+
+      # Allow lateral control if all the conditions are met
+      ret.alwaysOnLateral = self.cruiseState_previously_enabled and ret.gearShifter == car.CarState.GearShifter.drive
 
     # Disable the onroad widgets since they're not needed
     ret.drivingProfilesViaWheelCar = any(self.CP.carFingerprint in car for car in (TSS2_CAR, RADAR_ACC_CAR))

@@ -282,7 +282,7 @@ void ExperimentalButton::paintEvent(QPaintEvent *event) {
 
     p.setOpacity(1.0);
     p.setPen(Qt::NoPen);
-    p.setBrush(scene.conditional_status == 1 ? QColor(255, 246, 0, 255) : steeringWheel && isChecked() ? QColor(218, 111, 37, 241) : QColor(0, 0, 0, 166));
+    p.setBrush(scene.always_on_lateral_active ? QColor(10, 186, 181, 255) : scene.conditional_status == 1 ? QColor(255, 246, 0, 255) : steeringWheel && isChecked() ? QColor(218, 111, 37, 241) : QColor(0, 0, 0, 166));
     p.drawEllipse(center, btn_size / 2, btn_size / 2);
     p.setOpacity(isDown() ? 0.8 : 1.0);
     p.drawPixmap((btn_size - img_size) / 2, (btn_size - img_size) / 2, img);
@@ -404,6 +404,7 @@ void AnnotatedCameraWidget::updateState(const UIState &s) {
   dm_fade_state = std::clamp(dm_fade_state+0.2*(0.5-dmActive), 0.0, 1.0);
 
   // FrogPilot properties
+  setProperty("alwaysOnLateral", s.scene.always_on_lateral_active);
   setProperty("bearingDeg", s.scene.bearing_deg);
   setProperty("blindSpotLeft", s.scene.blind_spot_left);
   setProperty("blindSpotRight", s.scene.blind_spot_right);
@@ -545,7 +546,7 @@ void AnnotatedCameraWidget::drawHud(QPainter &p) {
   }
 
   // FrogPilot status bar
-  if (conditionalExperimental) {
+  if (conditionalExperimental || alwaysOnLateral) {
     drawStatusBar(p);
   }
 }
@@ -677,7 +678,11 @@ void AnnotatedCameraWidget::drawLaneLines(QPainter &painter, const UIState *s) {
 
   // Paint path edges
   QLinearGradient pe(0, height(), 0, 0);
-  if (conditionalStatus == 1) {
+  if (alwaysOnLateral) {
+    pe.setColorAt(0.0, QColor::fromHslF(178 / 360., 0.90, 0.38, 1.0));
+    pe.setColorAt(0.5, QColor::fromHslF(178 / 360., 0.90, 0.38, 0.5));
+    pe.setColorAt(1.0, QColor::fromHslF(178 / 360., 0.90, 0.38, 0.1));
+  } else if (conditionalStatus == 1) {
     pe.setColorAt(0.0, QColor::fromHslF(58 / 360., 1.00, 0.50, 1.0));
     pe.setColorAt(0.5, QColor::fromHslF(58 / 360., 1.00, 0.50, 0.5));
     pe.setColorAt(1.0, QColor::fromHslF(58 / 360., 1.00, 0.50, 0.1));
@@ -1087,7 +1092,7 @@ void AnnotatedCameraWidget::drawRotatingWheel(QPainter &p, int x, int y) {
   // Draw the icon and rotate it alongside the steering wheel
   p.setOpacity(1.0);
   p.setPen(Qt::NoPen);
-  p.setBrush(conditionalStatus == 1 ? QColor(255, 246, 0, 255) : steeringWheel && experimentalMode ? QColor(218, 111, 37, 241) : QColor(0, 0, 0, 166));
+  p.setBrush(alwaysOnLateral ? QColor(10, 186, 181, 255) : conditionalStatus == 1 ? QColor(255, 246, 0, 255) : steeringWheel && experimentalMode ? QColor(218, 111, 37, 241) : QColor(0, 0, 0, 166));
   p.drawEllipse(x - btn_size / 2, y - btn_size / 2, btn_size, btn_size);
   p.save();
   p.translate(x, y);
@@ -1114,7 +1119,9 @@ void AnnotatedCameraWidget::drawStatusBar(QPainter &p) {
   };
 
   // Status configuration
-  if (conditionalExperimental && !(status == STATUS_ENGAGED)) {
+  if (alwaysOnLateral) {
+    statusText = QString("Always On Lateral active.") + (QString(" Press the \"Cruise Control\" button to disable"));
+  } else if (conditionalExperimental && !(status == STATUS_ENGAGED)) {
     statusText = QString("Conditional Experimental Mode ready");
   } else if (conditionalExperimental && status == STATUS_ENGAGED) {
     statusText = conditionalStatuses();

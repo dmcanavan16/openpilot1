@@ -211,6 +211,7 @@ static void update_state(UIState *s) {
     scene.pandaType = cereal::PandaState::PandaType::UNKNOWN;
   }
   if (sm.updated("carParams")) {
+    scene.always_on_lateral = sm["carParams"].getCarParams().getAlwaysOnLateral();
     scene.longitudinal_control = sm["carParams"].getCarParams().getOpenpilotLongitudinalControl();
     if (scene.longitudinal_control) {
       scene.conditional_experimental = sm["carParams"].getCarParams().getConditionalExperimentalMode();
@@ -218,6 +219,9 @@ static void update_state(UIState *s) {
     }
   }
   if (sm.updated("carState")) {
+    if (scene.always_on_lateral) {
+      scene.always_on_lateral_active = !scene.active && sm["carState"].getCarState().getAlwaysOnLateral();
+    }
     if (scene.blind_spot_path || scene.frog_signals) {
       scene.blind_spot_left = sm["carState"].getCarState().getLeftBlindspot();
       scene.blind_spot_right = sm["carState"].getCarState().getRightBlindspot();
@@ -237,6 +241,7 @@ static void update_state(UIState *s) {
     }
   }
   if (sm.updated("controlsState")) {
+    scene.active = sm["controlsState"].getControlsState().getEnabled();
     scene.experimental_mode = sm["controlsState"].getControlsState().getExperimentalMode();
   }
   if (sm.updated("gpsLocationExternal")) {
@@ -304,6 +309,8 @@ void UIState::updateStatus() {
     auto state = controls_state.getState();
     if (state == cereal::ControlsState::OpenpilotState::PRE_ENABLED || state == cereal::ControlsState::OpenpilotState::OVERRIDING) {
       status = STATUS_OVERRIDE;
+    } else if (scene.always_on_lateral_active) {
+      status = STATUS_LATERAL_ACTIVE;
     } else {
       status = controls_state.getEnabled() ? STATUS_ENGAGED : STATUS_DISENGAGED;
     }
