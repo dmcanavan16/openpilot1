@@ -212,6 +212,9 @@ static void update_state(UIState *s) {
   }
   if (sm.updated("carParams")) {
     scene.longitudinal_control = sm["carParams"].getCarParams().getOpenpilotLongitudinalControl();
+    if (scene.longitudinal_control) {
+      scene.experimental_mode_via_wheel = sm["carParams"].getCarParams().getExperimentalModeViaWheel();
+    }
   }
   if (sm.updated("carState")) {
     if (scene.blind_spot_path || scene.frog_signals) {

@@ -497,6 +497,7 @@ struct CarParams {
   wheelSpeedFactor @63 :Float32; # Multiplier on wheels speeds to computer actual speeds
 
   # FrogPilot CarParams
+  experimentalModeViaWheel @74 :Bool;
   personalTune @75 :Bool;
 
   struct SafetyConfig {

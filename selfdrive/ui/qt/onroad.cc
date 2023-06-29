@@ -90,6 +90,7 @@ void OnroadWindow::mousePressEvent(QMouseEvent* e) {
   const SubMaster &sm = *uiState()->sm;
   static auto params = Params();
   const bool isDrivingPersonalitiesViaUI = scene.driving_personalities_ui_wheel && scene.driving_personalities_via_ui_car;
+  const bool isExperimentalModeViaUI = scene.experimental_mode_via_wheel;
   static bool propagateEvent = false;
   static bool recentlyTapped = false;
   static bool rightHandDM = false;
@@ -107,6 +108,16 @@ void OnroadWindow::mousePressEvent(QMouseEvent* e) {
   if (isDrivingPersonalitiesClicked) {
     params.putInt("LongitudinalPersonality", (scene.personality_profile + 2) % 3);
     propagateEvent = false;
+  // If the click wasn't on the button for drivingPersonalities, change the value of "ExperimentalMode"
+  } else if (recentlyTapped && isExperimentalModeViaUI) {
+    bool experimentalMode = params.getBool("ExperimentalMode");
+    params.putBool("ExperimentalMode", !experimentalMode);
+    params.putBool("FrogPilotTogglesUpdated", "True");
+    recentlyTapped = false;
+    propagateEvent = true;
+  } else {
+    recentlyTapped = true;
+    propagateEvent = true;
   }
 
   // propagation event to parent(HomeWindow)
