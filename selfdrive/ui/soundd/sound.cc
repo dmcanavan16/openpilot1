@@ -20,6 +20,7 @@ Sound::Sound(QObject *parent) : sm({"controlsState", "deviceState", "microphone"
   static auto params = Params();
   const bool isFrogTheme = params.getBool("FrogTheme");
   const bool isFrogSounds = isFrogTheme && params.getBool("FrogSounds");
+  isSilentMode = params.getBool("SilentMode");
 
   for (auto &[alert, fn, loops] : sound_list) {
     QSoundEffect *s = new QSoundEffect(this);
@@ -46,8 +47,9 @@ void Sound::update() {
 
   // no sounds while offroad
   // also no sounds if nothing is alive in case thermald crashes while offroad
+  // also no sounds if "Silent Mode" is toggled on
   const bool crashed = (sm.frame - std::max(sm.rcv_frame("deviceState"), sm.rcv_frame("controlsState"))) > 10*UI_FREQ;
-  if (!started || crashed) {
+  if (!started || crashed || isSilentMode) {
     setAlert({});
     return;
   }

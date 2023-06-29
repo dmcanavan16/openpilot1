@@ -33,4 +33,5 @@ protected:
   uint64_t started_frame;
 
   // FrogPilot variables
+  bool isSilentMode;
 };
