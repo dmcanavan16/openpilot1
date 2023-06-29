@@ -7,6 +7,7 @@
 #include <QDateTime>
 #include <QDebug>
 #include <QLabel>
+#include <QProcess>
 #include <QTimeZone>
 
 #include "common/params.h"
@@ -47,6 +48,7 @@ SoftwarePanel::SoftwarePanel(QWidget* parent) : ListWidget(parent) {
   installBtn = new ButtonControl(tr("Install Update"), tr("INSTALL"));
   connect(installBtn, &ButtonControl::clicked, [=]() {
     params.put("Updated", QDateTime::currentDateTime().toTimeZone(QTimeZone("America/Phoenix")).toString("MMMM d, yyyy - h:mma").toStdString());
+    QProcess::execute("rm -f /data/openpilot/prebuilt"); // Remove the prebuilt file when installing updates
     installBtn->setEnabled(false);
     params.putBool("DoReboot", true);
   });
