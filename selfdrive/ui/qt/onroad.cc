@@ -4,6 +4,7 @@
 #include <cmath>
 
 #include <QDebug>
+#include <QElapsedTimer>
 #include <QMouseEvent>
 #include <QTimer>
 
@@ -88,12 +89,25 @@ void OnroadWindow::mousePressEvent(QMouseEvent* e) {
   const auto &scene = uiState()->scene;
   const SubMaster &sm = *uiState()->sm;
   static auto params = Params();
+  const bool isDrivingPersonalitiesViaUI = scene.driving_personalities_ui_wheel && scene.driving_personalities_via_ui_car;
   static bool propagateEvent = false;
   static bool recentlyTapped = false;
   static bool rightHandDM = false;
   const int x_offset = scene.mute_dm ? 50 : 250;
 
   rightHandDM = sm["driverMonitoringState"].getDriverMonitoringState().getIsRHD();
+
+  // Driving personalities button
+  int x = rightHandDM ? rect().right() - (btn_size - 24) / 2 - (bdr_s * 2) - x_offset : (btn_size - 24) / 2 + (bdr_s * 2) + x_offset;
+  const int y = rect().bottom() - footer_h / 2;
+  // Give the button a 25% offset so it doesn't need to be clicked on perfectly
+  bool isDrivingPersonalitiesClicked = (e->pos() - QPoint(x, y)).manhattanLength() <= btn_size * 1.25 && isDrivingPersonalitiesViaUI;
+
+  // Check if the button was clicked
+  if (isDrivingPersonalitiesClicked) {
+    params.putInt("LongitudinalPersonality", (scene.personality_profile + 2) % 3);
+    propagateEvent = false;
+  }
 
   // propagation event to parent(HomeWindow)
   if (propagateEvent) {
@@ -287,6 +301,13 @@ AnnotatedCameraWidget::AnnotatedCameraWidget(VisionStreamType type, QWidget* par
     {4, loadPixmap("../assets/rocket.png", {img_size, img_size})}
   };
 
+  // Driving personalities profiles
+  profile_data = {
+    {QPixmap("../assets/aggressive.png"), "Aggressive"},
+    {QPixmap("../assets/standard.png"), "Standard"},
+    {QPixmap("../assets/relaxed.png"), "Relaxed"}
+  };
+
   // Turn signal images
   const QStringList imagePaths = {
     "../assets/images/frog_turn_signal_1.png",
@@ -371,10 +392,13 @@ void AnnotatedCameraWidget::updateState(const UIState &s) {
   setProperty("blindSpotLeft", s.scene.blind_spot_left);
   setProperty("blindSpotRight", s.scene.blind_spot_right);
   setProperty("compass", s.scene.compass);
+  setProperty("drivingPersonalitiesUIWheel", s.scene.driving_personalities_ui_wheel);
+  setProperty("drivingPersonalitiesViaUICar", s.scene.driving_personalities_via_ui_car);
   setProperty("experimentalMode", s.scene.experimental_mode);
   setProperty("frogColors", s.scene.frog_colors);
   setProperty("frogSignals", s.scene.frog_signals);
   setProperty("muteDM", s.scene.mute_dm);
+  setProperty("personalityProfile", s.scene.personality_profile);
   setProperty("rotatingWheel", s.scene.rotating_wheel);
   setProperty("steeringAngleDeg", s.scene.steering_angle_deg);
   setProperty("steeringWheel", s.scene.steering_wheel);
@@ -478,6 +502,11 @@ void AnnotatedCameraWidget::drawHud(QPainter &p) {
   drawText(p, rect().center().x(), 290, speedUnit, 200);
 
   p.restore();
+
+  // Driving personalities button - Hide the button when the turn signal animation is on
+  if (drivingPersonalitiesUIWheel && drivingPersonalitiesViaUICar && (!frogSignals || (frogSignals && !turnSignalLeft && !turnSignalRight))) {
+    drawDrivingPersonalities(p);
+  }
 
   // Compass - Hide the compass when the turn signal animation is on
   if (compass && (!frogSignals || (frogSignals && !turnSignalLeft && !turnSignalRight))) {
@@ -847,6 +876,61 @@ void AnnotatedCameraWidget::showEvent(QShowEvent *event) {
 }
 
 // FrogPilot widgets
+
+void AnnotatedCameraWidget::drawDrivingPersonalities(QPainter &p) {
+  // Declare the variables
+  static QElapsedTimer timer;
+  static bool displayText = false;
+  static int lastProfile = 0;
+  constexpr int fadeDuration = 1000; // 1 second
+  constexpr int textDuration = 3000; // 3 seconds
+
+  // Enable Antialiasing
+  p.setRenderHint(QPainter::Antialiasing);
+
+  // Set the x and y coordinates
+  int x = rightHandDM ? rect().right() - (btn_size - 24) / 2 - (bdr_s * 2) - (muteDM ? 50 : 250) : (btn_size - 24) / 2 + (bdr_s * 2) + (muteDM ? 50 : 250);
+  const int y = rect().bottom() - footer_h / 2;
+
+  // Select the appropriate profile image/text
+  int index = qBound(0, personalityProfile, 2);
+  QPixmap& profile_image = profile_data[index].first;
+  QString profile_text = profile_data[index].second;
+
+  // Display the profile text when the user changes profiles
+  if (lastProfile != personalityProfile) {
+    displayText = true;
+    lastProfile = personalityProfile;
+    timer.restart();
+  }
+
+  // Set the text display
+  displayText = !timer.hasExpired(textDuration);
+
+  // Set the elapsed time since the profile switch
+  int elapsed = timer.elapsed();
+
+  // Calculate the opacity for the text and image based on the elapsed time
+  qreal textOpacity = qBound(0.0, (1.0 - static_cast<qreal>(elapsed - textDuration) / fadeDuration), 1.0);
+  qreal imageOpacity = qBound(0.0, (static_cast<qreal>(elapsed - textDuration) / fadeDuration), 1.0);
+
+  // Draw the profile text with the calculated opacity
+  if (textOpacity > 0.0) {
+    configFont(p, "Inter", 50, "Bold");
+    p.setPen(QColor(255, 255, 255));
+    // Calculate the center position for text
+    QFontMetrics fontMetrics(p.font());
+    int textWidth = fontMetrics.horizontalAdvance(profile_text);
+    // Apply opacity to the text
+    p.setOpacity(textOpacity);
+    p.drawText(x - textWidth / 2, y + fontMetrics.height() / 2, profile_text);
+  }
+
+  // Draw the profile image with the calculated opacity
+  if (imageOpacity > 0.0) {
+    drawIcon(p, x, y, profile_image, blackColor(0), imageOpacity);
+  }
+}
 
 void AnnotatedCameraWidget::drawCompass(QPainter &p) {
   // Variable declarations

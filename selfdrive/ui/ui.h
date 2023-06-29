@@ -142,6 +142,8 @@ typedef struct UIScene {
   bool blind_spot_right;
   bool compass;
   bool custom_road_ui;
+  bool driving_personalities_ui_wheel;
+  bool driving_personalities_via_ui_car;
   bool experimental_mode;
   bool frog_colors;
   bool frog_signals;
@@ -156,6 +158,7 @@ typedef struct UIScene {
   float path_width;
   float road_edge_width;
   int bearing_deg;
+  int personality_profile;
   int screen_brightness;
   int steering_angle_deg;
   int steering_wheel;

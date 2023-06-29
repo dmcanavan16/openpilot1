@@ -218,6 +218,9 @@ static void update_state(UIState *s) {
       scene.blind_spot_left = sm["carState"].getCarState().getLeftBlindspot();
       scene.blind_spot_right = sm["carState"].getCarState().getRightBlindspot();
     }
+    if (scene.driving_personalities_ui_wheel) {
+      scene.driving_personalities_via_ui_car = !sm["carState"].getCarState().getDrivingProfilesViaWheelCar();
+    }
     if (scene.frog_signals) {
       scene.turn_signal_left = sm["carState"].getCarState().getLeftBlinker();
       scene.turn_signal_right = sm["carState"].getCarState().getRightBlinker();
@@ -252,6 +255,7 @@ void ui_update_params(UIState *s) {
   scene.custom_road_ui = params.getBool("CustomRoadUI");
   scene.blind_spot_path = scene.custom_road_ui && params.getBool("BlindSpotPath");
   scene.compass = params.getBool("Compass");
+  scene.driving_personalities_ui_wheel = params.getBool("DrivingPersonalitiesUIWheel");
   scene.frog_colors = frog_theme && params.getBool("FrogColors");
   scene.frog_signals = frog_theme && params.getBool("FrogSignals");
   scene.mute_dm = params.getBool("FireTheBabysitter") && params.getBool("MuteDM");
@@ -264,6 +268,9 @@ void ui_live_update_params(UIState *s) {
   static auto params = Params();
   UIScene &scene = s->scene;
   // FrogPilot variables that need to be updated live
+  if (scene.driving_personalities_ui_wheel && scene.driving_personalities_via_ui_car) {
+    scene.personality_profile = params.getInt("LongitudinalPersonality");
+  }
   // FrogPilot variables that need to be updated whenever the user changes its toggle value
   if (params.getBool("FrogPilotTogglesUpdated") || !scene.started) {
     if (scene.custom_road_ui) {

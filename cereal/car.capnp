@@ -221,6 +221,7 @@ struct CarState {
   charging @43 :Bool;
 
   # FrogPilot CarStates
+  drivingProfilesViaWheelCar @49 :Bool;
 
   struct WheelSpeeds {
     # optional wheel speeds
