@@ -37,6 +37,7 @@ FrogPilotPanel::FrogPilotPanel(QWidget *parent) : QWidget(parent) {
         {"FrogColors", "Colors"},
         {"FrogIcons", "Icons"},
         {"FrogSounds", "Sounds"},
+        {"FrogSignals", "Turn Signals"}
       }, mainLayout);
     } else if (key == "CustomRoadUI") {
       createSubControl(key, label, desc, icon, {

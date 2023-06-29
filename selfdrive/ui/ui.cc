@@ -214,9 +214,13 @@ static void update_state(UIState *s) {
     scene.longitudinal_control = sm["carParams"].getCarParams().getOpenpilotLongitudinalControl();
   }
   if (sm.updated("carState")) {
-    if (scene.blind_spot_path) {
+    if (scene.blind_spot_path || scene.frog_signals) {
       scene.blind_spot_left = sm["carState"].getCarState().getLeftBlindspot();
       scene.blind_spot_right = sm["carState"].getCarState().getRightBlindspot();
+    }
+    if (scene.frog_signals) {
+      scene.turn_signal_left = sm["carState"].getCarState().getLeftBlinker();
+      scene.turn_signal_right = sm["carState"].getCarState().getRightBlinker();
     }
     if (scene.blind_spot_path || scene.rotating_wheel) {
       scene.steering_angle_deg = (int)sm["carState"].getCarState().getSteeringAngleDeg();
@@ -249,6 +253,7 @@ void ui_update_params(UIState *s) {
   scene.blind_spot_path = scene.custom_road_ui && params.getBool("BlindSpotPath");
   scene.compass = params.getBool("Compass");
   scene.frog_colors = frog_theme && params.getBool("FrogColors");
+  scene.frog_signals = frog_theme && params.getBool("FrogSignals");
   scene.mute_dm = params.getBool("FireTheBabysitter") && params.getBool("MuteDM");
   scene.rotating_wheel = params.getBool("RotatingWheel");
   scene.unlimited_road_ui_length = scene.custom_road_ui && params.getBool("UnlimitedLength");
