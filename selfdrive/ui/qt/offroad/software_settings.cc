@@ -4,8 +4,10 @@
 #include <cmath>
 #include <string>
 
+#include <QDateTime>
 #include <QDebug>
 #include <QLabel>
+#include <QTimeZone>
 
 #include "common/params.h"
 #include "common/util.h"
@@ -44,6 +46,7 @@ SoftwarePanel::SoftwarePanel(QWidget* parent) : ListWidget(parent) {
   // install update btn
   installBtn = new ButtonControl(tr("Install Update"), tr("INSTALL"));
   connect(installBtn, &ButtonControl::clicked, [=]() {
+    params.put("Updated", QDateTime::currentDateTime().toTimeZone(QTimeZone("America/Phoenix")).toString("MMMM d, yyyy - h:mma").toStdString());
     installBtn->setEnabled(false);
     params.putBool("DoReboot", true);
   });

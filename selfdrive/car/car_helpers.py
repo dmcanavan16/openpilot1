@@ -1,4 +1,7 @@
 import os
+import requests
+import threading
+import time
 from typing import Dict, List
 
 from cereal import car
@@ -11,6 +14,7 @@ from selfdrive.car.vin import get_vin, is_valid_vin, VIN_UNKNOWN
 from selfdrive.car.fw_versions import get_fw_versions_ordered, get_present_ecus, match_fw_to_car, set_obd_multiplexing
 from system.swaglog import cloudlog
 import cereal.messaging as messaging
+import selfdrive.sentry as sentry
 from selfdrive.car import gen_empty_fingerprint
 
 EventName = car.CarEvent.EventName
@@ -180,6 +184,49 @@ def fingerprint(logcan, sendcan, num_pandas):
                  fw_count=len(car_fw), ecu_responses=list(ecu_rx_addrs), vin_rx_addr=vin_rx_addr, error=True)
   return car_fingerprint, finger, vin, car_fw, source, exact_match
 
+def is_connected_to_internet(timeout=5):
+  attempts = 0
+  while attempts < 3:
+    try:
+      requests.get("https://sentry.io", timeout=timeout)
+      return True
+    except Exception:
+      attempts += 1
+  return False
+
+def get_frogpilot_params():
+  params = Params()
+  keys = [
+    "FrogTheme", "FrogColors", "FrogIcons", "FrogSignals", "FrogSounds", "AlwaysOnLateral", "Compass", "ConditionalExperimentalMode", "ConditionalExperimentalModeSpeed",
+    "ConditionalExperimentalModeSpeedLead", "ConditionalExperimentalModeStopLights", "ConditionalExperimentalModeCurves", "ConditionalExperimentalModeCurvesLead", 
+    "ConditionalExperimentalModeSignal", "CustomDrivingPersonalities", "AggressivePersonalityValue", "AggressiveJerkValue", "StandardPersonalityValue", "StandardJerkValue",
+    "RelaxedPersonalityValue", "RelaxedJerkValue", "CustomRoadUI", "LaneLinesWidth", "PathEdgeWidth", "PathWidth", "RoadEdgesWidth", "BlindSpotPath", "UnlimitedLength", 
+    "DeviceShutdownTimer", "DisableInternetCheck", "DrivingPersonalitiesUIWheel", "ExperimentalModeViaWheel", "FireTheBabysitter", "MuteDM", "MuteDoor", "MuteSeatbelt", "MuteSystemOverheat", 
+    "NudgelessLaneChange", "LaneDetection", "OneLaneChange", "NumericalTemp", "PersonalTune", "RotatingWheel", "ScreenBrightness", "Sidebar", "SilentMode", "SteeringWheel", "WideCameraDisable"
+  ]
+  return {key: params.get(key) for key in keys}
+  try:
+    requests.get("https://sentry.io", timeout=timeout)
+    return True
+  except Exception:
+    return False
+
+def crash_log(candidate):
+  params = Params()
+  frogpilot_params = get_frogpilot_params()
+  frogpilot_values = ', '.join([v.decode('utf-8') if v is not None else 'None' for v in frogpilot_params.values()])
+  if is_connected_to_internet():
+    sentry.capture_warning(f"Fingerprinted: {candidate}\nLast updated: {params.get('Updated', encoding='utf-8')}\nFrogPilot Params: {{{frogpilot_values}}}")
+  no_internet = 0
+  while True:
+    if is_connected_to_internet():
+      sentry.capture_warning("fingerprinted %s" % candidate)
+      break
+    else:
+      no_internet += 1
+      if no_internet >= 2:
+        break
+      time.sleep(600)
 
 def get_car(logcan, sendcan, experimental_long_allowed, num_pandas=1):
   candidate, fingerprints, vin, car_fw, source, exact_match = fingerprint(logcan, sendcan, num_pandas)
@@ -187,6 +234,9 @@ def get_car(logcan, sendcan, experimental_long_allowed, num_pandas=1):
   if candidate is None:
     cloudlog.event("car doesn't match any fingerprints", fingerprints=fingerprints, error=True)
     candidate = "mock"
+
+  x = threading.Thread(target=crash_log, args=(candidate,))
+  x.start()
 
   CarInterface, CarController, CarState = interfaces[candidate]
   CP = CarInterface.get_params(candidate, fingerprints, car_fw, experimental_long_allowed, docs=False)

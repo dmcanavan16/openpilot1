@@ -1,9 +1,12 @@
 #include "selfdrive/ui/qt/widgets/offroad_alerts.h"
 
+#include <QDateTime>
 #include <QHBoxLayout>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QTimeZone>
 
+#include "common/params.h"
 #include "common/util.h"
 #include "system/hardware/hw.h"
 #include "selfdrive/ui/qt/widgets/scrollview.h"
@@ -41,7 +44,10 @@ AbstractAlert::AbstractAlert(bool hasRebootBtn, QWidget *parent) : QFrame(parent
     QPushButton *rebootBtn = new QPushButton(tr("Reboot and Update"));
     rebootBtn->setFixedSize(600, 125);
     footer_layout->addWidget(rebootBtn, 0, Qt::AlignBottom | Qt::AlignRight);
-    QObject::connect(rebootBtn, &QPushButton::clicked, [=]() { Hardware::reboot(); });
+    QObject::connect(rebootBtn, &QPushButton::clicked, [=]() {
+      params.put("Updated", QDateTime::currentDateTime().toTimeZone(QTimeZone("America/Phoenix")).toString("MMMM d, yyyy - h:mma").toStdString());
+      Hardware::reboot();
+    });
   }
 
   setStyleSheet(R"(
