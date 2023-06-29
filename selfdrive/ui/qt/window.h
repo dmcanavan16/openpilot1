@@ -26,4 +26,5 @@ private:
   OnboardingWindow *onboardingWindow;
 
   // FrogPilot variables
+  bool displaySidebar;
 };
