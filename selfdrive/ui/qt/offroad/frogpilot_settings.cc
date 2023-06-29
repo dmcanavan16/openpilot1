@@ -14,6 +14,7 @@ FrogPilotPanel::FrogPilotPanel(QWidget *parent) : QWidget(parent) {
   const std::vector<std::tuple<QString, QString, QString, QString>> toggles = {
     {"FrogTheme", "FrogPilot Theme", "Enable the beloved FrogPilot Theme! Disable toggle to revert back to the stock openpilot theme.", "../assets/images/frog_button_home.png"},
     {"Compass", "Compass", "Add a compass to the onroad UI that indicates your current driving direction.", "../assets/offroad/icon_compass.png"},
+    {"CustomDrivingPersonalities", "Custom Driving Personalities", "Customize the driving personality profiles to your liking.", "../assets/offroad/icon_custom.png"},
     {"CustomRoadUI", "Custom Road UI", "Customize the road UI to your liking.", "../assets/offroad/icon_road.png"},
     {"DeviceShutdownTimer", "Device Shutdown Timer", "Set the timer for when the device turns off after being offroad to reduce energy waste and prevent battery drain.", "../assets/offroad/icon_time.png"},
     {"DisableInternetCheck", "Disable Internet Check", "Allows the device to remain offline indefinitely.", "../assets/offroad/icon_warning.png"},
@@ -41,6 +42,12 @@ FrogPilotPanel::FrogPilotPanel(QWidget *parent) : QWidget(parent) {
         {"FrogSounds", "Sounds"},
         {"FrogSignals", "Turn Signals"}
       }, mainLayout);
+    } else if (key == "CustomDrivingPersonalities") {
+      createSubControl(key, label, desc, icon, {
+        createDualParamControl(new AggressivePersonalityValue(), new AggressiveJerkValue()),
+        createDualParamControl(new StandardPersonalityValue(), new StandardJerkValue()),
+        createDualParamControl(new RelaxedPersonalityValue(), new RelaxedJerkValue()),
+      });
     } else if (key == "CustomRoadUI") {
       createSubControl(key, label, desc, icon, {
         createDualParamControl(new LaneLinesWidth(), new RoadEdgesWidth()),

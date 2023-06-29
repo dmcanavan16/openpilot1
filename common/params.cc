@@ -85,6 +85,8 @@ private:
 
 std::unordered_map<std::string, uint32_t> keys = {
     {"AccessToken", CLEAR_ON_MANAGER_START | DONT_LOG},
+    {"AggressiveJerkValue", PERSISTENT},
+    {"AggressivePersonalityValue", PERSISTENT},
     {"ApiCache_Device", PERSISTENT},
     {"ApiCache_DriveStats", PERSISTENT},
     {"ApiCache_NavDestinations", PERSISTENT},
@@ -105,6 +107,7 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"ControlsReady", CLEAR_ON_MANAGER_START | CLEAR_ON_ONROAD_TRANSITION},
     {"CurrentBootlog", PERSISTENT},
     {"CurrentRoute", CLEAR_ON_MANAGER_START | CLEAR_ON_ONROAD_TRANSITION},
+    {"CustomDrivingPersonalities", PERSISTENT},
     {"CustomRoadUI", PERSISTENT},
     {"DefaultParamsSet", PERSISTENT},
     {"DeviceShutdownTimer", PERSISTENT},
@@ -210,6 +213,8 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"PrimeType", PERSISTENT},
     {"RecordFront", PERSISTENT},
     {"RecordFrontLock", PERSISTENT},  // for the internal fleet
+    {"RelaxedJerkValue", PERSISTENT},
+    {"RelaxedPersonalityValue", PERSISTENT},
     {"ReplayControlsState", CLEAR_ON_MANAGER_START | CLEAR_ON_ONROAD_TRANSITION},
     {"RoadEdgesWidth", PERSISTENT},
     {"RotatingWheel", PERSISTENT},
@@ -219,6 +224,8 @@ std::unordered_map<std::string, uint32_t> keys = {
     {"SilentMode", PERSISTENT},
     {"SnoozeUpdate", CLEAR_ON_MANAGER_START | CLEAR_ON_OFFROAD_TRANSITION},
     {"SshEnabled", PERSISTENT},
+    {"StandardJerkValue", PERSISTENT},
+    {"StandardPersonalityValue", PERSISTENT},
     {"SteeringWheel", PERSISTENT},
     {"SubscriberInfo", PERSISTENT},
     {"TermsVersion", PERSISTENT},
