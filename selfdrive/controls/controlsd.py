@@ -118,6 +118,7 @@ class Controls:
     frog_theme = self.params.get_bool("FrogTheme")
     self.frog_sounds = frog_theme and self.params.get_bool("FrogSounds")
     self.mute_overheat = fire_the_babysitter and self.params.get_bool("MuteSystemOverheat")
+    self.personal_tune = self.CP.personalTune
 
     # detect sound card presence and ensure successful init
     sounds_available = HARDWARE.get_sound_card_online()
@@ -612,7 +613,7 @@ class Controls:
 
     if not self.joystick_mode:
       # accel PID loop
-      pid_accel_limits = self.CI.get_pid_accel_limits(self.CP, CS.vEgo, self.v_cruise_helper.v_cruise_kph * CV.KPH_TO_MS)
+      pid_accel_limits = self.CI.get_pid_accel_limits(self.CP, CS.vEgo, self.v_cruise_helper.v_cruise_kph * CV.KPH_TO_MS, self.personal_tune)
       t_since_plan = (self.sm.frame - self.sm.rcv_frame['longitudinalPlan']) * DT_CTRL
       actuators.accel = self.LoC.update(CC.longActive, CS, long_plan, pid_accel_limits, t_since_plan)
 
@@ -620,7 +621,9 @@ class Controls:
       self.desired_curvature, self.desired_curvature_rate = get_lag_adjusted_curvature(self.CP, CS.vEgo,
                                                                                        lat_plan.psis,
                                                                                        lat_plan.curvatures,
-                                                                                       lat_plan.curvatureRates)
+                                                                                       lat_plan.curvatureRates,
+                                                                                       long_plan.distances,
+                                                                                       self.personal_tune)
       actuators.steer, actuators.steeringAngleDeg, lac_log = self.LaC.update(CC.latActive, CS, self.VM, lp,
                                                                              self.last_actuators, self.steer_limited, self.desired_curvature,
                                                                              self.desired_curvature_rate, self.sm['liveLocationKalman'])

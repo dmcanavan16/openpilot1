@@ -43,6 +43,7 @@ class CarController:
     self.accel = 0
 
     # FrogPilot variables
+    self.personal_tune = self.CP.personalTune
 
   def update(self, CC, CS, now_nanos):
     actuators = CC.actuators
@@ -115,6 +116,7 @@ class CarController:
     else:
       interceptor_gas_cmd = 0.
     pcm_accel_cmd = clip(actuators.accel, self.params.ACCEL_MIN, self.params.ACCEL_MAX)
+    pcm_accel_cmd_personal_tune = clip(actuators.accel, self.params.ACCEL_MIN, self.params.ACCEL_MAX_PERSONAL_TUNE)
 
     # TODO: probably can delete this. CS.pcm_acc_status uses a different signal
     # than CS.cruiseState.enabled. confirm they're not meaningfully different
@@ -139,7 +141,7 @@ class CarController:
         can_sends.append(create_acc_cancel_command(self.packer))
       elif self.CP.openpilotLongitudinalControl:
         can_sends.append(create_accel_command(self.packer, pcm_accel_cmd, pcm_cancel_cmd, self.standstill_req, lead, CS.acc_type))
-        self.accel = pcm_accel_cmd
+        self.accel = pcm_accel_cmd_personal_tune if self.personal_tune else pcm_accel_cmd
       else:
         can_sends.append(create_accel_command(self.packer, 0, pcm_cancel_cmd, False, lead, CS.acc_type))
 

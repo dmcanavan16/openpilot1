@@ -79,8 +79,24 @@ def get_T_FOLLOW(personality=log.LongitudinalPersonality.standard):
   else:
     raise NotImplementedError("Longitudinal personality not supported")
 
-def get_stopped_equivalence_factor(v_lead):
-  return (v_lead**2) / (2 * COMFORT_BRAKE)
+def get_stopped_equivalence_factor(personal_tune, radarstate, v_ego, v_lead):
+  # KRKeegan this offset rapidly decreases the following distance when the lead pulls
+  # away, resulting in an early demand for acceleration.
+  # Tweaked by FrogAi for FrogPilot to be more aggressive
+  v_diff_offset = 0
+  if np.all(v_lead - v_ego > 0) and personal_tune:
+    v_diff_offset = ((v_lead - v_ego) * 1.)
+    v_diff_offset = np.clip(v_diff_offset, 0, STOP_DISTANCE)
+    v_diff_offset = np.maximum(v_diff_offset * ((25 - v_ego)/10), 0)
+  distance = (v_lead**2) / (2 * COMFORT_BRAKE) + v_diff_offset
+  # Offset to approach slower lead vehicles smoothly
+  distance_offset = 0
+  # If we're going 20%+ faster than the lead vehicle apply the offset
+  if np.all(v_ego - v_lead > v_ego * 0.2) and np.all(v_lead > 5) and personal_tune:
+    # Decrease following distance according to how far away the lead is
+    distance_offset = (radarstate.leadOne.dRel * COMFORT_BRAKE) / v_lead
+    distance_offset = np.clip(distance_offset, 0, 100)
+  return distance + distance_offset
 
 def get_safe_obstacle_distance(v_ego, t_follow):
   return (v_ego**2) / (2 * COMFORT_BRAKE) + t_follow * v_ego + STOP_DISTANCE
@@ -233,6 +249,7 @@ class LongitudinalMpc:
     # self.solver = AcadosOcpSolverCython(MODEL_NAME, ACADOS_SOLVER_TYPE, N)
     self.solver.reset()
     # self.solver.options_set('print_level', 2)
+    self.x_solution = np.zeros(N+1)
     self.v_solution = np.zeros(N+1)
     self.a_solution = np.zeros(N+1)
     self.prev_a = np.array(self.a_solution)
@@ -274,11 +291,25 @@ class LongitudinalMpc:
     for i in range(N):
       self.solver.cost_set(i, 'Zl', Zl)
 
-  def set_weights(self, prev_accel_constraint=True, personality=log.LongitudinalPersonality.standard):
+  def get_cost_multipliers(self, personal_tune, v_lead0, v_lead1):
+    # KRKeegan adjustments to improve sluggish acceleration
+    # do not apply to deceleration
+    # Tweaked by FrogAi for FrogPilot to be more aggressive
+    v_ego = self.x0[1]
+    v_ego_bps = [0, 25]
+    a_change_v_ego = 1
+    j_ego_v_ego = 1
+    if (v_lead0 - v_ego >= 0) and (v_lead1 - v_ego >= 0) and personal_tune:
+      a_change_v_ego = np.interp(v_ego, v_ego_bps, [.01, 1.])
+      j_ego_v_ego = np.interp(v_ego, v_ego_bps, [.01, 1.])
+    return (a_change_v_ego, j_ego_v_ego)
+
+  def set_weights(self, personal_tune=False, personality=log.LongitudinalPersonality.standard, prev_accel_constraint=True, v_lead0=0, v_lead1=0):
     jerk_factor = get_jerk_factor(personality)
     if self.mode == 'acc':
+      cost_multipliers = self.get_cost_multipliers(personal_tune, v_lead0, v_lead1)
       a_change_cost = A_CHANGE_COST if prev_accel_constraint else 0
-      cost_weights = [X_EGO_OBSTACLE_COST, X_EGO_COST, V_EGO_COST, A_EGO_COST, jerk_factor * a_change_cost, jerk_factor * J_EGO_COST]
+      cost_weights = [X_EGO_OBSTACLE_COST, X_EGO_COST, V_EGO_COST, A_EGO_COST, jerk_factor * a_change_cost * cost_multipliers[0], jerk_factor * J_EGO_COST * cost_multipliers[1]]
       constraint_cost_weights = [LIMIT_COST, LIMIT_COST, LIMIT_COST, DANGER_ZONE_COST]
     elif self.mode == 'blended':
       a_change_cost = 40.0 if prev_accel_constraint else 0
@@ -333,7 +364,7 @@ class LongitudinalMpc:
     self.cruise_min_a = min_a
     self.max_a = max_a
 
-  def update(self, radarstate, v_cruise, x, v, a, j, personality=log.LongitudinalPersonality.standard):
+  def update(self, radarstate, v_cruise, x, v, a, j, personal_tune=False, personality=log.LongitudinalPersonality.standard):
     t_follow = get_T_FOLLOW(personality)
     v_ego = self.x0[1]
     self.status = radarstate.leadOne.status or radarstate.leadTwo.status
@@ -341,11 +372,13 @@ class LongitudinalMpc:
     lead_xv_0 = self.process_lead(radarstate.leadOne)
     lead_xv_1 = self.process_lead(radarstate.leadTwo)
 
+    self.set_weights(personal_tune, personality, lead_xv_0[0,1], lead_xv_1[0,1])
+
     # To estimate a safe distance from a moving lead, we calculate how much stopping
     # distance that lead needs as a minimum. We can add that to the current distance
     # and then treat that as a stopped car/obstacle at this new distance.
-    lead_0_obstacle = lead_xv_0[:,0] + get_stopped_equivalence_factor(lead_xv_0[:,1])
-    lead_1_obstacle = lead_xv_1[:,0] + get_stopped_equivalence_factor(lead_xv_1[:,1])
+    lead_0_obstacle = lead_xv_0[:,0] + get_stopped_equivalence_factor(personal_tune, radarstate, self.x_sol[:,1], lead_xv_0[:,1])
+    lead_1_obstacle = lead_xv_1[:,0] + get_stopped_equivalence_factor(personal_tune, radarstate, self.x_sol[:,1], lead_xv_1[:,1])
 
     self.params[:,0] = MIN_ACCEL
     self.params[:,1] = self.max_a
@@ -438,6 +471,7 @@ class LongitudinalMpc:
     for i in range(N):
       self.u_sol[i] = self.solver.get(i, 'u')
 
+    self.x_solution = self.x_sol[:,0]
     self.v_solution = self.x_sol[:,1]
     self.a_solution = self.x_sol[:,2]
     self.j_solution = self.u_sol[:,0]

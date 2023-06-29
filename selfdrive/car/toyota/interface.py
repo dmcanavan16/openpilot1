@@ -13,8 +13,8 @@ SteerControlType = car.CarParams.SteerControlType
 
 class CarInterface(CarInterfaceBase):
   @staticmethod
-  def get_pid_accel_limits(CP, current_speed, cruise_speed):
-    return CarControllerParams.ACCEL_MIN, CarControllerParams.ACCEL_MAX
+  def get_pid_accel_limits(CP, current_speed, cruise_speed, personal_tune):
+    return CarControllerParams.ACCEL_MIN, CarControllerParams.ACCEL_MAX_PERSONAL_TUNE if personal_tune else CarControllerParams.ACCEL_MAX
 
   @staticmethod
   def _get_params(ret, candidate, fingerprint, car_fw, experimental_long, docs):
@@ -253,7 +253,17 @@ class CarInterface(CarInterfaceBase):
     tune = ret.longitudinalTuning
     tune.deadzoneBP = [0., 9.]
     tune.deadzoneV = [.0, .15]
-    if candidate in TSS2_CAR or ret.enableGasInterceptor:
+    if (candidate in TSS2_CAR or ret.enableGasInterceptor) and ret.personalTune:
+      tune.kpBP = [0., 5., 20.]
+      tune.kpV = [1.3, 1.0, 0.7]
+      tune.kiBP = [0.,  3.,  12.,  20.,  23.,  40.]
+      tune.kiV = [.209,  .219, .209, .168, .085, .0027]
+      if candidate in TSS2_CAR:
+        ret.vEgoStopping = 0.15         # car is near 0.1 to 0.2 when car starts requesting stopping accel
+        ret.vEgoStarting = 0.15         # needs to be > or == vEgoStopping
+        ret.stopAccel = -0.4            # Toyota requests -0.4 when stopped
+        ret.stoppingDecelRate = 0.009   # reach stopping target smoothly
+    elif candidate in TSS2_CAR or ret.enableGasInterceptor:
       tune.kpBP = [0., 5., 20.]
       tune.kpV = [1.3, 1.0, 0.7]
       tune.kiBP = [0., 5., 12., 20., 27.]
