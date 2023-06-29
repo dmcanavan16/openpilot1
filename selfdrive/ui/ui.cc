@@ -219,6 +219,8 @@ void ui_update_params(UIState *s) {
 
   // FrogPilot variables
   UIScene &scene = s->scene;
+  const bool frog_theme = params.getBool("FrogTheme");
+  scene.frog_colors = frog_theme && params.getBool("FrogColors");
 }
 
 void ui_live_update_params(UIState *s) {
