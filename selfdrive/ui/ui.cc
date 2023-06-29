@@ -229,6 +229,7 @@ void ui_live_update_params(UIState *s) {
   // FrogPilot variables that need to be updated live
   // FrogPilot variables that need to be updated whenever the user changes its toggle value
   if (params.getBool("FrogPilotTogglesUpdated") || !scene.started) {
+    scene.screen_brightness = params.getInt("ScreenBrightness");
   }
 }
 
@@ -342,6 +343,12 @@ void Device::updateBrightness(const UIState &s) {
   int brightness = brightness_filter.update(clipped_brightness);
   if (!awake) {
     brightness = 0;
+  } else if (s.scene.screen_brightness <= 100) {
+    brightness = s.scene.screen_brightness;
+    if (awake) {
+      // Don't let the screen brightness go below 5% upon screen tap
+      brightness = fmax(5, s.scene.screen_brightness);
+    }
   }
 
   if (brightness != last_brightness) {
@@ -362,7 +369,11 @@ void Device::updateWakefulness(const UIState &s) {
     emit interactiveTimout();
   }
 
-  setAwake(s.scene.ignition || interactive_timeout > 0);
+  if (s.scene.screen_brightness != 0) {
+    setAwake(s.scene.ignition || interactive_timeout > 0);
+  } else {
+    setAwake(interactive_timeout > 0);
+  }
 }
 
 UIState *uiState() {
