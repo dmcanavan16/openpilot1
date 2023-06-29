@@ -137,14 +137,26 @@ typedef struct UIScene {
   uint64_t started_frame;
 
   // FrogPilot variables
+  bool blind_spot_left;
+  bool blind_spot_path;
+  bool blind_spot_right;
+  bool custom_road_ui;
   bool experimental_mode;
   bool frog_colors;
   bool mute_dm;
   bool rotating_wheel;
+  bool unlimited_road_ui_length;
   bool wide_camera_disabled;
+  float lane_line_width;
+  float path_edge_width;
+  float path_width;
+  float road_edge_width;
   int screen_brightness;
   int steering_angle_deg;
   int steering_wheel;
+  QPolygonF track_edge_vertices;
+  QPolygonF track_left_blindspot_vertices;
+  QPolygonF track_right_blindspot_vertices;
 
 } UIScene;
 

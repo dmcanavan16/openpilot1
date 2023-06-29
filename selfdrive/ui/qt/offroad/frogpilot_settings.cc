@@ -13,6 +13,7 @@ FrogPilotPanel::FrogPilotPanel(QWidget *parent) : QWidget(parent) {
 
   const std::vector<std::tuple<QString, QString, QString, QString>> toggles = {
     {"FrogTheme", "FrogPilot Theme", "Enable the beloved FrogPilot Theme! Disable toggle to revert back to the stock openpilot theme.", "../assets/images/frog_button_home.png"},
+    {"CustomRoadUI", "Custom Road UI", "Customize the road UI to your liking.", "../assets/offroad/icon_road.png"},
     {"DeviceShutdownTimer", "Device Shutdown Timer", "Set the timer for when the device turns off after being offroad to reduce energy waste and prevent battery drain.", "../assets/offroad/icon_time.png"},
     {"DisableInternetCheck", "Disable Internet Check", "Allows the device to remain offline indefinitely.", "../assets/offroad/icon_warning.png"},
     {"FireTheBabysitter", "Fire the Babysitter", "Disable some of openpilot's 'Babysitter Protocols'.", "../assets/offroad/icon_babysitter.png"},
@@ -35,6 +36,15 @@ FrogPilotPanel::FrogPilotPanel(QWidget *parent) : QWidget(parent) {
         {"FrogColors", "Colors"},
         {"FrogIcons", "Icons"},
         {"FrogSounds", "Sounds"},
+      }, mainLayout);
+    } else if (key == "CustomRoadUI") {
+      createSubControl(key, label, desc, icon, {
+        createDualParamControl(new LaneLinesWidth(), new RoadEdgesWidth()),
+        createDualParamControl(new PathWidth(), new PathEdgeWidth()),
+      });
+      createSubButtonControl(key, {
+        {"BlindSpotPath", "Blind Spot Path"},
+        {"UnlimitedLength", "'Unlimited' Road UI Length"},
       }, mainLayout);
     } else if (key == "DeviceShutdownTimer") {
       mainLayout->addWidget(new DeviceShutdownTimer());
